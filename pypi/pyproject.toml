@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools>=68.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "slash-tokens"
+version = "0.0.1"
+description = "Token budget estimation in 4.8 KB WASM. Sub-millisecond. Zero dependencies."
+license = {text = "MIT"}
+authors = [{name = "wolfejam"}]
+keywords = ["tokens", "wasm", "edge", "budget", "llm", "ai"]
+requires-python = ">=3.8"

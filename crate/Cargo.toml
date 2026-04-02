@@ -1,0 +1,9 @@
+[package]
+name = "slash-tokens"
+version = "0.0.1"
+edition = "2021"
+description = "Token budget estimation in 4.8 KB WASM. Sub-millisecond. Zero dependencies."
+license = "MIT"
+authors = ["wolfejam"]
+keywords = ["tokens", "wasm", "edge", "budget", "llm"]
+categories = ["wasm", "text-processing"]

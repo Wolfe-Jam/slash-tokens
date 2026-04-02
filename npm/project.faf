@@ -1,0 +1,39 @@
+faf_version: "3.0"
+project:
+  name: slash-tokens
+  goal: Token budget estimation in 4.8 KB WASM. Sub-millisecond. Zero dependencies. I don't count tokens. I slash them.
+  main_language: TypeScript
+  type: cli
+stack:
+  frontend: slotignored
+  css_framework: slotignored
+  ui_library: slotignored
+  state_management: slotignored
+  backend: slotignored
+  api_type: slotignored
+  runtime: slotignored
+  database: slotignored
+  connection: slotignored
+  hosting: slotignored
+  build: slotignored
+  cicd: slotignored
+  monorepo_tool: slotignored
+  package_manager: slotignored
+  workspaces: slotignored
+  admin: slotignored
+  cache: slotignored
+  search: slotignored
+  storage: slotignored
+human_context:
+  who: AI developers, teams, and token burners building with LLM APIs
+  what: Token budget estimation in 4.8 KB WASM. Sub-millisecond. Zero dependencies. I don't count tokens. I slash them.
+  why: Every AI app estimates tokens before API calls. Current options are 300 KB - 1 MB libraries. Slash does it in 4.8 KB with zero deps.
+  where: npm (slash-tokens), crates.io, PyPI, slashtokens.com
+  when: v0.1.0, April 2026
+  how: npm install slash-tokens / bunx slash-tokens
+monorepo:
+  packages_count: slotignored
+  build_orchestrator: slotignored
+  versioning_strategy: slotignored
+  shared_configs: slotignored
+  remote_cache: slotignored

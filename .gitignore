@@ -1,0 +1,7 @@
+node_modules/
+dist/
+bun.lock
+*.tgz
+target/
+__pycache__/
+*.egg-info/

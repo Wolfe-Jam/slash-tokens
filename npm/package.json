@@ -1,0 +1,36 @@
+{
+  "name": "slash-tokens",
+  "version": "0.1.0",
+  "description": "Token budget estimation in 4.8 KB WASM. Sub-millisecond. Zero dependencies. I don't count tokens. I slash them.",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "type": "module",
+  "bin": {
+    "slash-tokens": "dist/cli.js"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": ["dist"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "bun build src/cli.ts --outfile=dist/cli.js --target=node && tsc --emitDeclarationOnly && bun build src/index.ts --outfile=dist/index.js --target=node",
+    "test": "bun test"
+  },
+  "author": "wolfejam",
+  "license": "MIT",
+  "keywords": ["tokens", "wasm", "edge", "budget", "estimation", "llm", "ai", "openai", "anthropic", "claude", "grok", "gemini"],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Wolfe-Jam/slash-tokens"
+  },
+  "homepage": "https://slashtokens.com",
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^6.0.2"
+  }
+}
