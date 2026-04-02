@@ -116,6 +116,13 @@ This is a **budget gate**. It answers "does this fit?" with 96-98% accuracy in s
 
 Built from [xai-faf-zig](https://github.com/Wolfe-Jam/xai-faf-zig). 172 tests including 65 adversarial (CJK, emoji, binary, base64, threshold boundaries).
 
+## Links
+
+- [slashtokens.com](https://slashtokens.com) — product site
+- [mcpaas.live/slash](https://mcpaas.live/slash) — live one-pager
+- [npm](https://www.npmjs.com/package/slash-tokens) / [crates.io](https://crates.io/crates/slash-tokens) / [PyPI](https://pypi.org/project/slash-tokens/)
+- [xai-faf-zig](https://github.com/Wolfe-Jam/xai-faf-zig) — WASM engine source
+
 ## License
 
 MIT
