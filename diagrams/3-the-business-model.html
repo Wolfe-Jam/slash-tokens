@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>The Business Model — Slash Flywheel</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0a0a;
+      color: #f5f5f5;
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+    .diagram {
+      max-width: 900px;
+      width: 100%;
+    }
+    .title {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .title h1 {
+      font-size: 2.2rem;
+      font-weight: 800;
+      color: #f5f5f5;
+      margin-bottom: 0.5rem;
+    }
+    .title p {
+      color: #666;
+      font-size: 1rem;
+    }
+
+    /* Flywheel — true clock dial, 6 nodes at 60° intervals */
+    .flywheel {
+      position: relative;
+      width: 600px;
+      height: 600px;
+      margin: 0 auto 3rem auto;
+    }
+
+    .wheel-node {
+      position: absolute;
+      background: #111;
+      border: 1px solid #444;
+      border-radius: 12px;
+      padding: 1rem 1rem;
+      text-align: center;
+      width: 150px;
+      transform: translate(-50%, -50%);
+    }
+    .wheel-node .num {
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.3rem;
+    }
+    .wheel-node .label {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #f5f5f5;
+      margin-bottom: 0.2rem;
+    }
+    .wheel-node .detail {
+      font-size: 0.6rem;
+      color: #666;
+    }
+
+    /*
+      Clock positions (center = 300,300, radius = 240):
+      12 o'clock (step 1): 300, 60    → left:50%, top:10%
+       2 o'clock (step 2): 508, 180   → left:84.6%, top:30%
+       4 o'clock (step 3): 508, 420   → left:84.6%, top:70%
+       6 o'clock (step 4): 300, 540   → left:50%, top:90%
+       8 o'clock (step 5): 92, 420    → left:15.4%, top:70%
+      10 o'clock (step 6): 92, 180    → left:15.4%, top:30%
+    */
+    .node-1 { left: 50%;   top: 10%; }
+    .node-2 { left: 84.6%; top: 33%; }
+    .node-3 { left: 84.6%; top: 67%; }
+    .node-4 { left: 50%;   top: 90%; }
+    .node-5 { left: 15.4%; top: 67%; }
+    .node-6 { left: 15.4%; top: 33%; }
+
+    /* Step 4 = the money — only colored node */
+    .node-4 {
+      border-color: #4ade80;
+      background: rgba(74, 222, 128, 0.06);
+    }
+    .node-4 .num { color: #4ade80; }
+    .node-4 .label { color: #4ade80; }
+
+    /* Arrows between nodes — positioned on the arc */
+    .wheel-arrow {
+      position: absolute;
+      color: #F7A41D;
+      font-size: 1.3rem;
+      font-weight: 800;
+      transform: translate(-50%, -50%);
+    }
+    /* Between 12→2: midpoint */
+    .arrow-1-2 { left: 72%;  top: 17%;  transform: translate(-50%,-50%) rotate(30deg); }
+    /* Between 2→4 */
+    .arrow-2-3 { left: 90%;  top: 50%;  transform: translate(-50%,-50%) rotate(90deg); }
+    /* Between 4→6 */
+    .arrow-3-4 { left: 72%;  top: 83%;  transform: translate(-50%,-50%) rotate(150deg); }
+    /* Between 6→8 */
+    .arrow-4-5 { left: 28%;  top: 83%;  transform: translate(-50%,-50%) rotate(-150deg); }
+    /* Between 8→10 */
+    .arrow-5-6 { left: 10%;  top: 50%;  transform: translate(-50%,-50%) rotate(-90deg); }
+    /* Between 10→12 */
+    .arrow-6-1 { left: 28%;  top: 17%;  transform: translate(-50%,-50%) rotate(-30deg); }
+
+    /* Center hub — minimal */
+    .center-hub {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #111;
+      border: 2px solid #f5f5f5;
+      border-radius: 50%;
+      width: 130px;
+      height: 130px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .center-hub .icon { font-size: 1.8rem; }
+    .center-hub .label {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #f5f5f5;
+    }
+    .center-hub .detail {
+      font-size: 0.6rem;
+      color: #666;
+      font-family: 'SF Mono', monospace;
+    }
+
+    /* Bottom section */
+    .packages {
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .pkg {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 1.2rem 1.5rem;
+      text-align: center;
+      width: 280px;
+    }
+    .pkg .name {
+      font-family: 'SF Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #f5f5f5;
+      margin-bottom: 0.3rem;
+    }
+    .pkg .role {
+      font-size: 0.75rem;
+      color: #888;
+    }
+    .pkg .size {
+      font-size: 0.65rem;
+      color: #555;
+      font-family: 'SF Mono', monospace;
+      margin-top: 0.3rem;
+    }
+
+    .punchline {
+      text-align: center;
+      margin-top: 1rem;
+    }
+    .punchline p {
+      font-size: 1rem;
+      color: #f5f5f5;
+      font-weight: 600;
+    }
+    .punchline p span { color: #4ade80; }
+    .punchline .sub {
+      font-size: 0.8rem;
+      color: #555;
+      margin-top: 0.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="diagram">
+    <div class="title">
+      <h1>The Business Model</h1>
+      <p>The more you pay us, the more you save</p>
+    </div>
+
+    <div class="flywheel">
+      <div class="wheel-node node-1">
+        <div class="num">Step 1</div>
+        <div class="label">Pre-Flight Gate</div>
+        <div class="detail">4.8 KB checks before every call</div>
+      </div>
+
+      <div class="wheel-arrow arrow-1-2">→</div>
+
+      <div class="wheel-node node-2">
+        <div class="num">Step 2</div>
+        <div class="label">Tokens Saved</div>
+        <div class="detail">overflow caught, wrong model caught</div>
+      </div>
+
+      <div class="wheel-arrow arrow-2-3">→</div>
+
+      <div class="wheel-node node-3">
+        <div class="num">Step 3</div>
+        <div class="label">Savings Measured</div>
+        <div class="detail">dashboard shows the receipt</div>
+      </div>
+
+      <div class="wheel-arrow arrow-3-4">→</div>
+
+      <div class="wheel-node node-4">
+        <div class="num">Step 4</div>
+        <div class="label">Customer Keeps 90%</div>
+        <div class="detail">we take 10% of savings</div>
+      </div>
+
+      <div class="wheel-arrow arrow-4-5">→</div>
+
+      <div class="wheel-node node-5">
+        <div class="num">Step 5</div>
+        <div class="label">More Budget</div>
+        <div class="detail">savings fund more usage</div>
+      </div>
+
+      <div class="wheel-arrow arrow-5-6">→</div>
+
+      <div class="wheel-node node-6">
+        <div class="num">Step 6</div>
+        <div class="label">More Usage</div>
+        <div class="detail">more tokens = more savings</div>
+      </div>
+
+      <div class="wheel-arrow arrow-6-1">→</div>
+
+      <div class="center-hub">
+        <div class="icon">⚡</div>
+        <div class="label">TOKENS</div>
+        <div class="detail">/slash flywheel</div>
+      </div>
+    </div>
+
+    <div class="packages">
+      <div class="pkg">
+        <div class="name">slash-tokens</div>
+        <div class="role">Does the math</div>
+        <div class="size">8.7 KB · zero deps</div>
+      </div>
+      <div class="pkg">
+        <div class="name">mcpaas</div>
+        <div class="role">Shows the receipt</div>
+        <div class="size">2.4 KB · zero deps</div>
+      </div>
+    </div>
+
+    <div class="punchline">
+      <p>Cancelling costs you money. Paying us <span>saves</span> you more.</p>
+      <div class="sub">No VCs. No board. No marketing. The dashboard is the marketing.</div>
+    </div>
+  </div>
+</body>
+</html>

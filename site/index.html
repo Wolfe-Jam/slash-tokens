@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>/slash — Fly First, Pay Economy</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="4.8 KB pre-flight for every AI call. I don't count tokens. I slash them.">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://slashtokens.com">
+  <meta property="og:title" content="/slash — Fly First, Pay Economy">
+  <meta property="og:description" content="4.8 KB WASM pre-flight for every AI API call. Sub-ms. Zero deps. I don't count tokens. I slash them.">
+
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:site" content="@wolfe_jam">
+  <meta name="twitter:title" content="/slash — Fly First, Pay Economy">
+  <meta name="twitter:description" content="4.8 KB WASM pre-flight for every AI API call. Sub-ms. Zero deps. Save 90% on token waste.">
+
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='60,0 20,55 48,55 38,100 80,42 52,42' fill='%23FFAA00'/></svg>">
+  <meta name="theme-color" content="#FF4400">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700;800;900&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0a0a;
+      color: #f5f5f5;
+      font-family: 'Roboto', -apple-system, sans-serif;
+      line-height: 1.7;
+    }
+
+    .section {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+    .section.hero {
+      padding: 6rem 1.5rem 4rem;
+      text-align: center;
+    }
+
+    /* Hero */
+    .hero h1 {
+      font-size: 4rem;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      margin-bottom: 1rem;
+      line-height: 1.1;
+    }
+    .hero h1 .slash { color: #FF4400; }
+    .hero .billboard {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #f5f5f5;
+      margin-bottom: 0.5rem;
+    }
+    .hero .billboard span { color: #FF4400; }
+    .hero .url {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1rem;
+      color: #FF4400;
+      margin-bottom: 2rem;
+    }
+    .hero .sub {
+      font-size: 1.1rem;
+      color: #bbb;
+      max-width: 500px;
+      margin: 0 auto;
+    }
+
+    /* Divider */
+    .divider {
+      border: none;
+      border-top: 1px solid #1a1a1a;
+      margin: 0 auto;
+      max-width: 720px;
+    }
+
+    /* The Analogy */
+    .analogy {
+      border-left: 3px solid #FF4400;
+      padding-left: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .analogy p {
+      font-size: 1.05rem;
+      color: #ddd;
+      margin-bottom: 1rem;
+    }
+    .analogy p:last-child { margin-bottom: 0; }
+    .analogy strong { color: #f5f5f5; }
+    .analogy .highlight { color: #FF4400; font-weight: 700; }
+    .analogy .green { color: #4ade80; font-weight: 700; }
+
+    /* Section headers */
+    h2 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #f5f5f5;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+    h2 .slash { color: #FF4400; }
+
+    /* The Problem */
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .problem-card {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 10px;
+      padding: 1.2rem;
+    }
+    .problem-card .label {
+      font-size: 0.75rem;
+      color: #aaa;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.4rem;
+    }
+    .problem-card .val {
+      font-size: 1.4rem;
+      font-weight: 800;
+      font-family: 'Roboto Mono', monospace;
+    }
+    .problem-card .val.red { color: #dc2626; }
+    .problem-card .val.white { color: #f5f5f5; }
+
+    /* Quotes / punchlines */
+    .punchline {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 12px;
+      padding: 2rem;
+      text-align: center;
+      margin: 2rem 0;
+    }
+    .punchline p {
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: #f5f5f5;
+    }
+    .punchline p .orange { color: #FF4400; }
+    .punchline p .green { color: #4ade80; }
+    .punchline .sub {
+      font-size: 0.85rem;
+      color: #aaa;
+      margin-top: 0.8rem;
+    }
+
+    /* The Gate */
+    .gate-flow {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      margin: 2rem 0;
+      flex-wrap: wrap;
+    }
+    .gate-box {
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      text-align: center;
+      min-width: 120px;
+    }
+    .gate-box.slash-gate {
+      border-color: #FF4400;
+      background: rgba(255, 68, 0, 0.06);
+    }
+    .gate-box .icon { font-size: 1.5rem; }
+    .gate-box .label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #f5f5f5;
+    }
+    .gate-box .detail {
+      font-size: 0.65rem;
+      color: #aaa;
+      font-family: 'Roboto Mono', monospace;
+    }
+    .gate-arrow {
+      color: #F7A41D;
+      font-size: 1.5rem;
+      font-weight: 800;
+    }
+
+    /* Stats row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    .stat {
+      text-align: center;
+      background: #111;
+      border: 1px solid #1a1a1a;
+      border-radius: 8px;
+      padding: 1rem 0.5rem;
+    }
+    .stat .val {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #f5f5f5;
+      font-family: 'Roboto Mono', monospace;
+    }
+    .stat .lbl {
+      font-size: 0.6rem;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-top: 0.2rem;
+    }
+
+    /* The Model */
+    .model-equation {
+      text-align: center;
+      margin: 2rem 0;
+      padding: 2rem;
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 12px;
+    }
+    .model-equation .line1 {
+      font-size: 1.1rem;
+      color: #bbb;
+      margin-bottom: 0.5rem;
+    }
+    .model-equation .line2 {
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #f5f5f5;
+    }
+    .model-equation .line2 .green { color: #4ade80; }
+    .model-equation .line3 {
+      font-size: 0.85rem;
+      color: #aaa;
+      margin-top: 0.8rem;
+    }
+
+    /* Prose blocks */
+    .prose {
+      margin-bottom: 2rem;
+    }
+    .prose p {
+      font-size: 1rem;
+      color: #aaa;
+      margin-bottom: 1rem;
+    }
+    .prose p:last-child { margin-bottom: 0; }
+    .prose strong { color: #f5f5f5; }
+    .prose .orange { color: #FF4400; font-weight: 700; }
+    .prose .green { color: #4ade80; font-weight: 700; }
+
+    /* Favicon line */
+    .favicon-line {
+      text-align: center;
+      padding: 3rem 1.5rem;
+      border-top: 1px solid #1a1a1a;
+      border-bottom: 1px solid #1a1a1a;
+    }
+    .favicon-line p {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #f5f5f5;
+    }
+    .favicon-line .sub {
+      font-size: 0.85rem;
+      color: #999;
+      margin-top: 0.5rem;
+    }
+
+    /* Risk section */
+    .zero-risk {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      margin: 1.5rem 0;
+    }
+    .risk-item {
+      font-size: 0.85rem;
+      color: #bbb;
+      padding: 0.6rem 1rem;
+      background: #111;
+      border-radius: 6px;
+    }
+    .risk-item strong { color: #f5f5f5; }
+
+    /* CTA */
+    .cta {
+      text-align: center;
+      padding: 4rem 1.5rem;
+    }
+    .cta .install {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.1rem;
+      color: #FF4400;
+      background: rgba(255, 68, 0, 0.08);
+      border: 1px solid rgba(255, 68, 0, 0.2);
+      display: inline-block;
+      padding: 0.8rem 2rem;
+      border-radius: 8px;
+      margin-bottom: 1.5rem;
+    }
+    .cta .links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .cta .links a {
+      color: #aaa;
+      text-decoration: none;
+      font-size: 0.85rem;
+      transition: color 0.2s;
+    }
+    .cta .links a:hover { color: #f5f5f5; }
+    .cta .credit {
+      margin-top: 2rem;
+      font-size: 0.75rem;
+      color: #888;
+    }
+
+    /* Proof cards */
+    .proof-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .proof-card {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 10px;
+      padding: 1.2rem;
+    }
+    .proof-repo {
+      font-size: 0.75rem;
+      font-family: 'Roboto Mono', monospace;
+      margin-bottom: 0.8rem;
+    }
+    .proof-repo a {
+      color: #f5f5f5;
+      text-decoration: none;
+    }
+    .proof-repo a:hover { text-decoration: underline; }
+    .proof-metrics {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.6rem;
+    }
+    .proof-metric { text-align: center; }
+    .proof-val {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #f5f5f5;
+      font-family: 'Roboto Mono', monospace;
+    }
+    .proof-lbl {
+      font-size: 0.55rem;
+      color: #666;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Flywheel */
+    .flywheel {
+      position: relative;
+      width: 600px;
+      height: 600px;
+      margin: 2rem auto;
+    }
+    .wheel-node {
+      position: absolute;
+      background: #111;
+      border: 1px solid #444;
+      border-radius: 12px;
+      padding: 1rem;
+      text-align: center;
+      width: 150px;
+      transform: translate(-50%, -50%);
+    }
+    .wheel-node .num {
+      font-size: 0.6rem;
+      font-weight: 700;
+      color: #999;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 0.3rem;
+    }
+    .wheel-node .wlabel {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: #f5f5f5;
+      margin-bottom: 0.2rem;
+    }
+    .wheel-node .wdetail {
+      font-size: 0.6rem;
+      color: #999;
+    }
+    .node-1 { left: 50%;   top: 10%; }
+    .node-2 { left: 84.6%; top: 33%; }
+    .node-3 { left: 84.6%; top: 67%; }
+    .node-4 { left: 50%;   top: 90%; }
+    .node-5 { left: 15.4%; top: 67%; }
+    .node-6 { left: 15.4%; top: 33%; }
+    .node-4 {
+      border-color: #4ade80;
+      background: rgba(74, 222, 128, 0.06);
+    }
+    .node-4 .num { color: #4ade80; }
+    .node-4 .wlabel { color: #4ade80; }
+    .wheel-arrow {
+      position: absolute;
+      color: #F7A41D;
+      font-size: 1.3rem;
+      font-weight: 800;
+      transform: translate(-50%, -50%);
+    }
+    .arrow-1-2 { left: 72%;  top: 17%;  transform: translate(-50%,-50%) rotate(30deg); }
+    .arrow-2-3 { left: 90%;  top: 50%;  transform: translate(-50%,-50%) rotate(90deg); }
+    .arrow-3-4 { left: 72%;  top: 83%;  transform: translate(-50%,-50%) rotate(150deg); }
+    .arrow-4-5 { left: 28%;  top: 83%;  transform: translate(-50%,-50%) rotate(-150deg); }
+    .arrow-5-6 { left: 10%;  top: 50%;  transform: translate(-50%,-50%) rotate(-90deg); }
+    .arrow-6-1 { left: 28%;  top: 17%;  transform: translate(-50%,-50%) rotate(-30deg); }
+    .center-hub {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #111;
+      border: 2px solid #f5f5f5;
+      border-radius: 50%;
+      width: 130px;
+      height: 130px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .center-hub .hub-icon { font-size: 1.8rem; }
+    .center-hub .hub-label {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: #f5f5f5;
+    }
+    .center-hub .hub-detail {
+      font-size: 0.6rem;
+      color: #999;
+      font-family: 'Roboto Mono', monospace;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 2.5rem; }
+      .problem-grid, .stats-row, .zero-risk, .proof-grid { grid-template-columns: 1fr; }
+      .gate-flow { flex-direction: column; }
+      .flywheel { width: 100%; height: 500px; }
+      .wheel-node { width: 120px; padding: 0.7rem; }
+      .wheel-node .wlabel { font-size: 0.7rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <div class="section hero">
+    <h1><svg class="hero-bolt" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="56" height="56" style="vertical-align:-0.1em;margin-right:-0.05em;display:inline-block;"><polygon points="60,0 20,55 48,55 38,100 80,42 52,42" fill="#FFAA00"/></svg><span style="color:#f5f5f5">/</span><span class="slash">slash</span></h1>
+    <div class="billboard"><span>Fly First,</span> pay economy.</div>
+    <div class="url">slashtokens.com</div>
+    <div class="sub">4.8 KB pre-flight for every AI call.<br>I don't count tokens. I slash them.</div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- THE ANALOGY -->
+  <div class="section">
+    <h2>Every API call is a <span class="slash">flight</span></h2>
+
+    <div class="analogy">
+      <p>Pre-flight check before takeoff. If the payload doesn't fit the plane (context window), <strong>you don't board it.</strong></p>
+      <p>Right now the entire AI industry is boarding every flight blind. No weight check, no gate, no manifest. Just throw the content at the API and hope it fits.</p>
+      <p>If it doesn't — <span class="highlight">you already paid for the taxi to the runway and a return flight.</span></p>
+      <p>Slash is TSA for tokens. Except it's 4.8 KB, takes less than a millisecond, and actually <span class="green">saves you money</span> instead of wasting your time.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- THE PROBLEM -->
+  <div class="section">
+    <h2>The <span style="color:#FFAA00">bonfire</span></h2>
+
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="label">Industry burn rate</div>
+        <div class="val red">3-5T tokens/day</div>
+      </div>
+      <div class="problem-card">
+        <div class="label">Estimated waste</div>
+        <div class="val red">10%+</div>
+      </div>
+      <div class="problem-card">
+        <div class="label">Pre-call visibility</div>
+        <div class="val red">$0</div>
+      </div>
+      <div class="problem-card">
+        <div class="label">Growing at</div>
+        <div class="val white">2x / year</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>The fastest growing expenditure in human history. Every model gets more expensive at the frontier. Every company adding AI to everything. Every agent making autonomous calls 24/7.</p>
+      <p><strong>The meter is running and it never stops.</strong></p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- THE GATE -->
+  <div class="section">
+    <h2>The <span class="slash">pre-flight</span> gate</h2>
+
+    <div class="gate-flow">
+      <div class="gate-box">
+        <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="24" height="24"><circle cx="50" cy="35" r="18" fill="#666"/><ellipse cx="50" cy="85" rx="30" ry="22" fill="#666"/></svg></div>
+        <div class="label">Your content</div>
+      </div>
+      <div class="gate-arrow" style="color:#f5f5f5">→</div>
+      <div class="gate-box slash-gate">
+        <div class="icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="24" height="24"><polygon points="60,0 20,55 48,55 38,100 80,42 52,42" fill="#FFAA00"/></svg></div>
+        <div class="label"><span style="color:#f5f5f5">/</span><span style="color:#FF4400">slash</span></div>
+        <div class="detail">4.8 KB · &lt;1ms</div>
+      </div>
+      <div class="gate-arrow" style="color:#4ade80">→</div>
+      <div class="gate-box">
+        <div class="icon" style="color:#4ade80">✓</div>
+        <div class="label">Fits? Call API</div>
+        <div class="detail">right model, right size</div>
+      </div>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat">
+        <div class="val">4.8 KB</div>
+        <div class="lbl">WASM</div>
+      </div>
+      <div class="stat">
+        <div class="val">&lt;1ms</div>
+        <div class="lbl">latency</div>
+      </div>
+      <div class="stat">
+        <div class="val">0</div>
+        <div class="lbl">deps</div>
+      </div>
+      <div class="stat">
+        <div class="val">96-98%</div>
+        <div class="lbl">accuracy</div>
+      </div>
+    </div>
+
+    <div class="punchline">
+      <p>Worst case: everything stays exactly the same.</p>
+      <p>Best case: you <span class="green">save millions</span>.</p>
+      <div class="sub">That's not a product pitch. That's a free option with unlimited upside.</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- THE FAVICON LINE -->
+  <div class="favicon-line">
+    <p>I can save you $100M with a file smaller than your favicon.</p>
+    <div class="sub">4,865 bytes. Zig-compiled WASM. No allocator. No floats. No heap.</div>
+  </div>
+
+  <!-- ZERO RISK -->
+  <div class="section">
+    <h2>Zero risk</h2>
+
+    <div class="zero-risk">
+      <div class="risk-item"><strong>4.8 KB</strong> — smaller than a favicon</div>
+      <div class="risk-item"><strong>Sub-ms</strong> — faster than your network round trip</div>
+      <div class="risk-item"><strong>Zero deps</strong> — nothing to break or update</div>
+      <div class="risk-item"><strong>It's a gate</strong> — your API calls don't touch us</div>
+    </div>
+    <p style="text-align:center;font-size:0.85rem;color:#bbb;margin-top:1rem;"><strong style="color:#f5f5f5;">Wrong estimate?</strong> — API returns exact counts anyway</p>
+  </div>
+
+  <hr class="divider">
+
+  <!-- THE RECEIPTS -->
+  <div class="section">
+    <h2>The receipts</h2>
+
+    <div class="proof-grid">
+      <div class="proof-card">
+        <div class="proof-repo"><a href="https://github.com/langchain-ai/langchainjs" target="_blank">langchain-ai/langchainjs</a></div>
+        <div class="proof-metrics">
+          <div class="proof-metric">
+            <div class="proof-val">1,960</div>
+            <div class="proof-lbl">files scanned</div>
+          </div>
+          <div class="proof-metric">
+            <div class="proof-val">322M</div>
+            <div class="proof-lbl">tokens/day</div>
+          </div>
+          <div class="proof-metric">
+            <div class="proof-val" style="color:#dc2626;">$106K</div>
+            <div class="proof-lbl">monthly cost</div>
+          </div>
+          <div class="proof-metric">
+            <div class="proof-val" style="color:#4ade80;">$127K</div>
+            <div class="proof-lbl">annual savings</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="proof-card">
+        <div class="proof-repo"><a href="https://github.com/vercel/ai" target="_blank">vercel/ai</a></div>
+        <div class="proof-metrics">
+          <div class="proof-metric">
+            <div class="proof-val">5,376</div>
+            <div class="proof-lbl">files scanned</div>
+          </div>
+          <div class="proof-metric">
+            <div class="proof-val">234M</div>
+            <div class="proof-lbl">tokens/day</div>
+          </div>
+          <div class="proof-metric">
+            <div class="proof-val" style="color:#dc2626;">$77K</div>
+            <div class="proof-lbl">monthly cost</div>
+          </div>
+          <div class="proof-metric">
+            <div class="proof-val" style="color:#4ade80;">$93K</div>
+            <div class="proof-lbl">annual savings</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="proof-card">
+        <div class="proof-repo"><a href="https://github.com/Significant-Gravitas/AutoGPT" target="_blank">AutoGPT</a></div>
+        <div class="proof-metrics">
+          <div class="proof-metric">
+            <div class="proof-val">5,021</div>
+            <div class="proof-lbl">files scanned</div>
+          </div>
+          <div class="proof-metric">
+            <div class="proof-val">3M</div>
+            <div class="proof-lbl">tokens/day</div>
+          </div>
+          <div class="proof-metric">
+            <div class="proof-val" style="color:#dc2626;">$989</div>
+            <div class="proof-lbl">monthly cost</div>
+          </div>
+          <div class="proof-metric">
+            <div class="proof-val" style="color:#4ade80;">$1.2K</div>
+            <div class="proof-lbl">annual savings</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="punchline">
+      <p>Combined: <span class="green">$221K/yr</span> in savings.</p>
+      <div class="sub">From a 4.8 KB file. Run it yourself: <code style="font-family:'Roboto Mono',monospace;color:#FF4400;">bunx slash-tokens</code></div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- THE MODEL -->
+  <div class="section">
+    <h2>The model</h2>
+
+    <div class="model-equation">
+      <div class="line1">Our fee: 10% of pre-agreed metered savings</div>
+      <div class="line2">You <span class="green">save 90%</span></div>
+      <div class="line3">The more you pay us, the more you save.</div>
+    </div>
+
+    <!-- FLYWHEEL -->
+    <div class="flywheel">
+      <div class="wheel-node node-1">
+        <div class="num">Step 1</div>
+        <div class="wlabel">Pre-Flight Gate</div>
+        <div class="wdetail">4.8 KB checks before every call</div>
+      </div>
+      <div class="wheel-arrow arrow-1-2">→</div>
+      <div class="wheel-node node-2">
+        <div class="num">Step 2</div>
+        <div class="wlabel">Tokens Saved</div>
+        <div class="wdetail">overflow caught, wrong model caught</div>
+      </div>
+      <div class="wheel-arrow arrow-2-3">→</div>
+      <div class="wheel-node node-3">
+        <div class="num">Step 3</div>
+        <div class="wlabel">Savings Measured</div>
+        <div class="wdetail">dashboard shows the receipt</div>
+      </div>
+      <div class="wheel-arrow arrow-3-4">→</div>
+      <div class="wheel-node node-4">
+        <div class="num">Step 4</div>
+        <div class="wlabel">Customer Keeps 90% Savings</div>
+        <div class="wdetail">we take 10% of savings</div>
+      </div>
+      <div class="wheel-arrow arrow-4-5">→</div>
+      <div class="wheel-node node-5">
+        <div class="num">Step 5</div>
+        <div class="wlabel">More Budget</div>
+        <div class="wdetail">savings fund more usage</div>
+      </div>
+      <div class="wheel-arrow arrow-5-6">→</div>
+      <div class="wheel-node node-6">
+        <div class="num">Step 6</div>
+        <div class="wlabel">More Usage</div>
+        <div class="wdetail">more tokens = more savings</div>
+      </div>
+      <div class="wheel-arrow arrow-6-1">→</div>
+      <div class="center-hub">
+        <div class="hub-icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="32" height="32"><polygon points="60,0 20,55 48,55 38,100 80,42 52,42" fill="#FFAA00"/></svg></div>
+        <div class="hub-label">TOKENS</div>
+        <div class="hub-detail"><span style="color:#f5f5f5">/</span><span style="color:#FF4400">slash</span> flywheel</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p><strong>Traditional SaaS:</strong> "Here's your bill. It goes up every month. You hate us a little more each quarter."</p>
+      <p><strong><span style="color:#f5f5f5">/</span><span style="color:#FF4400">slash:</span></strong> "Here's what you saved. We took 10% of that. You saved 90%. You're welcome."</p>
+      <p>Every invoice is proof the product works.</p>
+      <p>You're not a line item on the cost sheet. You're on the <span class="green">savings sheet</span>. Finance teams don't cut the thing that's saving them money. They give it more surface area.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- SLASH IS MONEY -->
+  <div class="section">
+    <h2><span style="color:#f5f5f5">/</span><span class="slash">slash</span> means business</h2>
+
+    <div class="prose">
+      <p>FAF was Context — important, foundational, but abstract. "Persistent AI context" is a conversation.</p>
+      <p><strong><span style="color:#f5f5f5">/</span><span style="color:#FF4400">slash</span></strong> is <strong>money</strong>. Tokens are the unit of currency in AI. Every single API call is a cash register. <strong><span style="color:#f5f5f5">/</span><span style="color:#FF4400">slash</span></strong> sits at the register.</p>
+    </div>
+
+    <div class="punchline">
+      <p>Context is philosophical. Tokens are invoices.</p>
+      <div class="sub">Nobody argues with "we reduced your invoice."</div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- CTA -->
+  <div class="cta">
+    <div style="display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+      <div class="install">npm install slash-tokens</div>
+      <div class="install" style="border-color: rgba(255,68,0,0.1); color: #aaa;">bunx slash-tokens</div>
+    </div>
+
+    <div class="links" style="margin-top: 2rem;">
+      <a href="https://github.com/Wolfe-Jam/slash-tokens">GitHub</a>
+      <a href="https://www.npmjs.com/package/slash-tokens">npm</a>
+      <a href="https://crates.io/crates/slash-tokens">crates.io</a>
+      <a href="https://pypi.org/project/slash-tokens/">PyPI</a>
+      <a href="https://mcpaas.live/slash">mcpaas.live/slash</a>
+    </div>
+
+    <div class="credit">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="14" height="14" style="vertical-align:-0.1em;display:inline-block;"><polygon points="60,0 20,55 48,55 38,100 80,42 52,42" fill="#FFAA00"/></svg> <span style="color:#f5f5f5">/</span><span style="color:#FF4400">slash</span> — Fly First, pay economy.
+    </div>
+  </div>
+
+</body>
+</html>
