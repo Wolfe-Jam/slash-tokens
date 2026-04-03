@@ -4,9 +4,15 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "slash-tokens"
-version = "0.0.1"
+version = "0.0.2"
 description = "Token budget estimation in 4.8 KB WASM. Sub-millisecond. Zero dependencies."
+readme = "README.md"
 license = {text = "MIT"}
 authors = [{name = "wolfejam"}]
 keywords = ["tokens", "wasm", "edge", "budget", "llm", "ai"]
 requires-python = ">=3.8"
+
+[project.urls]
+Homepage = "https://slashtokens.com"
+Repository = "https://github.com/Wolfe-Jam/slash-tokens"
+Documentation = "https://slashtokens.com"

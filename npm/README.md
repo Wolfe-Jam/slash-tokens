@@ -120,7 +120,7 @@ Built from [xai-faf-zig](https://github.com/Wolfe-Jam/xai-faf-zig). 172 tests in
 
 - [slashtokens.com](https://slashtokens.com) — product site
 - [mcpaas.live/slash](https://mcpaas.live/slash) — live one-pager
-- [npm](https://www.npmjs.com/package/slash-tokens) / [crates.io](https://crates.io/crates/slash-tokens) / [PyPI](https://pypi.org/project/slash-tokens/)
+- [npm](https://www.npmjs.com/package/slash-tokens)
 - [xai-faf-zig](https://github.com/Wolfe-Jam/xai-faf-zig) — WASM engine source
 
 ## License
