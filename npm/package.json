@@ -1,7 +1,7 @@
 {
   "name": "slash-tokens",
-  "version": "0.2.0",
-  "description": "Token budget estimation in 4.8 KB WASM. Sub-millisecond. Zero dependencies. I don't count tokens. I slash them.",
+  "version": "0.3.0",
+  "description": "Pre-flight checks for API calls. 4.8 KB WASM. Sub-millisecond. Zero dependencies. Fly First. Pay Economy.",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,6 +13,10 @@
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
+    },
+    "./auto": {
+      "import": "./dist/auto.js",
+      "types": "./dist/auto.d.ts"
     }
   },
   "files": ["dist"],
