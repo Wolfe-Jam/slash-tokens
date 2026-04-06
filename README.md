@@ -1,8 +1,26 @@
 # /slash-tokens
 
-Token budget estimation in 4.8 KB WASM. Sub-millisecond. Zero dependencies.
+Pre-flight checks for API calls. 4.8 KB WASM. Sub-millisecond. Zero dependencies.
 
-I don't count tokens. I slash them.
+Fly First. Pay Economy.
+
+## The problem
+
+Every AI API call costs tokens. Most apps have no idea how much a call will cost until after it's made. You're paying for flights you shouldn't board.
+
+## The solution
+
+One line. Before any LLM call. Know the cost. Decide what to do.
+
+```js
+import { slash } from 'slash-tokens'
+
+const tokens = slash(prompt)         // 47,000 tokens → $0.71
+
+if (tokens > budget) skip()          // Don't board
+if (tokens > threshold) trim(prompt) // Fly lighter
+if (tokens > cheap_limit) reroute()  // Cheaper flight
+```
 
 ## Install
 
@@ -10,63 +28,76 @@ I don't count tokens. I slash them.
 npm install slash-tokens
 ```
 
-## Use
+## API
+
+### `slash(content: string): number`
+
+Estimate token count. Returns immediately. Sub-millisecond.
 
 ```js
-import { slash } from 'slash-tokens'
-
-const tokens = slash('Your content here')
-
-if (tokens > 128_000) trim(content)     // Context window gate
-const cost = tokens * PRICE_PER_TOKEN   // Cost estimation
+slash('')                    // 0
+slash('hello')               // 1
+slash(longDocument)          // 47,283
 ```
 
-One function. Returns a number. That's the entire API.
+### `slashBytes(bytes: Uint8Array): number`
 
-## Scan your project
+Estimate from raw bytes. Skips TextEncoder overhead.
+
+### `init(opts: { key: string, endpoint?: string }): void`
+
+Configure your API key for savings reporting.
+
+```js
+import { init } from 'slash-tokens'
+
+init({ key: 'mcp_slash_xxx' })
+// Or set SLASH_KEY environment variable
+```
+
+### `report(opts: ReportOptions): Promise<ReportResult>`
+
+Report savings to the metered API. You pay 10% of what you save.
+
+```js
+import { slash, report } from 'slash-tokens'
+
+const tokens = slash(prompt)
+if (tokens > threshold) {
+  // Skipped the call — report the savings
+  await report({
+    tokens_estimated: tokens,
+    tokens_saved: tokens,
+    model: 'claude-sonnet-4-20250514',
+    action: 'skipped',         // skipped | reduced | routed
+    cost_saved_usd: 0.05
+  })
+}
+```
+
+Key resolution: per-call `key` > `init({ key })` > `SLASH_KEY` env var.
+
+## Evaluate your project
 
 ```bash
 bunx slash-tokens
 ```
 
-Finds every AI API call in your codebase and estimates your token burn:
+Finds AI API call sites in your codebase and estimates token waste.
 
-```
-  ⚡ /slash
-  Token burn analysis
-
-  Scanned 47 files in 3ms
-
-  CALL SITES
-  ────────────────────────────────────────────────────────
-  src/api/chat.ts:24       Anthropic    ~2,400 tok/call
-  src/api/summary.ts:11    OpenAI       ~8,200 tok/call
-  src/lib/agent.ts:88      Vercel AI    ~1,100 tok/call
-
-  DAILY BURN (100 calls/site/day)
-  ────────────────────────────────────────────────────────
-  Input tokens:    1,520,000
-  Output tokens:   3,040,000  (estimated)
-  Total:           4,560,000 tokens/day
-
-  MONTHLY COST ($3/$15 per MTok)
-  ────────────────────────────────────────────────────────
-  Total:           $1,504.80/mo
-
-  ⚡ SLASH SAVINGS (10% gate efficiency)
-  ────────────────────────────────────────────────────────
-  Annual savings:  $1,805.76/yr
+```bash
+bunx slash-tokens --key=mcp_slash_xxx
 ```
 
-Detects: OpenAI, Anthropic, Vercel AI, LangChain, Gemini, Bedrock, Grok, Cohere, Mistral.
+With a key, results are reported to the metered API.
 
-## How it works
+## What this is not
 
-Single-pass byte classification over your content. No vocabulary tables. No BPE decode. Classifies content type (prose, code, JSON, YAML, mixed), applies a calibrated chars-per-token ratio, adds a safety margin.
+This is not a tokenizer. It doesn't decode BPE. It doesn't reproduce exact token counts.
 
-Budget gate — better to say "doesn't fit" than overflow. The API returns exact counts after the call. Pre-call, you only need go/no-go.
+This is a **pre-flight check**. It answers "should this call board?" with 96-98% accuracy in sub-millisecond time. The margin is intentional — overestimate, never underestimate.
 
-## Numbers
+## Why not tiktoken?
 
 | | js-tiktoken | gpt-tokenizer | slash-tokens |
 |---|---|---|---|
@@ -75,53 +106,22 @@ Budget gate — better to say "doesn't fit" than overflow. The API returns exact
 | Edge-ready | Painful | Difficult | **Native** |
 | Models | GPT only | GPT only | **Any model** |
 | Dependencies | npm tree | npm tree | **Zero** |
-| Allocations | Many | Many | **Zero** |
+
+tiktoken counts tokens for OpenAI models. Slash pre-flights any model — Claude, Grok, Gemini, GPT — in 4.8 KB.
 
 ## Runtime support
 
-Works everywhere WASM runs:
-
-- Node.js
-- Bun
-- Deno
-- Cloudflare Workers
-- Vercel Edge
-- Browser
-
-## API
-
-### `slash(content: string): number`
-
-Estimate token count for a string. Returns `u32`.
-
-```js
-slash('')                    // 0
-slash('hello')               // 1
-slash(longDocument)          // 4,283
-```
-
-### `slashBytes(bytes: Uint8Array): number`
-
-Estimate token count from raw bytes. Skips `TextEncoder` overhead.
-
-## What this is not
-
-This is not a tokenizer. It doesn't decode BPE. It doesn't reproduce exact token counts. No tokenizer can — Claude, Grok, and Gemini vocabularies are not public.
-
-This is a **budget gate**. It answers "does this fit?" with 96-98% accuracy in sub-millisecond time. The 2-4% margin is intentional — overestimate, never underestimate.
+Works everywhere WASM runs: Node.js, Bun, Deno, Cloudflare Workers, Vercel Edge, Browser.
 
 ## Engine
 
-4,865 bytes of Zig-compiled WASM (`wasm32-freestanding`). No allocator. No floats. No heap. Base64-embedded — no separate `.wasm` file to load.
-
-Built from [xai-faf-zig](https://github.com/Wolfe-Jam/xai-faf-zig). 172 tests including 65 adversarial (CJK, emoji, binary, base64, threshold boundaries).
+4.8 KB Zig-compiled WASM. 172 tests including 65 adversarial. Base64-embedded — no separate file to load.
 
 ## Links
 
-- [slashtokens.com](https://slashtokens.com) — product site
-- [mcpaas.live/slash](https://mcpaas.live/slash) — live one-pager
+- [slashtokens.com](https://slashtokens.com)
 - [npm](https://www.npmjs.com/package/slash-tokens)
-- [xai-faf-zig](https://github.com/Wolfe-Jam/xai-faf-zig) — WASM engine source
+- [mcpaas.live/slash](https://mcpaas.live/slash)
 
 ## License
 
