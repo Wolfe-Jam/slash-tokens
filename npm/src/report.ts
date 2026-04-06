@@ -1,4 +1,4 @@
-import { CallSite } from './scanner';
+import { CallSite } from './scanner.js';
 
 // ANSI — zero deps
 const R = '\x1b[0m';

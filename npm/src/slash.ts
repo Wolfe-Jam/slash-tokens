@@ -1,4 +1,4 @@
-import { getInstance, writeToMemory } from './wasm';
+import { getInstance, writeToMemory } from './wasm.js';
 
 const WASM_INPUT_OFFSET = 4096;
 

@@ -1,7 +1,7 @@
 import { readdirSync, readFileSync, statSync } from 'fs';
 import { join, extname } from 'path';
-import { slash } from './slash';
-import { AI_PATTERNS, SKIP_DIRS, SCAN_EXTENSIONS, Pattern } from './patterns';
+import { slash } from './slash.js';
+import { AI_PATTERNS, SKIP_DIRS, SCAN_EXTENSIONS, Pattern } from './patterns.js';
 
 export interface CallSite {
   file: string;

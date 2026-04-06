@@ -1,6 +1,6 @@
 {
   "name": "slash-tokens",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Token budget estimation in 4.8 KB WASM. Sub-millisecond. Zero dependencies. I don't count tokens. I slash them.",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -18,7 +18,7 @@
   "files": ["dist"],
   "sideEffects": false,
   "scripts": {
-    "build": "bun build src/cli.ts --outfile=dist/cli.js --target=node && tsc --emitDeclarationOnly && bun build src/index.ts --outfile=dist/index.js --target=node",
+    "build": "npx tsc && bun build src/cli.ts --outfile=dist/cli.js --target=node",
     "test": "bun test"
   },
   "author": "wolfejam",
