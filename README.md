@@ -20,7 +20,7 @@ Intercepts `fetch()` to Anthropic, OpenAI, xAI, and Google endpoints. Estimates 
 
 ```
 [slash] Anthropic claude-sonnet | 47,000 tokens | $0.1410 | OK
-[slash] xAI grok-3 | 12,300 tokens | $0.0615 | OK
+[slash] xAI grok-4.20 | 12,300 tokens | $0.0246 | OK
 ```
 
 ## Pre-flight check
@@ -50,9 +50,9 @@ interface Alternative {
 const check = preflight('Your prompt here...', 'claude-opus')
 
 check.tokens       // 47000
-check.cost         // 0.705 (USD)
+check.cost         // 0.235 (USD)
 check.fits         // true
-check.options[0]   // { model: 'claude-haiku', cost: 0.01175, savings: 0.69325, savingsPercent: 98.33 }
+check.options[0]   // { model: 'grok-4-1-fast', cost: 0.0094, savings: 0.2256, savingsPercent: 96 }
 ```
 
 ```js
@@ -118,12 +118,12 @@ const result = await report({
   tokens_saved: 47000,
   model: 'claude-opus',
   action: 'skipped',        // 'skipped' | 'reduced' | 'routed'
-  cost_saved_usd: 0.70
+  cost_saved_usd: 0.235
 })
 
 result.transaction_id        // 'txn_abc123'
-result.fee_usd               // 0.07 (10% of savings)
-result.balance_remaining_usd // 4.93
+result.fee_usd               // 0.0235 (10% of savings)
+result.balance_remaining_usd // 4.9765
 ```
 
 Key resolution: per-call `key` param > `init({ key })` > `SLASH_KEY` env var.
@@ -149,7 +149,7 @@ Node.js, Bun, Deno, Cloudflare Workers, Vercel Edge, Browser.
 
 ## Testing
 
-325 tests:
+323 tests:
 - 172 Zig (65 adversarial: CJK, emoji, binary, base64, thresholds)
 - 103 TypeScript (SDK, preflight, billing, auto mode)
 - 50 API (transaction lifecycle, auth, injection, key format attacks)
