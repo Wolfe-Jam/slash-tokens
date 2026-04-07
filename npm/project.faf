@@ -1,7 +1,7 @@
 faf_version: "3.0"
 project:
   name: slash-tokens
-  goal: Token budget estimation in 4.8 KB WASM. Sub-millisecond. Zero dependencies. I don't count tokens. I slash them.
+  goal: Pre-flight checks for API calls. 4.8 KB WASM. Sub-millisecond. Zero dependencies.
   main_language: TypeScript
   type: cli
 stack:
