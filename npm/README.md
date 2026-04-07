@@ -1,8 +1,7 @@
 # /slash-tokens
 
-Pre-flight checks for API calls. 4.8 KB WASM. Sub-millisecond. Zero dependencies.
-
-**Fly First. Pay Economy.**
+Token Optimization for Context Engineers.
+4.8 KB WASM. Sub-millisecond. Zero dependencies.
 
 ```bash
 npm install slash-tokens
@@ -15,7 +14,7 @@ const check = preflight(prompt, 'claude-opus')
 // tokens: 47,000 | cost: $0.71 | 11 cheaper options | save 99%
 ```
 
-Or one line — every API call pre-flighted automatically:
+Or one line — every API call checked pre-call:
 
 ```js
 import 'slash-tokens/auto'
