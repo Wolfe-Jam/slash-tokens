@@ -14,5 +14,5 @@ export { report } from './transact.js';
 export type { ReportOptions, ReportResult } from './transact.js';
 
 // Configuration
-export { init } from './config.js';
+export { init, hasKey } from './config.js';
 export { resolveKey } from './config.js';
