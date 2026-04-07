@@ -1,10 +1,10 @@
-<!-- faf: slash-tokens | TypeScript | Token budget estimation in 4.8 KB WASM. Sub-millisecond. Zero dependencies. I don't count tokens. I slash them. -->
+<!-- faf: slash-tokens | TypeScript | Pre-flight checks for API calls. 4.8 KB WASM. Sub-millisecond. Zero dependencies. -->
 
 # CLAUDE.md — slash-tokens
 
 ## What This Is
 
-Token budget estimation in 4.8 KB WASM. Sub-millisecond. Zero dependencies. I don't count tokens. I slash them.
+Pre-flight checks for API calls. 4.8 KB WASM. Sub-millisecond. Zero dependencies.
 
 ## Stack
 
@@ -12,13 +12,13 @@ Token budget estimation in 4.8 KB WASM. Sub-millisecond. Zero dependencies. I do
 
 ## Context
 
-- **Who:** AI developers, teams, and token burners building with LLM APIs
-- **What:** Token budget estimation in 4.8 KB WASM. Sub-millisecond. Zero dependencies. I don't count tokens. I slash them.
-- **Why:** Every AI app estimates tokens before API calls. Current options are 300 KB - 1 MB libraries. Slash does it in 4.8 KB with zero deps.
-- **Where:** npm (slash-tokens), crates.io, PyPI, slashtokens.com
-- **When:** v0.1.0, April 2026
+- **Who:** AI developers and teams making LLM API calls (Claude, Grok, Gemini, GPT)
+- **What:** Pre-flight checks for API calls. Know the cost before you board. Skip, reduce, or route.
+- **Why:** Every API call is a flight. Most apps have no idea what it costs until after. You're paying for flights that produce nothing.
+- **Where:** npm (slash-tokens), slashtokens.com, mcpaas.live/slash
+- **When:** v0.2.x, April 2026
 - **How:** npm install slash-tokens / bunx slash-tokens
 
 ---
 
-*STATUS: BI-SYNC ACTIVE — 2026-04-02T15:24:18.681Z*
+*STATUS: BI-SYNC ACTIVE — 2026-04-06*
