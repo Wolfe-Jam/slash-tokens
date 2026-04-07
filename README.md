@@ -5,6 +5,12 @@ Token Optimization for Context Engineers.
 
 Know the cost before the call leaves your machine.
 
+## Try it
+
+```bash
+bunx slash-tokens
+```
+
 ## Install
 
 ```bash
