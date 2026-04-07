@@ -4,35 +4,23 @@ Pre-flight checks for API calls. 4.8 KB WASM. Sub-millisecond. Zero dependencies
 
 **Fly First. Pay Economy.**
 
-## Install
-
 ```bash
 npm install slash-tokens
 ```
 
-## Use
+```js
+import { preflight } from 'slash-tokens'
+
+const check = preflight(prompt, 'claude-opus')
+// tokens: 47,000 | cost: $0.71 | 11 cheaper options | save 99%
+```
+
+Or one line — every API call pre-flighted automatically:
 
 ```js
-import { slash } from 'slash-tokens'
-
-const tokens = slash(prompt)
-
-if (tokens > contextWindow) trim(prompt)
-if (tokens < cheapThreshold) useHaiku()
+import 'slash-tokens/auto'
 ```
 
-One function. Returns a token estimate. Sub-millisecond. Any model.
+Full docs, examples, and model pricing at **[GitHub](https://github.com/Wolfe-Jam/slash-tokens)**
 
-## Evaluate a repo
-
-```bash
-bunx slash-tokens
-```
-
-## Docs
-
-Everything is at **[slashtokens.com](https://slashtokens.com)**
-
-## License
-
-MIT
+[slashtokens.com](https://slashtokens.com) | MIT
