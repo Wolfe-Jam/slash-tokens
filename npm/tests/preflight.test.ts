@@ -54,8 +54,8 @@ describe('TIER 1: BRAKE — Preflight Structure', () => {
   });
 
   it('model echoes back the requested model', () => {
-    const check = preflight('hello', 'grok-3');
-    expect(check.model).toBe('grok-3');
+    const check = preflight('hello', 'grok-4.20');
+    expect(check.model).toBe('grok-4.20');
   });
 
   it('options is an array', () => {
@@ -69,16 +69,16 @@ describe('TIER 1: BRAKE — Preflight Structure', () => {
     expect(models).toContain('claude-opus');
     expect(models).toContain('claude-sonnet');
     expect(models).toContain('claude-haiku');
-    expect(models).toContain('grok-3');
-    expect(models).toContain('gpt-4o');
+    expect(models).toContain('grok-4.20');
+    expect(models).toContain('gpt-5.4');
   });
 
   it('getModel returns ModelInfo for valid model', () => {
     const info = getModel('claude-opus');
     expect(info).toBeDefined();
-    expect(info!.input).toBe(15.00);
-    expect(info!.output).toBe(75.00);
-    expect(info!.context).toBe(200000);
+    expect(info!.input).toBe(5.00);
+    expect(info!.output).toBe(25.00);
+    expect(info!.context).toBe(1000000);
   });
 
   it('getModel returns undefined for invalid model', () => {
@@ -129,7 +129,7 @@ describe('TIER 2: ENGINE — Pricing & Intelligence', () => {
     it('cost formula: (tokens / 1M) * input_rate', () => {
       const content = 'test';
       const check = preflight(content, 'claude-opus');
-      const expected = (check.tokens / 1_000_000) * 15.00;
+      const expected = (check.tokens / 1_000_000) * 5.00;
       expect(Math.abs(check.cost - expected)).toBeLessThan(0.000001);
     });
   });
@@ -141,9 +141,9 @@ describe('TIER 2: ENGINE — Pricing & Intelligence', () => {
     });
 
     it('context matches model specification', () => {
-      expect(preflight('hi', 'claude-opus').context).toBe(200000);
-      expect(preflight('hi', 'gpt-4o').context).toBe(128000);
-      expect(preflight('hi', 'gemini-2.0-flash').context).toBe(1048576);
+      expect(preflight('hi', 'claude-opus').context).toBe(1000000);
+      expect(preflight('hi', 'gpt-5.4').context).toBe(1000000);
+      expect(preflight('hi', 'gemini-2.5-flash').context).toBe(1000000);
     });
 
     it('utilization is between 0 and 1 for fitting content', () => {
@@ -235,7 +235,7 @@ describe('TIER 3: AERO — Edge Cases', () => {
         preflight('hello', 'fake-model');
       } catch (e: any) {
         expect(e.message).toContain('claude-opus');
-        expect(e.message).toContain('grok-3');
+        expect(e.message).toContain('grok-4.20');
       }
     });
   });
@@ -274,7 +274,7 @@ describe('TIER 3: AERO — Edge Cases', () => {
 
     it('handles JSON content', () => {
       const json = JSON.stringify({ messages: [{ role: 'user', content: 'hello' }] });
-      const check = preflight(json, 'gpt-4o');
+      const check = preflight(json, 'gpt-5.4');
       expect(check.tokens).toBeGreaterThan(0);
     });
 
@@ -376,7 +376,7 @@ describe('TIER 4: PIT STOP — Auto Mode', () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'gpt-4o',
+          model: 'gpt-5.4',
           messages: [{ role: 'user', content: 'Hello' }]
         })
       });
@@ -384,7 +384,7 @@ describe('TIER 4: PIT STOP — Auto Mode', () => {
 
     expect(events.length).toBe(1);
     expect(events[0].provider).toBe('OpenAI');
-    expect(events[0].model).toBe('gpt-4o');
+    expect(events[0].model).toBe('gpt-5.4');
   }, 15000);
 
   it('intercepts xAI API calls', async () => {
@@ -394,7 +394,7 @@ describe('TIER 4: PIT STOP — Auto Mode', () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          model: 'grok-3',
+          model: 'grok-4.20',
           messages: [{ role: 'user', content: 'Test' }]
         })
       });
@@ -402,13 +402,13 @@ describe('TIER 4: PIT STOP — Auto Mode', () => {
 
     expect(events.length).toBe(1);
     expect(events[0].provider).toBe('xAI');
-    expect(events[0].model).toBe('grok-3');
+    expect(events[0].model).toBe('grok-4.20');
   }, 15000);
 
   it('intercepts Google Gemini API calls', async () => {
     events = [];
     try {
-      await globalThis.fetch('https://generativelanguage.googleapis.com/v1/models/gemini-2.0-flash:generateContent', {
+      await globalThis.fetch('https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

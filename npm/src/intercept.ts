@@ -38,18 +38,24 @@ const AI_ENDPOINTS: Array<{ pattern: RegExp; provider: string; modelExtractor: (
 // Normalize model names to our pricing table keys
 function normalizeModel(raw: string): string {
   const lower = raw.toLowerCase();
+  // Anthropic
   if (lower.includes('opus')) return 'claude-opus';
   if (lower.includes('sonnet')) return 'claude-sonnet';
   if (lower.includes('haiku')) return 'claude-haiku';
-  if (lower.includes('grok') && lower.includes('mini')) return 'grok-3-mini';
-  if (lower.includes('grok')) return 'grok-3';
-  if (lower.includes('gemini') && lower.includes('pro')) return 'gemini-2.0-pro';
-  if (lower.includes('gemini')) return 'gemini-2.0-flash';
-  if (lower.includes('4o-mini') || lower.includes('4o_mini')) return 'gpt-4o-mini';
-  if (lower.includes('4o')) return 'gpt-4o';
-  if (lower.includes('4.1') && lower.includes('nano')) return 'gpt-4.1-nano';
-  if (lower.includes('4.1') && lower.includes('mini')) return 'gpt-4.1-mini';
-  if (lower.includes('4.1')) return 'gpt-4.1';
+  // xAI
+  if (lower.includes('grok') && lower.includes('fast')) return 'grok-4-1-fast';
+  if (lower.includes('grok')) return 'grok-4.20';
+  // Google
+  if (lower.includes('gemini') && lower.includes('pro')) return 'gemini-3.1-pro';
+  if (lower.includes('gemini')) return 'gemini-2.5-flash';
+  // OpenAI
+  if (lower.includes('5.4') && lower.includes('nano')) return 'gpt-5.4-nano';
+  if (lower.includes('5.4') && lower.includes('mini')) return 'gpt-5.4-mini';
+  if (lower.includes('5.4')) return 'gpt-5.4';
+  // Legacy fallbacks
+  if (lower.includes('4o-mini') || lower.includes('4o_mini')) return 'gpt-5.4-mini';
+  if (lower.includes('4o') || lower.includes('4.1')) return 'gpt-5.4';
+  if (lower.includes('grok-3')) return 'grok-4.20';
   return raw;
 }
 

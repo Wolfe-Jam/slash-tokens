@@ -2,156 +2,163 @@
 
 Pre-flight checks for API calls. 4.8 KB WASM. Sub-millisecond. Zero dependencies.
 
-**Fly First. Pay Economy.**
-
 ## Install
 
 ```bash
 npm install slash-tokens
 ```
 
-## Pre-flight check
-
-Every API call is a flight. Know the cost before you board.
-
-```js
-import { preflight } from 'slash-tokens'
-
-const check = preflight(prompt, 'claude-opus')
-
-check.tokens       // 47,000
-check.cost         // $0.71
-check.fits         // true (under 200K context window)
-check.options      // 11 cheaper models
-check.options[0]   // { model: 'claude-haiku', cost: $0.01, savingsPercent: 99 }
-```
-
-99% savings. Not compression. Not caching. Right-sizing.
-
 ## Auto mode
 
-One line. Every LLM call pre-flighted automatically.
+One import. Every LLM call pre-flighted.
 
 ```js
 import 'slash-tokens/auto'
 ```
 
-Intercepts `fetch()` to Anthropic, OpenAI, xAI, and Google APIs. Logs every call. Sub-millisecond. Non-blocking. Zero config.
+Intercepts `fetch()` to Anthropic, OpenAI, xAI, and Google endpoints. Estimates tokens on the request body before the call leaves your machine. Sub-millisecond. Non-blocking.
 
-No key: console logging (free forever).
-With key: meter runs, savings reported.
+```
+[slash] Anthropic claude-sonnet | 47,000 tokens | $0.1410 | OK
+[slash] xAI grok-3 | 12,300 tokens | $0.0615 | OK
+```
+
+## Pre-flight check
+
+```ts
+import { preflight } from 'slash-tokens'
+
+interface PreflightResult {
+  tokens: number
+  cost: number           // USD (input tokens * model rate)
+  fits: boolean          // under context window
+  model: string
+  context: number        // model's context window size
+  utilization: number    // 0-1
+  options: Alternative[] // cheaper models, sorted by cost
+}
+
+interface Alternative {
+  model: string
+  cost: number
+  savings: number
+  savingsPercent: number
+}
+```
+
+```js
+const check = preflight('Your prompt here...', 'claude-opus')
+
+check.tokens       // 47000
+check.cost         // 0.705 (USD)
+check.fits         // true
+check.options[0]   // { model: 'claude-haiku', cost: 0.01175, savings: 0.69325, savingsPercent: 98.33 }
+```
+
+```js
+if (!check.fits) {
+  // over context window — trim or reject
+}
+
+if (check.options.length > 0) {
+  // cheaper model available
+  const best = check.options[0]
+  // use best.model instead, save best.savingsPercent%
+}
+```
 
 ## Models
 
-12 models with public pricing. Pre-flight any of them.
+10 models with public pricing (as of April 2026).
 
-| Provider | Models |
-|---|---|
-| Anthropic | claude-opus, claude-sonnet, claude-haiku |
-| xAI | grok-3, grok-3-mini |
-| Google | gemini-2.0-flash, gemini-2.0-pro |
-| OpenAI | gpt-4o, gpt-4o-mini, gpt-4.1, gpt-4.1-mini, gpt-4.1-nano |
+| Model | $/M input | $/M output | Context |
+|---|---|---|---|
+| claude-opus | 5.00 | 25.00 | 1M |
+| claude-sonnet | 3.00 | 15.00 | 1M |
+| claude-haiku | 1.00 | 5.00 | 200K |
+| grok-4.20 | 2.00 | 6.00 | 2M |
+| grok-4-1-fast | 0.20 | 0.50 | 2M |
+| gemini-3.1-pro | 2.00 | 12.00 | 1M |
+| gemini-2.5-flash | 0.30 | 2.50 | 1M |
+| gpt-5.4 | 2.50 | 15.00 | 1M |
+| gpt-5.4-mini | 0.75 | 4.50 | 128K |
+| gpt-5.4-nano | 0.20 | 1.25 | 128K |
 
 ```js
-import { listModels } from 'slash-tokens'
-listModels() // all 12
+import { listModels, MODELS } from 'slash-tokens'
+
+listModels()           // ['claude-opus', 'claude-sonnet', ...]
+MODELS['claude-opus']  // { input: 5, output: 25, context: 1000000 }
 ```
 
 ## Token estimation
 
-The engine underneath. Returns a count. Sub-millisecond. Any model.
+The engine underneath. 4.8 KB Zig-compiled WASM. 96-98% accurate.
 
 ```js
-import { slash } from 'slash-tokens'
+import { slash, slashBytes } from 'slash-tokens'
 
 slash('Hello world')           // 2
-slash(longDocument)            // 47,283
-slash(JSON.stringify(payload)) // 1,205
+slash(longDocument)            // 47283
+slashBytes(new Uint8Array(buf)) // skip TextEncoder
 ```
 
-96-98% accurate. The margin is intentional — overestimate, never underestimate.
+Overestimates by design. The margin prevents overflow. The API returns exact counts after the call — pre-call, you only need go/no-go.
 
 ## Savings reporting
-
-You save on a call, we take 10%. If we save you $50, we earn $5.
 
 ```js
 import { init, report } from 'slash-tokens'
 
 init({ key: 'mcp_slash_xxx' })
-// Or set SLASH_KEY environment variable
+// Or: process.env.SLASH_KEY
 
-await report({
+const result = await report({
   tokens_estimated: 47000,
   tokens_saved: 47000,
   model: 'claude-opus',
-  action: 'skipped',        // skipped | reduced | routed
+  action: 'skipped',        // 'skipped' | 'reduced' | 'routed'
   cost_saved_usd: 0.70
 })
-// → { transaction_id, fee_usd, balance_remaining_usd }
+
+result.transaction_id        // 'txn_abc123'
+result.fee_usd               // 0.07 (10% of savings)
+result.balance_remaining_usd // 4.93
 ```
 
-$5 on the house. No flight, no fee. When you save, we earn.
+Key resolution: per-call `key` param > `init({ key })` > `SLASH_KEY` env var.
+
+Register: `POST https://mcpaas.live/api/slash/register` with `{ "email": "you@company.com" }`
 
 ## Get started
 
 ```bash
-# 1. Set your key
 export SLASH_KEY=mcp_slash_xxx
-
-# 2. Try it
 bunx slash-tokens
-
-# 3. Add to your app
-# import 'slash-tokens/auto'
 ```
 
-Register for a key at [mcpaas.live/slash/scan](https://mcpaas.live/slash/scan) or via API:
+Add to your app:
 
-```bash
-curl -X POST https://mcpaas.live/api/slash/register \
-  -H 'Content-Type: application/json' \
-  -d '{"email": "you@company.com"}'
+```js
+import 'slash-tokens/auto'
 ```
 
-## Why not tiktoken?
-
-| | tiktoken | slash-tokens |
-|---|---|---|
-| Size | ~1 MB | **4.8 KB** |
-| Cold start | Heavy | **Sub-ms** |
-| Models | GPT only | **Any model** |
-| Edge-ready | Painful | **Native** |
-| Dependencies | npm tree | **Zero** |
-| Pre-flight | No | **Yes** |
-| Cost calc | No | **Yes** |
-| Auto mode | No | **Yes** |
-
-tiktoken counts tokens for OpenAI. Slash pre-flights any model in 4.8 KB.
-
-## Runs everywhere
+## Runtime support
 
 Node.js, Bun, Deno, Cloudflare Workers, Vercel Edge, Browser.
 
-4.8 KB Zig-compiled WASM. Base64-embedded. No separate file to load.
-
 ## Testing
 
-325 tests across the stack:
-- 172 in Zig (65 adversarial: CJK, emoji, binary, base64, threshold boundaries)
-- 103 in TypeScript (SDK, preflight, billing, auto mode)
-- 50 on the API (transaction lifecycle, auth, injection, key format attacks)
-
-## Dashboard
-
-[mcpaas.live/slash/dashboard](https://mcpaas.live/slash/dashboard) — see your balance, tokens salvaged, credits recovered.
+325 tests:
+- 172 Zig (65 adversarial: CJK, emoji, binary, base64, thresholds)
+- 103 TypeScript (SDK, preflight, billing, auto mode)
+- 50 API (transaction lifecycle, auth, injection, key format attacks)
 
 ## Links
 
-- [slashtokens.com](https://slashtokens.com) — the pitch
-- [mcpaas.live/slash](https://mcpaas.live/slash) — developer page
-- [mcpaas.live/slash/scan](https://mcpaas.live/slash/scan) — evaluate a repo
+- [slashtokens.com](https://slashtokens.com)
 - [npm](https://www.npmjs.com/package/slash-tokens)
+- [Dashboard](https://mcpaas.live/slash/dashboard)
 
 ## License
 
