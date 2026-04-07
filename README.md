@@ -67,7 +67,7 @@ Overestimates by design. The margin prevents overflow. Pre-call, you only need g
 
 ## Models
 
-10 models with public pricing (as of April 2026).
+Works with all models. 10 with built-in pricing (as of April 2026). Don't see yours? [Open an issue.](https://github.com/Wolfe-Jam/slash-tokens/issues)
 
 | Model | $/M input | $/M output | Context |
 |---|---|---|---|
