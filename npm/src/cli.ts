@@ -26,21 +26,21 @@ const GRAY = '\x1b[90m';
 const ORANGE = '\x1b[38;2;255;68;0m';
 
 if (key && sites.length > 0) {
-  // Calculate savings from scan
+  // Calculate sunk cost recovery from scan
   const callsPerDay = 100;
   const dailyInput = sites.reduce((sum, s) => sum + s.tokensPerCall * callsPerDay, 0);
   const dailyOutput = dailyInput * 2;
   const monthlyCostInput = (dailyInput * 30 / 1_000_000) * 3;
   const monthlyCostOutput = (dailyOutput * 30 / 1_000_000) * 15;
   const monthlyCost = monthlyCostInput + monthlyCostOutput;
-  const monthlySaved = monthlyCost * 0.10;
+  const monthlyRecovered = monthlyCost * 0.10;
 
   report({
     tokens_estimated: dailyInput * 30,
     tokens_saved: Math.round(dailyInput * 30 * 0.10),
     model: 'scan',
     action: 'reduced',
-    cost_saved_usd: monthlySaved,
+    cost_saved_usd: monthlyRecovered,
   })
     .then(result => {
       console.log(`${GREEN}${B}  ✓ Reported to MCPaaS${R} ${GRAY}(${result.transaction_id})${R}`);
@@ -52,7 +52,7 @@ if (key && sites.length > 0) {
       console.log('');
     });
 } else if (!key && sites.length > 0) {
-  console.log(`${GRAY}  → Report savings: ${ORANGE}bunx slash-tokens --key=YOUR_KEY${R}`);
+  console.log(`${GRAY}  → Track salvaged: ${ORANGE}bunx slash-tokens --key=YOUR_KEY${R}`);
   console.log(`${GRAY}  → Get a key:      POST https://mcpaas.live/api/slash/register${R}`);
   console.log('');
 }

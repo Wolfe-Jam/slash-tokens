@@ -20,7 +20,7 @@ function formatNum(n: number): string {
 export function printReport(sites: CallSite[], filesScanned: number, timeMs: number, cwd: string): void {
   console.log('');
   console.log(`${ORANGE}${B}  ⚡ /slash${R}`);
-  console.log(`${GRAY}  Token burn analysis${R}`);
+  console.log(`${GRAY}  Token optimization analysis${R}`);
   console.log('');
   console.log(`${DIM}  Scanned ${filesScanned} files in ${timeMs}ms${R}`);
   console.log('');
@@ -55,7 +55,7 @@ export function printReport(sites: CallSite[], filesScanned: number, timeMs: num
   const monthlyCostOutput = (dailyOutput * 30 / 1_000_000) * 15;
   const monthlyCost = monthlyCostInput + monthlyCostOutput;
 
-  console.log(`${ORANGE}  DAILY BURN ${GRAY}(${callsPerDay} calls/site/day)${R}`);
+  console.log(`${ORANGE}  DAILY TOKEN VOLUME ${GRAY}(${callsPerDay} calls/site/day)${R}`);
   console.log(`${DIM}  ${'─'.repeat(60)}${R}`);
   console.log(`${WHITE}  Input tokens:    ${B}${formatNum(dailyInput)}${R}`);
   console.log(`${WHITE}  Output tokens:   ${B}${formatNum(dailyOutput)}${R}  ${GRAY}(estimated)${R}`);
@@ -69,13 +69,13 @@ export function printReport(sites: CallSite[], filesScanned: number, timeMs: num
   console.log(`${WHITE}  Total:           ${ORANGE}${B}$${monthlyCost.toFixed(2)}/mo${R}`);
   console.log('');
 
-  // Slash savings (conservative 10% gate savings)
-  const savingsPct = 10;
-  const monthlySaved = monthlyCost * savingsPct / 100;
-  console.log(`${GOLD}  ⚡ SLASH SAVINGS ${GRAY}(${savingsPct}% gate efficiency)${R}`);
+  // Slash — sunk cost recovery (conservative 10% gate efficiency)
+  const recoveryPct = 10;
+  const monthlyRecovered = monthlyCost * recoveryPct / 100;
+  console.log(`${GOLD}  ⚡ TOKENS SALVAGED ${GRAY}(${recoveryPct}% gate efficiency)${R}`);
   console.log(`${DIM}  ${'─'.repeat(60)}${R}`);
-  console.log(`${WHITE}  Monthly savings: ${GOLD}${B}$${monthlySaved.toFixed(2)}/mo${R}`);
-  console.log(`${WHITE}  Annual savings:  ${GOLD}${B}$${(monthlySaved * 12).toFixed(2)}/yr${R}`);
+  console.log(`${WHITE}  Monthly salvaged: ${GOLD}${B}$${monthlyRecovered.toFixed(2)}/mo${R}`);
+  console.log(`${WHITE}  Annual salvaged:  ${GOLD}${B}$${(monthlyRecovered * 12).toFixed(2)}/yr${R}`);
   console.log('');
 
   console.log(`${GRAY}  4.8 KB WASM · sub-ms · zero deps${R}`);
