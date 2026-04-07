@@ -5,3 +5,6 @@ bun.lock
 target/
 __pycache__/
 *.egg-info/
+*.whl
+*.tar.gz
+*.crate
