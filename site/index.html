@@ -747,12 +747,13 @@
     <h2>Are you the <span class="slash">boss</span>?</h2>
 
     <div class="prose">
-      <p>Send this to your dev. That's it.</p>
+      <p>Copy this. Send it to your dev. That's it.</p>
     </div>
 
-    <div class="punchline" style="border: 1px solid #FF4400; background: rgba(255, 68, 0, 0.04);">
+    <div class="punchline" style="border: 1px solid #FF4400; background: rgba(255, 68, 0, 0.04); cursor: pointer; position: relative;" onclick="navigator.clipboard.writeText('bunx slash-tokens').then(() => { const fb = this.querySelector('.copy-feedback'); fb.style.opacity = '1'; setTimeout(() => fb.style.opacity = '0', 1500); })">
       <p style="font-family: 'Roboto Mono', monospace; font-size: 1.4rem; letter-spacing: 0.02em;"><span style="color:#FF4400">bunx slash-tokens</span></p>
-      <div class="sub" style="margin-top: 1rem;">They'll know what to do.</div>
+      <div class="sub" style="margin-top: 0.8rem;">Click to copy</div>
+      <div class="copy-feedback" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #4ade80; color: #0a0a0a; font-weight: 800; font-size: 1rem; padding: 0.4rem 1.2rem; border-radius: 6px; opacity: 0; transition: opacity 0.3s; pointer-events: none;">Copied!</div>
     </div>
 
     <div class="prose" style="margin-top: 2rem;">
