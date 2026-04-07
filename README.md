@@ -1,6 +1,9 @@
 # /slash-tokens
 
-Pre-flight checks for API calls. 4.8 KB WASM. Sub-millisecond. Zero dependencies.
+Token Optimization for Context Engineers.
+4.8 KB WASM. Sub-millisecond. Zero dependencies.
+
+Know the cost before the call leaves your machine.
 
 ## Install
 
@@ -8,45 +11,30 @@ Pre-flight checks for API calls. 4.8 KB WASM. Sub-millisecond. Zero dependencies
 npm install slash-tokens
 ```
 
+```bash
+bun add slash-tokens
+```
+
 ## Auto mode
 
-One import. Every LLM call pre-flighted.
+One import. Every LLM call checked pre-call.
 
 ```js
 import 'slash-tokens/auto'
 ```
 
-Intercepts `fetch()` to Anthropic, OpenAI, xAI, and Google endpoints. Estimates tokens on the request body before the call leaves your machine. Sub-millisecond. Non-blocking.
+Intercepts `fetch()` to Anthropic, OpenAI, xAI, and Google endpoints. Estimates tokens before the call leaves your machine. Sub-millisecond. Non-blocking.
 
 ```
 [slash] Anthropic claude-sonnet | 47,000 tokens | $0.1410 | OK
 [slash] xAI grok-4.20 | 12,300 tokens | $0.0246 | OK
 ```
 
-## Pre-flight check
-
-```ts
-import { preflight } from 'slash-tokens'
-
-interface PreflightResult {
-  tokens: number
-  cost: number           // USD (input tokens * model rate)
-  fits: boolean          // under context window
-  model: string
-  context: number        // model's context window size
-  utilization: number    // 0-1
-  options: Alternative[] // cheaper models, sorted by cost
-}
-
-interface Alternative {
-  model: string
-  cost: number
-  savings: number
-  savingsPercent: number
-}
-```
+## Pre-call check
 
 ```js
+import { preflight } from 'slash-tokens'
+
 const check = preflight('Your prompt here...', 'claude-opus')
 
 check.tokens       // 47000
@@ -55,17 +43,21 @@ check.fits         // true
 check.options[0]   // { model: 'grok-4-1-fast', cost: 0.0094, savings: 0.2256, savingsPercent: 96 }
 ```
 
-```js
-if (!check.fits) {
-  // over context window — trim or reject
-}
+Fully typed. Returns tokens, cost, context fit, and cheaper alternatives sorted by price.
 
-if (check.options.length > 0) {
-  // cheaper model available
-  const best = check.options[0]
-  // use best.model instead, save best.savingsPercent%
-}
+## Token estimation
+
+The engine underneath. 4.8 KB Zig-compiled WASM. 96-98% accurate.
+
+```js
+import { slash, slashBytes } from 'slash-tokens'
+
+slash('Hello world')           // 2
+slash(longDocument)            // 47283
+slashBytes(new Uint8Array(buf)) // skip TextEncoder
 ```
+
+Overestimates by design. The margin prevents overflow. Pre-call, you only need go/no-go.
 
 ## Models
 
@@ -91,27 +83,12 @@ listModels()           // ['claude-opus', 'claude-sonnet', ...]
 MODELS['claude-opus']  // { input: 5, output: 25, context: 1000000 }
 ```
 
-## Token estimation
-
-The engine underneath. 4.8 KB Zig-compiled WASM. 96-98% accurate.
-
-```js
-import { slash, slashBytes } from 'slash-tokens'
-
-slash('Hello world')           // 2
-slash(longDocument)            // 47283
-slashBytes(new Uint8Array(buf)) // skip TextEncoder
-```
-
-Overestimates by design. The margin prevents overflow. The API returns exact counts after the call — pre-call, you only need go/no-go.
-
 ## Savings reporting
 
 ```js
 import { init, report } from 'slash-tokens'
 
 init({ key: 'mcp_slash_xxx' })
-// Or: process.env.SLASH_KEY
 
 const result = await report({
   tokens_estimated: 47000,
@@ -120,28 +97,9 @@ const result = await report({
   action: 'skipped',        // 'skipped' | 'reduced' | 'routed'
   cost_saved_usd: 0.235
 })
-
-result.transaction_id        // 'txn_abc123'
-result.fee_usd               // 0.0235 (10% of savings)
-result.balance_remaining_usd // 4.9765
 ```
 
-Key resolution: per-call `key` param > `init({ key })` > `SLASH_KEY` env var.
-
-Register: `POST https://mcpaas.live/api/slash/register` with `{ "email": "you@company.com" }`
-
-## Get started
-
-```bash
-export SLASH_KEY=mcp_slash_xxx
-bunx slash-tokens
-```
-
-Add to your app:
-
-```js
-import 'slash-tokens/auto'
-```
+Register at [mcpaas.live/slash/setup](https://mcpaas.live/slash/setup) to start tracking.
 
 ## Runtime support
 
