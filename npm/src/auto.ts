@@ -1,6 +1,6 @@
 import { patchFetch, onIntercept } from './intercept.js';
 import { report } from './transact.js';
-import { hasKey } from './config.js';
+import { hasKey, isQuiet } from './config.js';
 
 // Auto mode: import this file and every LLM call is optimized.
 // Usage: import 'slash-tokens/auto'
@@ -33,10 +33,18 @@ onIntercept((event) => {
     totalRouted++;
   }
 
-  // Nudge at thresholds: $5, $10, $25, $50, $100, $250, $500, $1000...
+  // Verbose mode (default) — log every call
+  if (!isQuiet()) {
+    const route = event.routed
+      ? `${GOLD}${event.originalModel} → ${event.model}${R}`
+      : `${event.model}`;
+    const salvageTag = event.salvaged > 0 ? ` ${GREEN}saved $${event.salvaged.toFixed(4)}${R}` : '';
+    console.log(`${GREEN}[slash]${R} ${event.provider} ${route} | ${event.tokens.toLocaleString()} tok | $${event.cost.toFixed(4)}${salvageTag}`);
+  }
+
+  // Nudge at thresholds (always, even in quiet mode)
   if (totalSalvaged >= nextNudge) {
     console.log(`${GREEN}${B}  ⚡ $${Math.floor(totalSalvaged)} salvaged${R}${GOLD} — keep building${R}`);
-    // Next threshold
     if (nextNudge < 10) nextNudge = 10;
     else if (nextNudge < 25) nextNudge = 25;
     else if (nextNudge < 50) nextNudge = 50;
@@ -44,7 +52,7 @@ onIntercept((event) => {
     else nextNudge += 100;
   }
 
-  // Report real savings to MCPaaS (non-blocking, silent)
+  // Report real savings to MCPaaS (non-blocking)
   if (hasKey() && event.salvaged > 0) {
     report({
       tokens_estimated: event.tokens,
@@ -52,8 +60,6 @@ onIntercept((event) => {
       model: event.originalModel,
       action: 'routed',
       cost_saved_usd: event.salvaged,
-    }).catch(() => {
-      // Silent — never break the app
-    });
+    }).catch(() => {});
   }
 });

@@ -2,12 +2,14 @@ let _key: string | null = null;
 let _endpoint: string = 'https://mcpaas.live/api/slash/transact';
 let _route: boolean = true; // default: route to cheapest model
 let _models: Set<string> | null = null; // null = all models allowed
+let _quiet: boolean = false; // default: verbose (show every call)
 
-export function init(opts: { key?: string; endpoint?: string; route?: boolean; models?: string[] }): void {
+export function init(opts: { key?: string; endpoint?: string; route?: boolean; models?: string[]; quiet?: boolean }): void {
   if (opts.key !== undefined) _key = opts.key;
   if (opts.endpoint) _endpoint = opts.endpoint;
   if (opts.route !== undefined) _route = opts.route;
   if (opts.models) _models = new Set(opts.models.map(m => m.toLowerCase()));
+  if (opts.quiet !== undefined) _quiet = opts.quiet;
 }
 
 export function resolveKey(perCallKey?: string): string {
@@ -36,4 +38,8 @@ export function shouldRoute(): boolean {
 export function isModelAllowed(model: string): boolean {
   if (!_models) return true; // null = all allowed
   return _models.has(model.toLowerCase());
+}
+
+export function isQuiet(): boolean {
+  return _quiet;
 }
