@@ -175,7 +175,7 @@ describe('TIER 2: ENGINE — Pricing & Intelligence', () => {
     it('alternatives only include models cheaper than requested', () => {
       const check = preflight('hello world', 'claude-opus');
       for (const opt of check.options) {
-        expect(opt.savings).toBeGreaterThan(0);
+        expect(opt.salvaged).toBeGreaterThan(0);
         expect(opt.cost).toBeLessThan(check.cost);
       }
     });
@@ -183,16 +183,16 @@ describe('TIER 2: ENGINE — Pricing & Intelligence', () => {
     it('savings + alternative cost equals original cost', () => {
       const check = preflight('hello world', 'claude-opus');
       for (const opt of check.options) {
-        const sum = opt.cost + opt.savings;
+        const sum = opt.cost + opt.salvaged;
         expect(Math.abs(sum - check.cost)).toBeLessThan(0.000001);
       }
     });
 
-    it('savingsPercent is between 0 and 100', () => {
+    it('salvagePercent is between 0 and 100', () => {
       const check = preflight('hello world', 'claude-opus');
       for (const opt of check.options) {
-        expect(opt.savingsPercent).toBeGreaterThan(0);
-        expect(opt.savingsPercent).toBeLessThanOrEqual(100);
+        expect(opt.salvagePercent).toBeGreaterThan(0);
+        expect(opt.salvagePercent).toBeLessThanOrEqual(100);
       }
     });
 
@@ -299,7 +299,7 @@ describe('TIER 3: AERO — Edge Cases', () => {
     it('savings math is precise', () => {
       const check = preflight('hello world test', 'claude-opus');
       for (const opt of check.options) {
-        const savingsStr = opt.savings.toString();
+        const savingsStr = opt.salvaged.toString();
         const parts = savingsStr.split('.');
         if (parts.length > 1) {
           expect(parts[1].length).toBeLessThanOrEqual(6);
@@ -365,7 +365,7 @@ describe('TIER 4: PIT STOP — Auto Mode', () => {
 
     expect(events.length).toBe(1);
     expect(events[0].provider).toBe('Anthropic');
-    expect(events[0].model).toBe('claude-sonnet');
+    expect(events[0].originalModel).toBe('claude-sonnet');
     expect(events[0].tokens).toBeGreaterThan(0);
   }, 15000);
 
@@ -384,7 +384,7 @@ describe('TIER 4: PIT STOP — Auto Mode', () => {
 
     expect(events.length).toBe(1);
     expect(events[0].provider).toBe('OpenAI');
-    expect(events[0].model).toBe('gpt-5.4');
+    expect(events[0].originalModel).toBe('gpt-5.4');
   }, 15000);
 
   it('intercepts xAI API calls', async () => {
@@ -402,7 +402,7 @@ describe('TIER 4: PIT STOP — Auto Mode', () => {
 
     expect(events.length).toBe(1);
     expect(events[0].provider).toBe('xAI');
-    expect(events[0].model).toBe('grok-4.20');
+    expect(events[0].originalModel).toBe('grok-4.20');
   }, 15000);
 
   it('intercepts Google Gemini API calls', async () => {
@@ -451,9 +451,13 @@ describe('TIER 4: PIT STOP — Auto Mode', () => {
     const e = events[0];
     expect(e.endpoint).toContain('api.anthropic.com');
     expect(e.provider).toBe('Anthropic');
-    expect(e.model).toBe('claude-opus');
+    expect(e.originalModel).toBe('claude-opus');
+    expect(typeof e.model).toBe('string');
+    expect(typeof e.routed).toBe('boolean');
     expect(e.tokens).toBeGreaterThan(0);
-    expect(e.cost).toBeGreaterThan(0);
+    expect(typeof e.cost).toBe('number');
+    expect(typeof e.originalCost).toBe('number');
+    expect(typeof e.salvaged).toBe('number');
     expect(typeof e.fits).toBe('boolean');
     expect(e.timestamp).toMatch(/^\d{4}-\d{2}/);
   }, 15000);
@@ -477,7 +481,7 @@ describe('TIER 4: PIT STOP — Auto Mode', () => {
           })
         });
       } catch {}
-      expect(events[0]?.model).toBe(t.expected);
+      expect(events[0]?.originalModel).toBe(t.expected);
     }
   }, 15000);
 

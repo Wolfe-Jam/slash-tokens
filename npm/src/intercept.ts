@@ -1,17 +1,44 @@
 import { slash } from './slash.js';
-import { getModel } from './models.js';
+import { getModel, MODELS } from './models.js';
 
 export interface InterceptEvent {
   endpoint: string;
   provider: string;
   model: string;
+  originalModel: string;
   tokens: number;
   cost: number;
+  originalCost: number;
+  salvaged: number;
   fits: boolean;
+  routed: boolean;
   timestamp: string;
 }
 
-// AI API endpoint detection — same patterns as scanner, runtime version
+// Provider groups — routing only happens within same provider
+const PROVIDER_MODELS: Record<string, string[]> = {
+  'Anthropic': ['claude-opus', 'claude-sonnet', 'claude-haiku'],
+  'OpenAI': ['gpt-5.4', 'gpt-5.4-mini', 'gpt-5.4-nano'],
+  'xAI': ['grok-4.20', 'grok-4-1-fast'],
+  'Google': ['gemini-3.1-pro', 'gemini-2.5-flash'],
+};
+
+// Reverse lookup: model name → provider model names in the API
+// (what to put back in the request body)
+const MODEL_API_NAMES: Record<string, string> = {
+  'claude-opus': 'claude-opus-4-20250514',
+  'claude-sonnet': 'claude-sonnet-4-20250514',
+  'claude-haiku': 'claude-haiku-4-20250414',
+  'gpt-5.4': 'gpt-5.4',
+  'gpt-5.4-mini': 'gpt-5.4-mini',
+  'gpt-5.4-nano': 'gpt-5.4-nano',
+  'grok-4.20': 'grok-4.20',
+  'grok-4-1-fast': 'grok-4-1-fast',
+  'gemini-3.1-pro': 'gemini-3.1-pro',
+  'gemini-2.5-flash': 'gemini-2.5-flash',
+};
+
+// AI API endpoint detection
 const AI_ENDPOINTS: Array<{ pattern: RegExp; provider: string; modelExtractor: (body: any) => string }> = [
   {
     pattern: /api\.anthropic\.com/,
@@ -21,17 +48,17 @@ const AI_ENDPOINTS: Array<{ pattern: RegExp; provider: string; modelExtractor: (
   {
     pattern: /api\.openai\.com/,
     provider: 'OpenAI',
-    modelExtractor: (body) => body?.model || 'gpt-4o',
+    modelExtractor: (body) => body?.model || 'gpt-5.4',
   },
   {
     pattern: /generativelanguage\.googleapis\.com/,
     provider: 'Google',
-    modelExtractor: (body) => 'gemini-2.0-flash',
+    modelExtractor: (body) => 'gemini-2.5-flash',
   },
   {
     pattern: /api\.x\.ai/,
     provider: 'xAI',
-    modelExtractor: (body) => body?.model || 'grok-3',
+    modelExtractor: (body) => body?.model || 'grok-4.20',
   },
 ];
 
@@ -62,27 +89,40 @@ function normalizeModel(raw: string): string {
 // Extract message content from request body
 function extractContent(body: any): string {
   if (!body) return '';
-
-  // Anthropic: { messages: [{ content: "..." }] }
-  // OpenAI: { messages: [{ content: "..." }] }
   if (body.messages && Array.isArray(body.messages)) {
     return body.messages
       .map((m: any) => typeof m.content === 'string' ? m.content : JSON.stringify(m.content))
       .join('\n');
   }
-
-  // Anthropic: { prompt: "..." }
   if (typeof body.prompt === 'string') return body.prompt;
-
-  // Google: { contents: [{ parts: [{ text: "..." }] }] }
   if (body.contents && Array.isArray(body.contents)) {
     return body.contents
       .flatMap((c: any) => c.parts || [])
       .map((p: any) => p.text || '')
       .join('\n');
   }
-
   return JSON.stringify(body);
+}
+
+// Find cheapest model from same provider that fits
+function findCheapestRoute(provider: string, tokens: number, currentModel: string): string | null {
+  const providerModels = PROVIDER_MODELS[provider];
+  if (!providerModels) return null;
+
+  let cheapest: { model: string; inputCost: number } | null = null;
+
+  for (const model of providerModels) {
+    if (model === currentModel) continue;
+    const info = getModel(model);
+    if (!info) continue;
+    if (tokens > info.context) continue; // doesn't fit
+    if (info.input >= (getModel(currentModel)?.input ?? 0)) continue; // not cheaper
+    if (!cheapest || info.input < cheapest.inputCost) {
+      cheapest = { model, inputCost: info.input };
+    }
+  }
+
+  return cheapest?.model ?? null;
 }
 
 let _onIntercept: ((event: InterceptEvent) => void) | null = null;
@@ -110,24 +150,41 @@ export function patchFetch(): void {
           const body = JSON.parse(bodyStr);
           const content = extractContent(body);
           const rawModel = match.modelExtractor(body);
-          const model = normalizeModel(rawModel);
+          const originalModel = normalizeModel(rawModel);
           const tokens = slash(content);
-          const info = getModel(model);
-          const cost = info ? Math.round(((tokens / 1_000_000) * info.input) * 1_000_000) / 1_000_000 : 0;
-          const fits = info ? tokens <= info.context : true;
+          const originalInfo = getModel(originalModel);
+          const originalCost = originalInfo ? Math.round(((tokens / 1_000_000) * originalInfo.input) * 1_000_000) / 1_000_000 : 0;
+          const fits = originalInfo ? tokens <= originalInfo.context : true;
+
+          // Find cheapest route within same provider
+          const routeModel = findCheapestRoute(match.provider, tokens, originalModel);
+          const routedInfo = routeModel ? getModel(routeModel) : null;
+          const routedCost = routedInfo ? Math.round(((tokens / 1_000_000) * routedInfo.input) * 1_000_000) / 1_000_000 : originalCost;
+          const salvaged = routeModel ? Math.round((originalCost - routedCost) * 1_000_000) / 1_000_000 : 0;
 
           const event: InterceptEvent = {
             endpoint: url,
             provider: match.provider,
-            model,
+            model: routeModel || originalModel,
+            originalModel,
             tokens,
-            cost,
+            cost: routeModel ? routedCost : originalCost,
+            originalCost,
+            salvaged,
             fits,
+            routed: !!routeModel,
             timestamp: new Date().toISOString(),
           };
 
           if (_onIntercept) {
             _onIntercept(event);
+          }
+
+          // If routed, rewrite the request body with the cheaper model
+          if (routeModel && init) {
+            const apiModelName = MODEL_API_NAMES[routeModel] || routeModel;
+            body.model = apiModelName;
+            init = { ...init, body: JSON.stringify(body) };
           }
         }
       } catch {

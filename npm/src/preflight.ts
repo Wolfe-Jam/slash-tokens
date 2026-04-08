@@ -4,8 +4,8 @@ import { getModel, MODELS } from './models.js';
 export interface Alternative {
   model: string;
   cost: number;
-  savings: number;
-  savingsPercent: number;
+  salvaged: number;
+  salvagePercent: number;
 }
 
 export interface PreflightResult {
@@ -40,11 +40,11 @@ export function preflight(content: string, model: string): PreflightResult {
       return {
         model: m,
         cost: altCost,
-        savings: Math.round((cost - altCost) * 1_000_000) / 1_000_000,
-        savingsPercent: cost > 0 ? Math.round(((cost - altCost) / cost) * 10000) / 100 : 0,
+        salvaged: Math.round((cost - altCost) * 1_000_000) / 1_000_000,
+        salvagePercent: cost > 0 ? Math.round(((cost - altCost) / cost) * 10000) / 100 : 0,
       };
     })
-    .filter(o => o.savings > 0)
+    .filter(o => o.salvaged > 0)
     .sort((a, b) => a.cost - b.cost);
 
   return { tokens, cost, fits, model, context: info.context, utilization, options };
