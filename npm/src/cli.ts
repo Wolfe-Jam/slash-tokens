@@ -52,6 +52,6 @@ if (key && sites.length > 0) {
       console.log('');
     });
 } else if (!key && sites.length > 0) {
-  console.log(`${GRAY}  → Next: ${ORANGE}https://mcpaas.live/slash/scan${R}`);
+  console.log(`${GRAY}  → Next: ${ORANGE}https://mcpaas.live/slash/setup${R}`);
   console.log('');
 }
