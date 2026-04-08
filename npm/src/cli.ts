@@ -52,7 +52,6 @@ if (key && sites.length > 0) {
       console.log('');
     });
 } else if (!key && sites.length > 0) {
-  console.log(`${GRAY}  → Get a key:       ${ORANGE}https://mcpaas.live/slash/setup${R}`);
-  console.log(`${GRAY}  → Track salvaged:  ${ORANGE}bunx slash-tokens --key=YOUR_KEY${R}`);
+  console.log(`${GRAY}  → Next: ${ORANGE}https://mcpaas.live/slash/setup${R}`);
   console.log('');
 }
