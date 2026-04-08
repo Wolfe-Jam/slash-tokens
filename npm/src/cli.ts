@@ -25,33 +25,12 @@ const GOLD = '\x1b[38;2;230;161;65m';
 const GRAY = '\x1b[90m';
 const ORANGE = '\x1b[38;2;255;68;0m';
 
-if (key && sites.length > 0) {
-  // Calculate sunk cost recovery from scan
-  const callsPerDay = 100;
-  const dailyInput = sites.reduce((sum, s) => sum + s.tokensPerCall * callsPerDay, 0);
-  const dailyOutput = dailyInput * 2;
-  const monthlyCostInput = (dailyInput * 30 / 1_000_000) * 3;
-  const monthlyCostOutput = (dailyOutput * 30 / 1_000_000) * 15;
-  const monthlyCost = monthlyCostInput + monthlyCostOutput;
-  const monthlyRecovered = monthlyCost * 0.10;
-
-  report({
-    tokens_estimated: dailyInput * 30,
-    tokens_saved: Math.round(dailyInput * 30 * 0.10),
-    model: 'scan',
-    action: 'reduced',
-    cost_saved_usd: monthlyRecovered,
-  })
-    .then(result => {
-      console.log(`${GREEN}${B}  ✓ Reported to MCPaaS${R} ${GRAY}(${result.transaction_id})${R}`);
-      console.log(`${GRAY}    Fee: $${result.fee_usd.toFixed(4)} · Balance: $${result.balance_remaining_usd.toFixed(2)}${R}`);
-      console.log('');
-    })
-    .catch(err => {
-      console.log(`${GOLD}  ⚠ Report failed: ${err.message}${R}`);
-      console.log('');
-    });
-} else if (!key && sites.length > 0) {
-  console.log(`${GRAY}  → Next: ${ORANGE}https://mcpaas.live/slash/setup${R}`);
+if (sites.length > 0) {
+  if (key) {
+    console.log(`${GREEN}${B}  ✓ Key active${R} ${GRAY}— evaluation complete, no charges on CLI scans${R}`);
+    console.log(`${GRAY}  → Dashboard: ${ORANGE}https://mcpaas.live/slash/dashboard${R}`);
+  } else {
+    console.log(`${GRAY}  → Next: ${ORANGE}https://mcpaas.live/slash/setup${R}`);
+  }
   console.log('');
 }
