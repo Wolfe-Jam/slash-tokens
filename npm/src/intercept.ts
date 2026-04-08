@@ -1,5 +1,6 @@
 import { slash } from './slash.js';
 import { getModel, MODELS } from './models.js';
+import { shouldRoute } from './config.js';
 
 export interface InterceptEvent {
   endpoint: string;
@@ -156,8 +157,8 @@ export function patchFetch(): void {
           const originalCost = originalInfo ? Math.round(((tokens / 1_000_000) * originalInfo.input) * 1_000_000) / 1_000_000 : 0;
           const fits = originalInfo ? tokens <= originalInfo.context : true;
 
-          // Find cheapest route within same provider
-          const routeModel = findCheapestRoute(match.provider, tokens, originalModel);
+          // Find cheapest route within same provider (if routing enabled)
+          const routeModel = shouldRoute() ? findCheapestRoute(match.provider, tokens, originalModel) : null;
           const routedInfo = routeModel ? getModel(routeModel) : null;
           const routedCost = routedInfo ? Math.round(((tokens / 1_000_000) * routedInfo.input) * 1_000_000) / 1_000_000 : originalCost;
           const salvaged = routeModel ? Math.round((originalCost - routedCost) * 1_000_000) / 1_000_000 : 0;

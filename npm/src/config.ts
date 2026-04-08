@@ -1,9 +1,11 @@
 let _key: string | null = null;
 let _endpoint: string = 'https://mcpaas.live/api/slash/transact';
+let _route: boolean = true; // default: route to cheapest model
 
-export function init(opts: { key: string; endpoint?: string }): void {
-  _key = opts.key;
+export function init(opts: { key?: string; endpoint?: string; route?: boolean }): void {
+  if (opts.key !== undefined) _key = opts.key;
   if (opts.endpoint) _endpoint = opts.endpoint;
+  if (opts.route !== undefined) _route = opts.route;
 }
 
 export function resolveKey(perCallKey?: string): string {
@@ -23,4 +25,8 @@ export function getEndpoint(): string {
 
 export function hasKey(): boolean {
   return !!(_key || process.env.SLASH_KEY);
+}
+
+export function shouldRoute(): boolean {
+  return _route;
 }
