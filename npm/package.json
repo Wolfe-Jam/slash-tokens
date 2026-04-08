@@ -1,7 +1,7 @@
 {
   "name": "slash-tokens",
-  "version": "1.1.0",
-  "description": "Pre-flight checks for API calls. 4.8 KB WASM. Sub-millisecond. Zero dependencies. Fly First. Pay Economy.",
+  "version": "1.1.1",
+  "description": "Token Optimization for Context Engineers. 4.8 KB WASM. Sub-millisecond. Zero dependencies.",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",

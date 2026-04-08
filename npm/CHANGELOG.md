@@ -1,5 +1,36 @@
 # Changelog
 
+## 1.1.1 (2026-04-08)
+
+Token Optimization for Context Engineers.
+
+### Auto Mode — Routes to Cheapest Model
+- `import 'slash-tokens/auto'` — one import, every call optimized
+- Routes within same provider: Opus → Haiku, GPT-5.4 → Nano, Grok → Fast
+- Rewrites request body before fetch — the API gets the cheaper model
+- Verbose by default — new users see every call, every route, every save
+- Nudges at $5/$10/$25/$50/$100 thresholds: `⚡ $5 salvaged — keep building`
+
+### Configuration
+- `init({ route: true })` — route to cheapest model (default)
+- `init({ route: false })` — track only, don't touch my models
+- `init({ models: ['claude-haiku', 'claude-sonnet'] })` — model-level control
+- `init({ quiet: true })` — nudges only, no per-call logging
+
+### CLI
+- Evaluator doesn't charge — `bunx slash-tokens` is free
+- "Token optimization analysis" (not "burn analysis")
+- "TOKENS SALVAGED" (not "savings")
+- "DAILY TOKEN VOLUME" (not "daily burn")
+- Single "Next" link to setup page
+
+### API
+- `salvaged` / `salvagePercent` (replaces `savings` / `savingsPercent`)
+- npm description: "Token Optimization for Context Engineers"
+
+### Testing
+- 99 pass, 0 fail, 326 assertions
+
 ## 1.1.0 (2026-04-07)
 
 Token Optimization for Context Engineering.

@@ -22,7 +22,7 @@ export function printReport(sites: CallSite[], filesScanned: number, timeMs: num
   console.log(`${ORANGE}${B}  ⚡ /slash${R}`);
   console.log(`${GRAY}  Token optimization analysis${R}`);
   console.log('');
-  console.log(`${DIM}  Scanned ${filesScanned} files in ${timeMs}ms${R}`);
+  console.log(`${DIM}  Evaluated ${filesScanned} files in ${timeMs}ms${R}`);
   console.log('');
 
   if (sites.length === 0) {

@@ -29,7 +29,7 @@ human_context:
   what: Token Optimization for Context Engineers. Pre-call checks in 4.8 KB WASM. Sub-millisecond. Zero dependencies.
   why: You don't know what a call costs until the invoice arrives. Slash tells you before the call leaves your machine.
   where: npm (slash-tokens), slashtokens.com, mcpaas.live/slash
-  when: v1.1.0, April 2026
+  when: v1.1.1, April 2026
   how: npm install slash-tokens / bunx slash-tokens
 monorepo:
   packages_count: slotignored
