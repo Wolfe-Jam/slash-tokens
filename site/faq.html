@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>/slash — FAQ</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Slash FAQ — Token Optimization for Context Engineers.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='60,0 20,55 48,55 38,100 80,42 52,42' fill='%23FFAA00'/></svg>">
+  <meta name="theme-color" content="#FF4400">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600;700;800;900&family=Roboto+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0a0a;
+      color: #f5f5f5;
+      font-family: 'Roboto', -apple-system, sans-serif;
+      line-height: 1.7;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+      flex: 1;
+    }
+    .header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 900;
+      margin-bottom: 0.3rem;
+    }
+    .header .slash { color: #FF4400; }
+
+    .faq-item {
+      margin-bottom: 2.5rem;
+    }
+    .faq-q {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: #f5f5f5;
+      margin-bottom: 0.8rem;
+    }
+    .faq-q .num { color: #FFAA00; }
+    .faq-a {
+      font-size: 1rem;
+      color: #ddd;
+      line-height: 1.8;
+    }
+    .faq-a strong { color: #f5f5f5; }
+    .faq-a .highlight { color: #4ade80; font-weight: 700; }
+    .faq-a .orange { color: #FF4400; font-weight: 700; }
+    .faq-a .gold { color: #FFAA00; font-weight: 700; }
+
+    .steps {
+      margin: 1rem 0;
+      padding-left: 0;
+      list-style: none;
+    }
+    .steps li {
+      margin-bottom: 0.4rem;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.9rem;
+    }
+    .steps li .label { color: #888; }
+    .steps li code {
+      color: #FF4400;
+      background: rgba(255, 68, 0, 0.08);
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+    }
+
+    .example {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 10px;
+      padding: 1rem 1.2rem;
+      margin: 1rem 0;
+      font-family: 'Roboto Mono', monospace;
+      font-size: 0.85rem;
+      line-height: 1.8;
+    }
+
+    .footer {
+      text-align: center;
+      padding: 2rem 1.5rem;
+      border-top: 1px solid #1a1a1a;
+    }
+    .footer a {
+      color: #888;
+      text-decoration: none;
+      font-size: 0.85rem;
+      margin: 0 1rem;
+    }
+    .footer a:hover { color: #f5f5f5; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <div class="header">
+      <h1>
+        <svg style="display:inline-block;vertical-align:-0.1em;margin-right:0.1em;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="28" height="28"><polygon points="60,0 20,55 48,55 38,100 80,42 52,42" fill="#FFAA00"/></svg>/<span class="slash">slash</span> FAQ
+      </h1>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q"><span class="num">1.</span> What is Slash?</div>
+      <div class="faq-a">
+        Token Optimization for Context Engineers. You do your job exactly the same with less tokens. Simple as that.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q"><span class="num">2.</span> How does it work?</div>
+      <div class="faq-a">
+        Makes instant cost evaluations before the call and optimizes the task.
+        <ul class="steps">
+          <li><span class="label">a)</span> <strong>Try it</strong> — <code>bunx slash-tokens</code></li>
+          <li><span class="label">b)</span> <strong>Install it</strong> — <code>npm install slash-tokens</code></li>
+          <li><span class="label">c)</span> <strong>Import it</strong> — <code>import 'slash-tokens/auto'</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q"><span class="num">3.</span> What does it cost?</div>
+      <div class="faq-a">
+        <span class="orange">10%</span> of what you save. That's it. Day one, every day. Never gonna change.
+
+        <div class="example">
+          Evaluation returns <strong>$50</strong> saving<br>
+          Slash 10% = <span class="orange">$5</span><br>
+          You keep <span class="highlight">$45</span>
+        </div>
+
+        <div class="example">
+          <span class="gold">$4.20</span> salvaged<br>
+          Slash 10% = <span class="orange">42 cents</span><br>
+          You keep <span class="highlight">$3.78</span>
+        </div>
+
+        Same task. Savings pile up in your <a href="https://mcpaas.live/slash/dashboard" style="color:#FF4400;text-decoration:none;font-weight:700;">Dashboard</a>.
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <a href="https://slashtokens.com">&larr; slashtokens.com</a>
+    <a href="https://mcpaas.live/slash/dashboard">Dashboard</a>
+    <a href="https://github.com/Wolfe-Jam/slash-tokens">GitHub</a>
+  </div>
+
+</body>
+</html>
