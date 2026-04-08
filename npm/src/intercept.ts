@@ -1,6 +1,6 @@
 import { slash } from './slash.js';
 import { getModel, MODELS } from './models.js';
-import { shouldRoute, isProviderEnabled } from './config.js';
+import { shouldRoute, isModelAllowed } from './config.js';
 
 export interface InterceptEvent {
   endpoint: string;
@@ -114,6 +114,7 @@ function findCheapestRoute(provider: string, tokens: number, currentModel: strin
 
   for (const model of providerModels) {
     if (model === currentModel) continue;
+    if (!isModelAllowed(model)) continue; // user excluded this model
     const info = getModel(model);
     if (!info) continue;
     if (tokens > info.context) continue; // doesn't fit
@@ -157,9 +158,8 @@ export function patchFetch(): void {
           const originalCost = originalInfo ? Math.round(((tokens / 1_000_000) * originalInfo.input) * 1_000_000) / 1_000_000 : 0;
           const fits = originalInfo ? tokens <= originalInfo.context : true;
 
-          // Find cheapest route within same provider (if routing + provider enabled)
-          const canRoute = shouldRoute() && isProviderEnabled(match.provider);
-          const routeModel = canRoute ? findCheapestRoute(match.provider, tokens, originalModel) : null;
+          // Find cheapest route within same provider (if routing enabled)
+          const routeModel = shouldRoute() ? findCheapestRoute(match.provider, tokens, originalModel) : null;
           const routedInfo = routeModel ? getModel(routeModel) : null;
           const routedCost = routedInfo ? Math.round(((tokens / 1_000_000) * routedInfo.input) * 1_000_000) / 1_000_000 : originalCost;
           const salvaged = routeModel ? Math.round((originalCost - routedCost) * 1_000_000) / 1_000_000 : 0;
