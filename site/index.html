@@ -472,6 +472,25 @@
 </head>
 <body>
 
+  <!-- THE EVALUATOR — flash entrance -->
+  <div id="evaluator-splash" style="position:fixed;top:0;left:0;right:0;bottom:0;background:#0a0a0a;z-index:99999;display:flex;align-items:center;justify-content:center;animation:evalFade 2s ease forwards;">
+    <img src="/og.jpg" alt="The Evaluator" style="max-width:80%;max-height:70vh;border-radius:12px;animation:evalZoom 2s ease forwards;">
+  </div>
+  <style>
+    @keyframes evalZoom {
+      0% { transform: scale(0.3); opacity: 0; }
+      30% { transform: scale(1.05); opacity: 1; }
+      50% { transform: scale(1); opacity: 1; }
+      100% { transform: scale(1); opacity: 0; }
+    }
+    @keyframes evalFade {
+      0% { opacity: 1; }
+      70% { opacity: 1; }
+      100% { opacity: 0; pointer-events: none; }
+    }
+  </style>
+  <script>setTimeout(() => { const el = document.getElementById('evaluator-splash'); if (el) el.remove(); }, 2200);</script>
+
   <!-- HERO -->
   <div class="section hero">
     <h1><svg class="hero-bolt" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="56" height="56" style="vertical-align:-0.1em;margin-right:-0.05em;display:inline-block;"><polygon points="60,0 20,55 48,55 38,100 80,42 52,42" fill="#FFAA00"/></svg><span style="color:#f5f5f5">/</span><span class="slash">slash</span></h1>
