@@ -159,6 +159,61 @@
         No. Unlike the Hotel California, you can leave whenever you like! Simply remove one line of code in your project and you stop saving tokens.
       </div>
     </div>
+
+    <!-- DIVIDER -->
+    <div style="border-top: 1px solid #333; margin: 2.5rem 0; text-align: center;">
+      <span style="background: #0a0a0a; padding: 0 1rem; color: #555; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.1em; position: relative; top: -0.6rem;">Deep Dive</span>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q"><span class="num">5.</span> How does Slash prevent a call?</div>
+      <div class="faq-a">
+        The Gate checks every call before it leaves your machine:
+        <ul class="steps">
+          <li><span class="label"></span> <strong>Duplicates</strong> — same content sent twice within 60 seconds? Stopped.</li>
+          <li><span class="label"></span> <strong>Empty/trivial</strong> — nothing useful to send? Stopped.</li>
+          <li><span class="label"></span> <strong>Context overflow</strong> — tokens exceed the model's window? It would fail anyway. Stopped.</li>
+        </ul>
+        PREVENT isn't about blocking legitimate work. It catches the accidental stuff — the redundant calls, the "oops I hit send twice," the requests that were never going to work anyway.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q"><span class="num">6.</span> Which is most common — Prevent, Route, or Pass?</div>
+      <div class="faq-a">
+        <strong>ROUTE</strong> is the workhorse. Most API calls don't need the flagship model. A simple question on Opus costs 5x more than Haiku — same answer. Slash catches those and reroutes automatically.<br><br>
+        <strong>PREVENT</strong> is surgical — catches obvious mistakes and redundancies.<br><br>
+        <strong>PASS</strong> lets the right call through unchanged. No savings, no charge. Right tool for the job.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q"><span class="num">7.</span> Is this per project or do I turn it on once?</div>
+      <div class="faq-a">
+        Turn it on. Forget about it. Every call optimized. One switch. Fire and forget. The Gate runs sub-millisecond on every request — whether it's one prompt or thousands a day. Same optimization, same 90/10 split.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q"><span class="num">8.</span> Is it safe? What happens to my API keys?</div>
+      <div class="faq-a">
+        Your API keys pass straight through to the provider. Slash never stores them. It only makes routing decisions. 4.8 KB WASM, zero dependencies, MIT licensed, open source. You can audit the code yourself at <a href="https://github.com/Wolfe-Jam/slash-tokens" style="color:#FF4400;text-decoration:none;">GitHub</a>.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q"><span class="num">9.</span> Who built this?</div>
+      <div class="faq-a">
+        FAF — the team behind the IANA-registered Foundational AI-Context Format (<code style="font-size:0.8em;color:#00D4D4;">application/vnd.faf+yaml</code>). Founded by wolfejam. Part of an ecosystem with 52,000+ downloads across 18 packages and 3 registries. Launched April 2026.
+      </div>
+    </div>
+
+    <div class="faq-item">
+      <div class="faq-q"><span class="num">10.</span> Which providers and models are supported?</div>
+      <div class="faq-a">
+        All four frontier providers: <strong>Anthropic</strong> (Opus, Sonnet, Haiku), <strong>OpenAI</strong> (GPT-5.4, Mini, Nano), <strong>xAI</strong> (Grok-4.20, Fast), <strong>Google</strong> (Gemini Pro, Flash). Works with any model — 10 with built-in pricing. Don't see yours? <a href="https://github.com/Wolfe-Jam/slash-tokens/issues" style="color:#FF4400;text-decoration:none;">Open an issue.</a>
+      </div>
+    </div>
   </div>
 
   <div class="footer">
