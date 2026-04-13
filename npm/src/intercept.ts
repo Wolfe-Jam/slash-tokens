@@ -29,7 +29,7 @@ const PROVIDER_MODELS: Record<string, string[]> = {
 const MODEL_API_NAMES: Record<string, string> = {
   'claude-opus': 'claude-opus-4-20250514',
   'claude-sonnet': 'claude-sonnet-4-20250514',
-  'claude-haiku': 'claude-haiku-4-20250414',
+  'claude-haiku': 'claude-haiku-4-5-20251001',
   'gpt-5.4': 'gpt-5.4',
   'gpt-5.4-mini': 'gpt-5.4-mini',
   'gpt-5.4-nano': 'gpt-5.4-nano',

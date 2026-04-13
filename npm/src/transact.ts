@@ -5,7 +5,7 @@ export interface ReportOptions {
   tokens_estimated: number;
   tokens_saved: number;
   model?: string;
-  action: 'skipped' | 'reduced' | 'routed';
+  action: 'prevented' | 'routed';
   cost_saved_usd: number;
 }
 

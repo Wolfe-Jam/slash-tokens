@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.2 (2026-04-13)
+
+### Fixes
+- Fix Haiku model ID — `claude-haiku-4-5-20251001` (was wrong, routing would fail)
+- Action types aligned to Gate vocabulary — `prevented | routed` (was `skipped | reduced | routed`)
+
+### Testing
+- 99 pass, 0 fail, 326 assertions
+
 ## 1.1.1 (2026-04-08)
 
 Token Optimization for Context Engineers.
