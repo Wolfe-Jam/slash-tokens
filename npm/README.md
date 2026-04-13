@@ -1,7 +1,7 @@
 # /slash-tokens
 
 Token Optimization for Context Engineers.
-4.8 KB WASM. Sub-millisecond. Zero dependencies.
+For anyone building with LLMs. 4.8 KB WASM. Sub-millisecond. Zero dependencies.
 
 ```bash
 npm install slash-tokens
