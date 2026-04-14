@@ -40,7 +40,7 @@ const MODEL_API_NAMES: Record<string, string> = {
 };
 
 // AI API endpoint detection
-const AI_ENDPOINTS: Array<{ pattern: RegExp; provider: string; modelExtractor: (body: any) => string }> = [
+const AI_ENDPOINTS: Array<{ pattern: RegExp; provider: string; modelExtractor: (body: any, url?: string) => string }> = [
   {
     pattern: /api\.anthropic\.com/,
     provider: 'Anthropic',
@@ -54,7 +54,11 @@ const AI_ENDPOINTS: Array<{ pattern: RegExp; provider: string; modelExtractor: (
   {
     pattern: /generativelanguage\.googleapis\.com/,
     provider: 'Google',
-    modelExtractor: (body) => 'gemini-2.5-flash',
+    modelExtractor: (_body, url) => {
+      // Model is in the URL path: /v1beta/models/gemini-2.0-flash:generateContent
+      const match = url?.match(/\/models\/([^/:]+)/);
+      return match ? match[1] : 'gemini-2.5-flash';
+    },
   },
   {
     pattern: /api\.x\.ai/,
@@ -151,7 +155,7 @@ export function patchFetch(): void {
         if (bodyStr) {
           const body = JSON.parse(bodyStr);
           const content = extractContent(body);
-          const rawModel = match.modelExtractor(body);
+          const rawModel = match.modelExtractor(body, url);
           const originalModel = normalizeModel(rawModel);
           const tokens = slash(content);
           const originalInfo = getModel(originalModel);

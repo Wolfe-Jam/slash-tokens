@@ -24,7 +24,7 @@ export function resolveKey(perCallKey?: string): string {
 }
 
 export function getEndpoint(): string {
-  return _endpoint;
+  return process.env.SLASH_ENDPOINT || _endpoint;
 }
 
 export function hasKey(): boolean {
