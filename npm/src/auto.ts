@@ -22,6 +22,21 @@ const R = '\x1b[0m';
 const B = '\x1b[1m';
 const GREEN = '\x1b[38;2;74;222;128m';
 const GOLD = '\x1b[38;2;230;161;65m';
+const DIM = '\x1b[2m';
+
+// Session summary on exit — print total saved when the process ends
+function printSummary() {
+  if (totalCalls === 0) return;
+  const savedStr = totalSalvaged > 0 ? `${GREEN}${B}$${totalSalvaged.toFixed(4)} salvaged${R}` : `$0 salvaged`;
+  const routedStr = totalRouted > 0 ? ` | ${GOLD}${totalRouted} routed${R}` : '';
+  console.log(`\n${GREEN}[slash]${R} Session: ${totalCalls} calls${routedStr} | ${savedStr} ${DIM}— The more you build, the more you save${R}`);
+}
+
+if (typeof process !== 'undefined') {
+  process.once('exit', printSummary);
+  process.once('SIGINT', () => { printSummary(); process.exit(0); });
+  process.once('SIGTERM', () => { printSummary(); process.exit(0); });
+}
 
 patchFetch();
 

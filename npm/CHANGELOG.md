@@ -1,5 +1,25 @@
 # Changelog
 
+## 1.2.0 (2026-04-14)
+
+### The Next.js Edition
+
+Session summary on exit — every time you stop your dev server, Slash prints how much you saved that session:
+```
+[slash] Session: 47 calls | 23 routed | $0.89 salvaged — The more you build, the more you save
+```
+Fires on `exit`, `SIGINT` (Ctrl+C), and `SIGTERM`. Zero calls = silent.
+
+### New
+- `auto` mode: session summary on process exit
+- Dashboard: 90-day transaction history (History panel, show all)
+- Dashboard: live feed now scrollable, shows `$saved` instead of raw token counts
+
+### Testing
+- 99 pass, 0 fail, 326 assertions
+
+---
+
 ## 1.1.2 (2026-04-13)
 
 ### Fixes
