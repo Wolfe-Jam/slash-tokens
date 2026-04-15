@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.2.1 (2026-04-15)
+
+### Fixes
+- Add `pass` action type to `ReportOptions` — SDK types now match server (`prevented | routed | pass`)
+
+### Testing
+- Cross-repo integration suite: 17 tests verifying SDK ↔ mcpaas-cf contract
+- Self-registering test keys, no secrets needed
+- TIER 5 proxy-path tests (Anthropic gateway, OpenAI, txn counting)
+- 118 tests total, 374 assertions
+
+---
+
 ## 1.2.0 (2026-04-14)
 
 ### The Next.js Edition
