@@ -17,11 +17,16 @@ import { slash } from '../src/index';
 import { corpus } from './corpus';
 import { writeFileSync } from 'fs';
 
-const API_KEY = process.env.ANTHROPIC_API_KEY;
-if (!API_KEY) {
-  console.error('Set ANTHROPIC_API_KEY to run calibration');
+// Auth: direct key OR proxy route (no key needed if ANTHROPIC_BASE_URL is set)
+const API_KEY = process.env.ANTHROPIC_API_KEY || '';
+const BASE_URL = process.env.ANTHROPIC_BASE_URL || 'https://api.anthropic.com';
+const USE_PROXY = BASE_URL.includes('mcpaas.live');
+
+if (!API_KEY && !USE_PROXY) {
+  console.error('Set ANTHROPIC_API_KEY or ANTHROPIC_BASE_URL to run calibration');
   process.exit(1);
 }
+console.log(`Auth: ${USE_PROXY ? 'proxy (' + BASE_URL + ')' : 'direct API key'}`);
 
 const MODELS = [
   { id: 'claude-opus-4-20250514', name: 'opus-4.6' },
@@ -41,13 +46,33 @@ interface CountResult {
 
 async function countTokens(model: string, content: string): Promise<number | null> {
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages/count_tokens', {
+    // Route: proxy uses /slash/v1/... path, direct uses /v1/...
+    const url = USE_PROXY
+      ? `${BASE_URL}/v1/messages/count_tokens`
+      : `${BASE_URL}/v1/messages/count_tokens`;
+
+    const headers: Record<string, string> = {
+      'anthropic-version': '2023-06-01',
+      'content-type': 'application/json',
+    };
+
+    if (API_KEY) {
+      headers['x-api-key'] = API_KEY;
+    }
+
+    // Pass custom headers from env (Claude Code auth)
+    const customHeaders = process.env.ANTHROPIC_CUSTOM_HEADERS;
+    if (customHeaders) {
+      // Format: "Key: Value" or "Key1: Value1, Key2: Value2"
+      customHeaders.split(',').forEach(h => {
+        const [k, ...v] = h.split(':');
+        if (k && v.length) headers[k.trim()] = v.join(':').trim();
+      });
+    }
+
+    const res = await fetch(url, {
       method: 'POST',
-      headers: {
-        'x-api-key': API_KEY!,
-        'anthropic-version': '2023-06-01',
-        'content-type': 'application/json',
-      },
+      headers,
       body: JSON.stringify({
         model,
         messages: [{ role: 'user', content }],
