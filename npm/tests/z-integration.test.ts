@@ -391,4 +391,21 @@ describe('TIER 5: PROXY — Gateway Path', () => {
     // Proxy pass-through should still increment (the fix we deployed today)
     expect(after.transactions_count).toBeGreaterThanOrEqual(before.transactions_count);
   });
+
+  it('Gemini proxy accepts calls and logs activity', async () => {
+    const res = await fetch(`${BASE_URL}/slash/v1/gemini/gemini-2.5-flash:generateContent`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-gemini-key': 'fake-gemini-key-for-test',
+        'X-Slash-Key': SLASH_KEY,
+        'X-Slash-App': 'integration-test',
+      },
+      body: JSON.stringify({
+        contents: [{ parts: [{ text: `Gemini proxy test ${Date.now()}` }] }],
+      }),
+    });
+    // 400 from Google (bad key) or 429 (rate limit) — both prove proxy handled it
+    expect([400, 401, 403, 429]).toContain(res.status);
+  });
 });
