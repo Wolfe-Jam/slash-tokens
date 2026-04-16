@@ -8,6 +8,7 @@ export interface ModelInfo {
 export const MODELS: Record<string, ModelInfo> = {
   // Anthropic
   'claude-opus':     { input:  5.00, output: 25.00, context: 1000000 },
+  'claude-opus-4.7': { input:  5.00, output: 25.00, context: 1000000 },
   'claude-sonnet':   { input:  3.00, output: 15.00, context: 1000000 },
   'claude-haiku':    { input:  1.00, output:  5.00, context: 200000 },
   // xAI
