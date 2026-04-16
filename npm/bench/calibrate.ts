@@ -25,7 +25,7 @@ if (!API_KEY) {
 
 const MODELS = [
   { id: 'claude-opus-4-20250514', name: 'opus-4.6' },
-  { id: 'claude-opus-4-7-20260416', name: 'opus-4.7' },
+  { id: 'claude-opus-4-7', name: 'opus-4.7' },
 ];
 
 interface CountResult {
