@@ -10,11 +10,21 @@ const WASM_INPUT_OFFSET = 4096;
  *
  * Default 1.0 = no adjustment. Update after running bench/calibrate.ts.
  */
+/**
+ * Calibration factors derived from bench/calibrate.ts (2026-04-16).
+ * WASM under-reports 4.6 by ~12% median. 4.7 tokenizer uses 1.29x more
+ * tokens than 4.6 median. Combined correction with safety margin:
+ *
+ * 4.6: 1.15 (corrects -12% under-report, adds ~3% safety)
+ * 4.7: 1.50 (corrects -28% under-report, adds ~5% safety)
+ *
+ * Slash must NEVER under-report. Over-reporting is safe (go/no-go only).
+ */
 const CALIBRATION: Record<string, number> = {
-  'claude-opus':      1.0,
-  'claude-opus-4.7':  1.0,  // TBD — run bench/calibrate.ts when API is live
-  'claude-sonnet':    1.0,
-  'claude-haiku':     1.0,
+  'claude-opus':      1.15,
+  'claude-opus-4.7':  1.50,
+  'claude-sonnet':    1.15,
+  'claude-haiku':     1.15,
 };
 
 /**

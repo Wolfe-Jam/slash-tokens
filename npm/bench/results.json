@@ -1,0 +1,268 @@
+{
+  "timestamp": "2026-04-16T16:43:04.730Z",
+  "results": [
+    {
+      "model": "claude-opus-4-20250514",
+      "modelName": "opus-4.6",
+      "corpus": "ts-function",
+      "type": "code",
+      "actual": 141,
+      "estimated": 150,
+      "ratio": 1.064,
+      "delta": 6.4
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "ts-function",
+      "type": "code",
+      "actual": 160,
+      "estimated": 150,
+      "ratio": 0.938,
+      "delta": -6.2
+    },
+    {
+      "model": "claude-opus-4-20250514",
+      "modelName": "opus-4.6",
+      "corpus": "python-class",
+      "type": "code",
+      "actual": 282,
+      "estimated": 255,
+      "ratio": 0.904,
+      "delta": -9.6
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "python-class",
+      "type": "code",
+      "actual": 349,
+      "estimated": 255,
+      "ratio": 0.731,
+      "delta": -26.9
+    },
+    {
+      "model": "claude-opus-4-20250514",
+      "modelName": "opus-4.6",
+      "corpus": "rust-struct",
+      "type": "code",
+      "actual": 292,
+      "estimated": 243,
+      "ratio": 0.832,
+      "delta": -16.8
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "rust-struct",
+      "type": "code",
+      "actual": 367,
+      "estimated": 243,
+      "ratio": 0.662,
+      "delta": -33.8
+    },
+    {
+      "model": "claude-opus-4-20250514",
+      "modelName": "opus-4.6",
+      "corpus": "technical-docs",
+      "type": "prose",
+      "actual": 239,
+      "estimated": 192,
+      "ratio": 0.803,
+      "delta": -19.7
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "technical-docs",
+      "type": "prose",
+      "actual": 336,
+      "estimated": 192,
+      "ratio": 0.571,
+      "delta": -42.9
+    },
+    {
+      "model": "claude-opus-4-20250514",
+      "modelName": "opus-4.6",
+      "corpus": "conversational",
+      "type": "prose",
+      "actual": 170,
+      "estimated": 149,
+      "ratio": 0.876,
+      "delta": -12.4
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "conversational",
+      "type": "prose",
+      "actual": 257,
+      "estimated": 149,
+      "ratio": 0.58,
+      "delta": -42
+    },
+    {
+      "model": "claude-opus-4-20250514",
+      "modelName": "opus-4.6",
+      "corpus": "api-response",
+      "type": "json",
+      "actual": 1789,
+      "estimated": 1554,
+      "ratio": 0.869,
+      "delta": -13.1
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "api-response",
+      "type": "json",
+      "actual": 2076,
+      "estimated": 1554,
+      "ratio": 0.749,
+      "delta": -25.1
+    },
+    {
+      "model": "claude-opus-4-20250514",
+      "modelName": "opus-4.6",
+      "corpus": "config-yaml-as-json",
+      "type": "json",
+      "actual": 237,
+      "estimated": 214,
+      "ratio": 0.903,
+      "delta": -9.7
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "config-yaml-as-json",
+      "type": "json",
+      "actual": 284,
+      "estimated": 214,
+      "ratio": 0.754,
+      "delta": -24.6
+    },
+    {
+      "model": "claude-opus-4-20250514",
+      "modelName": "opus-4.6",
+      "corpus": "readme-excerpt",
+      "type": "markdown",
+      "actual": 223,
+      "estimated": 170,
+      "ratio": 0.762,
+      "delta": -23.8
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "readme-excerpt",
+      "type": "markdown",
+      "actual": 288,
+      "estimated": 170,
+      "ratio": 0.59,
+      "delta": -41
+    },
+    {
+      "model": "claude-opus-4-20250514",
+      "modelName": "opus-4.6",
+      "corpus": "mixed-code-prose",
+      "type": "mixed",
+      "actual": 245,
+      "estimated": 235,
+      "ratio": 0.959,
+      "delta": -4.1
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "mixed-code-prose",
+      "type": "mixed",
+      "actual": 328,
+      "estimated": 235,
+      "ratio": 0.716,
+      "delta": -28.4
+    }
+  ],
+  "summary": {
+    "opus-4.6": {
+      "min_ratio": 0.762,
+      "median_ratio": 0.876,
+      "max_ratio": 1.064,
+      "min_delta": -23.8,
+      "median_delta": -12.4,
+      "max_delta": 6.4
+    },
+    "opus-4.7": {
+      "min_ratio": 0.571,
+      "median_ratio": 0.716,
+      "max_ratio": 0.938,
+      "min_delta": -42.9,
+      "median_delta": -28.4,
+      "max_delta": -6.2
+    }
+  },
+  "crossModel": [
+    {
+      "corpus": "ts-function",
+      "type": "code",
+      "tokens46": 141,
+      "tokens47": 160,
+      "ratio": 1.135
+    },
+    {
+      "corpus": "python-class",
+      "type": "code",
+      "tokens46": 282,
+      "tokens47": 349,
+      "ratio": 1.238
+    },
+    {
+      "corpus": "rust-struct",
+      "type": "code",
+      "tokens46": 292,
+      "tokens47": 367,
+      "ratio": 1.257
+    },
+    {
+      "corpus": "technical-docs",
+      "type": "prose",
+      "tokens46": 239,
+      "tokens47": 336,
+      "ratio": 1.406
+    },
+    {
+      "corpus": "conversational",
+      "type": "prose",
+      "tokens46": 170,
+      "tokens47": 257,
+      "ratio": 1.512
+    },
+    {
+      "corpus": "api-response",
+      "type": "json",
+      "tokens46": 1789,
+      "tokens47": 2076,
+      "ratio": 1.16
+    },
+    {
+      "corpus": "config-yaml-as-json",
+      "type": "json",
+      "tokens46": 237,
+      "tokens47": 284,
+      "ratio": 1.198
+    },
+    {
+      "corpus": "readme-excerpt",
+      "type": "markdown",
+      "tokens46": 223,
+      "tokens47": 288,
+      "ratio": 1.291
+    },
+    {
+      "corpus": "mixed-code-prose",
+      "type": "mixed",
+      "tokens46": 245,
+      "tokens47": 328,
+      "ratio": 1.339
+    }
+  ]
+}
