@@ -1,9 +1,18 @@
 # /slash-tokens
 
+[![Tests](https://github.com/Wolfe-Jam/slash-tokens/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/Wolfe-Jam/slash-tokens/actions/workflows/test.yml)
+[![npm version](https://img.shields.io/npm/v/slash-tokens.svg)](https://www.npmjs.com/package/slash-tokens)
+[![npm downloads](https://img.shields.io/npm/dm/slash-tokens.svg)](https://www.npmjs.com/package/slash-tokens)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/slash-tokens)](https://bundlephobia.com/package/slash-tokens)
+[![license](https://img.shields.io/npm/l/slash-tokens.svg)](./npm/LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/Wolfe-Jam/slash-tokens?style=social)](https://github.com/Wolfe-Jam/slash-tokens)
+
 Token Optimization for Context Engineers.
 4.8 KB WASM. Sub-millisecond. Zero dependencies.
 
 Know the cost before the call leaves your machine.
+
+> 🆕 **v1.3 — The Opus 4.7 Edition.** Same-day support for Claude Opus 4.7 with measured token calibration (1.16–1.51x). Plus Gemini proxy fix and benchmark harness for any upstream.
 
 ## Try it
 
@@ -41,7 +50,7 @@ Intercepts `fetch()` to Anthropic, OpenAI, xAI, and Google endpoints. Estimates 
 ```js
 import { preflight } from 'slash-tokens'
 
-const check = preflight('Your prompt here...', 'claude-opus')
+const check = preflight('Your prompt here...', 'claude-opus-4.7')
 
 check.tokens       // 47000
 check.cost         // 0.235 (USD)
@@ -71,6 +80,7 @@ Works with all models. 10 with built-in pricing (as of April 2026). Don't see yo
 
 | Model | $/M input | $/M output | Context |
 |---|---|---|---|
+| claude-opus-4.7 | 5.00 | 25.00 | 1M |
 | claude-opus | 5.00 | 25.00 | 1M |
 | claude-sonnet | 3.00 | 15.00 | 1M |
 | claude-haiku | 1.00 | 5.00 | 200K |

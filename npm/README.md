@@ -5,9 +5,12 @@
 [![npm downloads](https://img.shields.io/npm/dm/slash-tokens.svg)](https://www.npmjs.com/package/slash-tokens)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/slash-tokens)](https://bundlephobia.com/package/slash-tokens)
 [![license](https://img.shields.io/npm/l/slash-tokens.svg)](./LICENSE)
+[![GitHub stars](https://img.shields.io/github/stars/Wolfe-Jam/slash-tokens?style=social)](https://github.com/Wolfe-Jam/slash-tokens)
 
 Token Optimization for Context Engineers.
 For anyone building with LLMs. 4.8 KB WASM. Sub-millisecond. Zero dependencies.
+
+> 🆕 **v1.3 — The Opus 4.7 Edition.** Same-day support for Claude Opus 4.7 with measured token calibration (1.16–1.51x). Plus Gemini proxy fix and benchmark harness for any upstream.
 
 ```bash
 npm install slash-tokens
@@ -16,7 +19,7 @@ npm install slash-tokens
 ```js
 import { preflight } from 'slash-tokens'
 
-const check = preflight(prompt, 'claude-opus')
+const check = preflight(prompt, 'claude-opus-4.7')
 // tokens: 47,000 | cost: $0.71 | 11 cheaper options | save 99%
 ```
 
