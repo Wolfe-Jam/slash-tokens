@@ -49,4 +49,10 @@ Track savings across all your apps. Free key at [mcpaas.live/slash/setup](https:
 
 Full docs, examples, and model pricing at **[GitHub](https://github.com/Wolfe-Jam/slash-tokens)**
 
+## Brand
+
+By using the SDK, you agree not to use the ⚡slash-tokens brand or colors for your app without written consent. Violators will get a takedown request issued immediately.
+
+## License
+
 [slashtokens.com](https://slashtokens.com) | MIT
