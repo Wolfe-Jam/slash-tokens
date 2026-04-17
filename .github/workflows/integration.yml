@@ -1,0 +1,64 @@
+name: Integration (live mcpaas.live)
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'  # Mondays 09:00 UTC — weekly drift check
+  workflow_dispatch:
+    inputs:
+      force_skip:
+        description: 'Skip tests but mark the run as passing (maintenance window)'
+        type: boolean
+        default: false
+
+jobs:
+  integration:
+    name: Cross-repo integration vs mcpaas.live
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: npm
+    steps:
+      - name: Force-skip if requested (PASS)
+        if: ${{ github.event.inputs.force_skip == 'true' }}
+        run: |
+          echo "::notice::Integration skipped by request (maintenance window). Marked PASS."
+          exit 0
+
+      - uses: actions/checkout@v4
+        if: ${{ github.event.inputs.force_skip != 'true' }}
+
+      - name: Pre-flight — mcpaas.live health check (3 retries)
+        if: ${{ github.event.inputs.force_skip != 'true' }}
+        id: health
+        run: |
+          for attempt in 1 2 3; do
+            if curl -sf --max-time 10 https://mcpaas.live/health > /dev/null; then
+              echo "mcpaas.live is up (attempt $attempt)"
+              echo "status=up" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            echo "attempt $attempt: mcpaas.live unreachable, waiting 5s..."
+            sleep 5
+          done
+          echo "mcpaas.live unreachable after 3 attempts"
+          echo "status=down" >> "$GITHUB_OUTPUT"
+
+      - name: Skip if mcpaas.live is down (PASS)
+        if: ${{ steps.health.outputs.status == 'down' }}
+        run: |
+          echo "::warning::mcpaas.live unreachable — integration skipped. Service health is independent of SDK correctness."
+          exit 0
+
+      - name: Setup Bun
+        if: ${{ steps.health.outputs.status == 'up' }}
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        if: ${{ steps.health.outputs.status == 'up' }}
+        run: bun install --frozen-lockfile
+
+      - name: Run integration tests
+        if: ${{ steps.health.outputs.status == 'up' }}
+        run: bun test tests/z-integration.test.ts

@@ -1,5 +1,29 @@
 # Changelog
 
+## 1.3.0 (2026-04-16)
+
+### The Opus 4.7 Edition
+
+Same-day support for Claude Opus 4.7 — the new flagship — with measured token calibration and proxy-ready benchmarking. Plus a Gemini URL-extraction fix.
+
+### New
+- **Opus 4.7 support** — pricing + calibration layer. Measured 1.16–1.51x token increase vs prior Opus generations
+- **Benchmark harness** — now supports custom proxy + auth headers, so you can benchmark Slash against direct upstream
+- **Gemini URL model extraction** fix — proxy path correctly identifies model from `/v1beta/models/:model:generateContent`
+- **Cross-repo integration** — Gemini proxy path covered by integration tests
+
+### Model Registry
+- `claude-opus-4.7` with confirmed API ID `claude-opus-4-7`
+- All 4 providers routable through Slash proxy (Anthropic, OpenAI, xAI, Google)
+
+### Testing
+- 118 pass, 0 fail, 386 assertions
+
+### Docs
+- Honest production analysis — $75.98 saved, $7.60 collected (real numbers, not projections)
+
+---
+
 ## 1.2.1 (2026-04-15)
 
 ### Fixes

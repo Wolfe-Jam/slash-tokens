@@ -1,0 +1,66 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'npm/**'
+      - '.github/workflows/test.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'npm/**'
+      - '.github/workflows/test.yml'
+
+jobs:
+  test:
+    name: Unit tests (WJTTC)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: npm
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build
+        run: bun run build
+
+      - name: Run unit tests (preflight + sdk)
+        run: bun test tests/preflight.test.ts tests/sdk.test.ts
+
+  node-compat:
+    name: Node ${{ matrix.node }} install sanity
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        node: [20, 22]
+    defaults:
+      run:
+        working-directory: npm
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node ${{ matrix.node }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+
+      - name: Setup Bun (for build)
+        uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Install + build (verifies package loads on Node ${{ matrix.node }})
+        run: |
+          bun install --frozen-lockfile
+          bun run build
+          node -e "import('./dist/index.js').then(m => { if (!m.slash) throw new Error('missing slash export'); console.log('OK: slash-tokens loads on Node ${{ matrix.node }}'); })"
