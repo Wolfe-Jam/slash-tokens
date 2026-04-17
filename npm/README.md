@@ -1,11 +1,11 @@
 # /slash-tokens
 
-[![Tests](https://github.com/Wolfe-Jam/slash-tokens/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/Wolfe-Jam/slash-tokens/actions/workflows/test.yml)
+[![CI/CD](https://github.com/Wolfe-Jam/slash-tokens/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/Wolfe-Jam/slash-tokens/actions/workflows/test.yml)
 [![npm version](https://img.shields.io/npm/v/slash-tokens.svg)](https://www.npmjs.com/package/slash-tokens)
 [![npm downloads](https://img.shields.io/npm/dm/slash-tokens.svg)](https://www.npmjs.com/package/slash-tokens)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/slash-tokens)](https://bundlephobia.com/package/slash-tokens)
 [![license](https://img.shields.io/npm/l/slash-tokens.svg)](./LICENSE)
-[![GitHub stars](https://img.shields.io/github/stars/Wolfe-Jam/slash-tokens?style=social)](https://github.com/Wolfe-Jam/slash-tokens)
+[![⭐ Star on GitHub](https://img.shields.io/badge/%E2%AD%90_Star-black?logo=github&logoColor=white)](https://github.com/Wolfe-Jam/slash-tokens)
 
 Token Optimization for Context Engineers.
 For anyone building with LLMs. 4.8 KB WASM. Sub-millisecond. Zero dependencies.
