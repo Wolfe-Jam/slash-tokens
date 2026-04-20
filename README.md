@@ -136,10 +136,12 @@ Node.js, Bun, Deno, Cloudflare Workers, Vercel Edge, Browser.
 - [npm](https://www.npmjs.com/package/slash-tokens)
 - [Dashboard](https://mcpaas.live/slash/dashboard)
 
-## Brand
-
-By using the SDK, you agree not to use the ⚡slash-tokens brand or colors for your app without written consent. Violators will get a takedown request issued immediately.
-
 ## License
 
-MIT
+**Code: MIT.** Fork it, ship it, change it, sell it.
+
+**Brand: reserved.** The slash-tokens name, ⚡ mark, and red/gold colors stay with the project. If you're building on top of the SDK, ship under your own name and colors — don't represent your app as Slash.
+
+---
+
+*Don't go to the Corner Shop in a Ferrari.*

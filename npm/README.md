@@ -10,6 +10,8 @@
 Token Optimization for Context Engineers.
 For anyone building with LLMs. 4.8 KB WASM. Sub-millisecond. Zero dependencies.
 
+Know the cost before the call leaves your machine.
+
 > 🆕 **v1.4 — The Single-Source-of-Truth Edition.** New `preflightRoute()` matches the Slash proxy exactly — same-provider only, zero routing drift. `PROVIDER_MODELS` is now the single source of truth across the SDK.
 >
 > **v1.3 — The Opus 4.7 Edition.** Same-day support for Claude Opus 4.7 with measured token calibration (1.16–1.51x). Plus Gemini proxy fix and benchmark harness for any upstream.
@@ -56,10 +58,12 @@ Track savings across all your apps. Free key at [mcpaas.live/slash/setup](https:
 
 Full docs, examples, and model pricing at **[GitHub](https://github.com/Wolfe-Jam/slash-tokens)**
 
-## Brand
-
-By using the SDK, you agree not to use the ⚡slash-tokens brand or colors for your app without written consent. Violators will get a takedown request issued immediately.
-
 ## License
 
-[slashtokens.com](https://slashtokens.com) | MIT
+**Code: MIT.** Fork it, ship it, change it, sell it.
+
+**Brand: reserved.** The slash-tokens name, ⚡ mark, and red/gold colors stay with the project. If you're building on top of the SDK, ship under your own name and colors — don't represent your app as Slash.
+
+---
+
+*Don't go to the Corner Shop in a Ferrari.* · [slashtokens.com](https://slashtokens.com)
