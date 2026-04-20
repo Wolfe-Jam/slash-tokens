@@ -1,6 +1,12 @@
 import { slash } from './slash.js';
 import { getModel, MODELS } from './models.js';
 import { shouldRoute, isModelAllowed } from './config.js';
+import { PROVIDER_MODELS } from './providers.js';
+
+// TEST-NOTE: intercept.ts and preflight.ts MUST share PROVIDER_MODELS.
+// Duplicating it locally here (as pre-v1.4.0 did) caused cross-function
+// semantic drift. Any test that asserts "preflightRoute agrees with
+// findCheapestRoute" relies on this shared import.
 
 export interface InterceptEvent {
   endpoint: string;
@@ -15,14 +21,6 @@ export interface InterceptEvent {
   routed: boolean;
   timestamp: string;
 }
-
-// Provider groups — routing only happens within same provider
-const PROVIDER_MODELS: Record<string, string[]> = {
-  'Anthropic': ['claude-opus', 'claude-sonnet', 'claude-haiku'],
-  'OpenAI': ['gpt-5.4', 'gpt-5.4-mini', 'gpt-5.4-nano'],
-  'xAI': ['grok-4.20', 'grok-4-1-fast'],
-  'Google': ['gemini-3.1-pro', 'gemini-2.5-flash'],
-};
 
 // Reverse lookup: model name → provider model names in the API
 // (what to put back in the request body)

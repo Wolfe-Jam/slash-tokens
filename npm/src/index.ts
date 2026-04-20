@@ -2,8 +2,11 @@
 export { slash, slashBytes } from './slash.js';
 
 // Pre-flight checks
-export { preflight } from './preflight.js';
+export { preflight, preflightRoute } from './preflight.js';
 export type { PreflightResult, Alternative } from './preflight.js';
+
+// Provider groups (shared between preflight + intercept — single source of truth)
+export { PROVIDER_MODELS, providerOf } from './providers.js';
 
 // Model intelligence
 export { MODELS, listModels } from './models.js';

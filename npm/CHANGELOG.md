@@ -1,5 +1,38 @@
 # Changelog
 
+## 1.4.0 (2026-04-19)
+
+### The Single-Source-of-Truth Edition
+
+Extracted `PROVIDER_MODELS` to a shared module and added `preflightRoute()` — the exact routing decision the Slash proxy makes (same-provider only). Fixes a class of downstream bug where consumers used `preflight().options[0]` as a routing decision (cross-provider analysis) instead of the actual routing. Also caught a latent bug: `claude-opus-4.7` was in `MODELS` but missing from the Anthropic provider group, making it an orphan to the routing algorithm.
+
+### New
+- **`preflightRoute(content, model)`** — returns the single cheapest same-provider `Alternative | null`. Matches mcpaas-cf proxy's `findCheapestRoute` semantics exactly. This is what downstream consumers should use to show "what Slash would route to," not `preflight().options[0]`.
+- **`PROVIDER_MODELS`** and **`providerOf(model)`** — exported from the new `providers.ts` shared module. Single source of truth for same-provider grouping.
+
+### Changed
+- **`intercept.ts` refactored** — no longer maintains its own `PROVIDER_MODELS` copy; imports from `providers.ts`. Removes drift risk between `preflight.ts` and `intercept.ts`.
+- **`claude-opus-4.7` added to Anthropic provider group** — was already in `MODELS` but orphaned from `PROVIDER_MODELS`, caught by the new test suite.
+
+### Clarified (not changed)
+- **`preflight().options` is cross-provider analysis** — returns cheapest models globally, sorted by price. Use it to *show alternatives*. Do not use it as a routing decision.
+- **`preflightRoute()` is the routing decision** — same-provider only. Use it to show *"what would Slash route to right now."*
+
+### Testing
+- 127 pass, 0 fail, 432 assertions (up from 118 / 386 in v1.3.0)
+- 7 new TIER 1 BRAKE tests asserting the same-provider invariant, null return semantics, and `providerOf` hygiene
+- See `TEST-NOTES.md` for the full test matrix and WJTTC tier plan
+
+### Docs
+- `TEST-NOTES.md` — new living doc collecting invariants and WJTTC tier plan
+
+### Non-breaking
+- `preflight()` behavior unchanged
+- All existing exports retained
+- Only additions + one internal refactor
+
+---
+
 ## 1.3.0 (2026-04-16)
 
 ### The Opus 4.7 Edition

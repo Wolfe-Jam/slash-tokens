@@ -14,7 +14,7 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll } from 'bun:test';
-import { slash, preflight, listModels, MODELS } from '../src/index';
+import { slash, preflight, preflightRoute, listModels, MODELS, PROVIDER_MODELS, providerOf } from '../src/index';
 import type { PreflightResult, ModelInfo } from '../src/index';
 import { getModel } from '../src/models';
 import { patchFetch, onIntercept } from '../src/intercept';
@@ -661,5 +661,74 @@ describe('TIER 5: BILLING — Auto Report & Metering', () => {
       const fee = Math.round((savings * 0.10) * 1_000_000) / 1_000_000;
       expect(fee).toBe(0.05);
     });
+  });
+});
+
+// ============================================================================
+// TIER 1 (BRAKE) — preflightRoute same-provider routing (v1.4.0)
+// These tests codify the invariant that the v1.3.0 bug violated:
+// preflight().options is cross-provider analysis; preflightRoute() is
+// same-provider routing decision that matches the proxy.
+// See TEST-NOTES.md for the full test matrix.
+// ============================================================================
+
+describe('TIER 1: BRAKE — preflightRoute same-provider invariant', () => {
+  it('preflightRoute never returns a cross-provider model', () => {
+    // For every canonical model in PROVIDER_MODELS, preflightRoute must either
+    // return null OR return a model from the same provider group. Never cross.
+    for (const [provider, models] of Object.entries(PROVIDER_MODELS)) {
+      for (const model of models) {
+        const route = preflightRoute('a test prompt that is reasonably long', model);
+        if (route) {
+          expect(PROVIDER_MODELS[provider]).toContain(route.model);
+        }
+      }
+    }
+  });
+
+  it('preflightRoute returns null for unknown model', () => {
+    expect(preflightRoute('hello', 'not-a-real-model')).toBeNull();
+  });
+
+  it('preflightRoute returns null when model has no cheaper same-provider option', () => {
+    // Haiku is the cheapest Anthropic model — no cheaper same-provider option exists
+    expect(preflightRoute('hello', 'claude-haiku')).toBeNull();
+    // Nano is the cheapest OpenAI
+    expect(preflightRoute('hello', 'gpt-5.4-nano')).toBeNull();
+  });
+
+  it('preflightRoute result is always cheaper than input model', () => {
+    for (const [, models] of Object.entries(PROVIDER_MODELS)) {
+      for (const model of models) {
+        const route = preflightRoute('test prompt for routing check', model);
+        if (route) {
+          const origCost = preflight('test prompt for routing check', model).cost;
+          expect(route.cost).toBeLessThan(origCost);
+          expect(route.salvaged).toBeGreaterThan(0);
+        }
+      }
+    }
+  });
+
+  it('providerOf returns correct provider for every model in MODELS', () => {
+    // Catches: model added to MODELS but not to PROVIDER_MODELS
+    for (const model of Object.keys(MODELS)) {
+      expect(providerOf(model)).not.toBeNull();
+    }
+  });
+
+  it('providerOf returns null for unknown model', () => {
+    expect(providerOf('not-a-real-model')).toBeNull();
+  });
+
+  it('preflight() semantics unchanged — still cross-provider analysis', () => {
+    // Regression guard: preflight() must continue to return cross-provider
+    // options. Only preflightRoute is same-provider. This is by design.
+    const pre = preflight('hello', 'claude-opus');
+    expect(Array.isArray(pre.options)).toBe(true);
+    // Existing behavior: every returned option is cheaper than requested
+    for (const opt of pre.options) {
+      expect(opt.salvaged).toBeGreaterThan(0);
+    }
   });
 });

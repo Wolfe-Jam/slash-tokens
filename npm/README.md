@@ -17,10 +17,15 @@ npm install slash-tokens
 ```
 
 ```js
-import { preflight } from 'slash-tokens'
+import { preflight, preflightRoute } from 'slash-tokens'
 
+// Analysis — all cheaper alternatives across all providers
 const check = preflight(prompt, 'claude-opus-4.7')
 // tokens: 47,000 | cost: $0.71 | 11 cheaper options | save 99%
+
+// Routing decision — matches Slash proxy behavior (same-provider only)
+const route = preflightRoute(prompt, 'claude-opus-4.7')
+// → { model: 'claude-haiku', cost: 0.14, salvaged: 0.57, ... } or null
 ```
 
 Or one line — every API call optimized pre-call:
