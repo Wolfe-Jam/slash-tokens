@@ -8,6 +8,9 @@ on:
       - '.github/workflows/deploy-site.yml'
   workflow_dispatch:
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   deploy:
     name: Deploy site/ to Cloudflare Pages
