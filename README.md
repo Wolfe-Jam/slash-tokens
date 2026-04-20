@@ -1,10 +1,10 @@
 # /slash-tokens
 
 [![CI/CD](https://github.com/Wolfe-Jam/slash-tokens/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/Wolfe-Jam/slash-tokens/actions/workflows/test.yml)
-[![npm version](https://img.shields.io/npm/v/slash-tokens.svg)](https://www.npmjs.com/package/slash-tokens)
-[![npm downloads](https://img.shields.io/npm/dm/slash-tokens.svg)](https://www.npmjs.com/package/slash-tokens)
-[![bundle size](https://img.shields.io/bundlephobia/minzip/slash-tokens)](https://bundlephobia.com/package/slash-tokens)
-[![license](https://img.shields.io/npm/l/slash-tokens.svg)](./npm/LICENSE)
+[![npm version](https://img.shields.io/npm/v/slash-tokens?style=flat&color=cb3837)](https://www.npmjs.com/package/slash-tokens)
+[![npm downloads](https://img.shields.io/npm/dm/slash-tokens?style=flat&color=brightgreen)](https://www.npmjs.com/package/slash-tokens)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/slash-tokens?style=flat)](https://bundlephobia.com/package/slash-tokens)
+[![license](https://img.shields.io/npm/l/slash-tokens?style=flat)](./npm/LICENSE)
 [![⭐ Star on GitHub](https://img.shields.io/badge/%E2%AD%90_Star-black?logo=github&logoColor=white)](https://github.com/Wolfe-Jam/slash-tokens)
 
 Token Optimization for Context Engineers.
