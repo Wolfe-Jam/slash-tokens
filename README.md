@@ -138,7 +138,7 @@ Node.js, Bun, Deno, Cloudflare Workers, Vercel Edge, Browser.
 
 ## License
 
-**Code: MIT.** Fork it, ship it, change it, sell it.
+**Code: MIT.** Fork it, ship it, change it, show it, share it, sell it.
 
 **Brand: reserved.** The slash-tokens name, ⚡ mark, and red/gold colors stay with the project. If you're building on top of the SDK, ship under your own name and colors — don't represent your app as Slash.
 
