@@ -19,9 +19,23 @@ jobs:
       contents: read
       deployments: write
     steps:
+      # Pre-flight: skip cleanly if secrets aren't set (e.g. initial repo setup).
+      # Skipped steps show grey, not red — no ghost failures on birthing pushes.
+      - name: Check required secrets
+        id: check-secrets
+        run: |
+          if [ -z "${{ secrets.CLOUDFLARE_API_TOKEN }}" ] || [ -z "${{ secrets.CLOUDFLARE_ACCOUNT_ID }}" ]; then
+            echo "::notice::Required CF secrets not set — skipping deploy (this is OK during initial setup)"
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+
       - uses: actions/checkout@v4
+        if: steps.check-secrets.outputs.skip != 'true'
 
       - name: Deploy to Cloudflare Pages
+        if: steps.check-secrets.outputs.skip != 'true'
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
