@@ -12,7 +12,9 @@ Token Optimization for Context Engineers.
 
 Know the cost before the call leaves your machine.
 
-> 🆕 **v1.4 — The Single-Source-of-Truth Edition.** New `preflightRoute()` matches the Slash proxy exactly (same-provider only). `PROVIDER_MODELS` is now the one source of truth across the SDK — no more routing drift. Builds on v1.3's Opus 4.7 support.
+> 🆕 **v1.4 — The Single-Source-of-Truth Edition.** New `preflightRoute()` matches the Slash proxy exactly — same-provider only, zero routing drift. `PROVIDER_MODELS` is now the single source of truth across the SDK.
+>
+> **v1.3 — The Opus 4.7 Edition.** Same-day support for Claude Opus 4.7 with measured token calibration (1.16–1.51x). Plus Gemini proxy fix and benchmark harness for any upstream.
 
 ## Try it
 
