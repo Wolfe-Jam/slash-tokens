@@ -144,4 +144,4 @@ Node.js, Bun, Deno, Cloudflare Workers, Vercel Edge, Browser.
 
 ---
 
-*Don't go to the Corner Shop in a Ferrari.*
+🏎️ *Don't go to the Corner Shop in a Ferrari.*

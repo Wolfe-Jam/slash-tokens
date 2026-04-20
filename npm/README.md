@@ -66,4 +66,4 @@ Full docs, examples, and model pricing at **[GitHub](https://github.com/Wolfe-Ja
 
 ---
 
-*Don't go to the Corner Shop in a Ferrari.* · [slashtokens.com](https://slashtokens.com)
+🏎️ *Don't go to the Corner Shop in a Ferrari.* · [slashtokens.com](https://slashtokens.com)
