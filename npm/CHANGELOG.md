@@ -1,5 +1,26 @@
 # Changelog
 
+## 1.4.1 (2026-04-20)
+
+### Polish release — no code changes
+
+**FAF 100% 🏆 · synced with a lean CLAUDE.md.** Documentation and brand consistency pass ahead of wider distribution. No SDK surface changes; all code identical to 1.4.0.
+
+`project.faf` now scores a full 🏆 Trophy (12/12 slots). CLAUDE.md is intentionally lean — a one-line `<!-- faf: ... -->` meta-stamp and a bi-sync status line, nothing more. Every piece of context has exactly one home: structured facts in `project.faf`, narrative in `README.md`, the sync pointer in `CLAUDE.md`. Token-frugal by design — which is on-brand for a token optimization SDK.
+
+### Changed
+- **License/Brand language rewritten.** Merged the prior separate `Brand` and `License` sections into one. Leads with "Code: MIT. Fork it, ship it, change it, sell it." Brand protection follows in plain language ("don't represent your app as Slash") instead of the prior "violators will get a takedown request" phrasing. Consistent with the slash-nextjs template pattern.
+- **v1.4 and v1.3 callouts now stacked** at the top of both READMEs — newest first, with the 🆕 badge on v1.4. The Opus 4.7 story (v1.3) keeps its visibility, not erased by the newer release.
+- **"Know the cost before the call leaves your machine."** subtitle added to `npm/README.md` so both READMEs read identically below the headline.
+- **WASM badge now shows 4.8 KB** (the raw WASM engine size, matching every other surface) instead of the 5.1 KiB minzipped package total. Both numbers are true; the brand claim ("4.8 KB WASM") is the one users recognize.
+- **Signature sign-off added:** 🏎️ *Don't go to the Corner Shop in a Ferrari.* — the line we've been using everywhere else now appears on both READMEs.
+- **shields.io badge URLs refreshed** to the newer (`?style=flat`) format so GitHub's camo image proxy re-fetches under fresh URLs (fixes the intermittent "rate limited by upstream service" render on the bundle-size badge).
+
+### Why
+The npm package page bakes the README into the tarball at publish time. After v1.4.0 shipped, several improvements landed on GitHub but couldn't reach the npm landing page without a new publish. With the launch X post about to fire, the page visitors land on first needs to reflect the current brand and language.
+
+---
+
 ## 1.4.0 (2026-04-19)
 
 ### The Single-Source-of-Truth Edition

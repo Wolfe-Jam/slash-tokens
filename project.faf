@@ -1,0 +1,40 @@
+faf_version: "3.0"
+project:
+  name: slash-tokens
+  goal: Token optimization for Context Engineers — pre-flight checks on every LLM API call, sub-millisecond, 4.8 KB WASM
+  main_language: TypeScript
+  type: library
+  framework: none
+stack:
+  frontend: slotignored
+  css_framework: slotignored
+  ui_library: slotignored
+  state_management: slotignored
+  backend: slotignored
+  api_type: slotignored
+  runtime: Node.js
+  database: slotignored
+  connection: slotignored
+  hosting: slotignored
+  build: Bun
+  cicd: GitHub Actions
+  monorepo_tool: slotignored
+  package_manager: npm
+  workspaces: slotignored
+  admin: slotignored
+  cache: slotignored
+  search: slotignored
+  storage: slotignored
+human_context:
+  who: Context Engineers building with LLMs (Claude, OpenAI, xAI, Google) who want pre-call cost visibility and automatic routing to cheaper same-provider models
+  what: 4.8 KB Zig-compiled WASM SDK — estimates tokens, costs, and routes LLM calls pre-send. preflight() for cross-provider analysis, preflightRoute() for the same-provider routing decision the Slash proxy makes
+  why: Most apps waste 40-80% of tokens calling frontier models for tasks that fit smaller ones. Slash decides pre-call, not after the invoice. Don't go to the corner shop in a Ferrari.
+  where: npm (slash-tokens), slashtokens.com, GitHub (Wolfe-Jam/slash-tokens), mcpaas.live/slash
+  when: v1.4.1 polish release, April 20 2026. v1.4.0 shipped April 19 (Single-Source-of-Truth Edition). 1.5k+ monthly downloads.
+  how: npm install slash-tokens or bunx slash-tokens. One import (slash-tokens/auto) intercepts every fetch to Anthropic/OpenAI/xAI/Google endpoints pre-call.
+monorepo:
+  packages_count: slotignored
+  build_orchestrator: slotignored
+  versioning_strategy: slotignored
+  shared_configs: slotignored
+  remote_cache: slotignored
