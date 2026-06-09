@@ -472,6 +472,10 @@
 </head>
 <body>
 
+  <!-- VERSION BADGE — single live version reference, top-left, reads from npm so it can't drift -->
+  <a id="versionBadge" href="https://github.com/Wolfe-Jam/slash-tokens" target="_blank" rel="noopener"
+     style="position:fixed;top:12px;left:12px;z-index:100000;font-family:'Roboto Mono',monospace;font-size:0.72rem;font-weight:700;color:#f5f5f5;background:rgba(255,68,0,0.12);border:1px solid rgba(255,68,0,0.4);padding:0.25rem 0.6rem;border-radius:6px;text-decoration:none;letter-spacing:0.02em;">v1.4.1</a>
+
   <!-- THE EVALUATOR — flash entrance -->
   <div id="evaluator-splash" style="position:fixed;top:0;left:0;right:0;bottom:0;background:#0a0a0a;z-index:99999;display:flex;align-items:center;justify-content:center;animation:evalFade 2s ease forwards;">
     <img src="/og.jpg" alt="The Evaluator" style="max-width:80%;max-height:70vh;border-radius:12px;animation:evalZoom 2s ease forwards;">
@@ -822,7 +826,7 @@
     </div>
 
     <div style="text-align:center;margin-top:0.75rem;font-size:0.75rem;color:#666;">
-      Latest: <a href="https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.4.1" style="color:#888;text-decoration:none;border-bottom:1px dotted #444;">v1.4.1</a> · April 20, 2026 · <a href="https://github.com/Wolfe-Jam/slash-tokens/blob/main/npm/CHANGELOG.md" style="color:#888;text-decoration:none;border-bottom:1px dotted #444;">Changelog</a>
+      <a href="https://github.com/Wolfe-Jam/slash-tokens/releases" style="color:#888;text-decoration:none;border-bottom:1px dotted #444;">The Single-Source-of-Truth Edition</a> · <a href="https://github.com/Wolfe-Jam/slash-tokens/blob/main/npm/CHANGELOG.md" style="color:#888;text-decoration:none;border-bottom:1px dotted #444;">Changelog</a>
     </div>
 
     <div style="display: flex; justify-content: center; margin-top: 1.5rem;">
@@ -846,6 +850,14 @@
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="14" height="14" style="vertical-align:-0.1em;display:inline-block;"><polygon points="60,0 20,55 48,55 38,100 80,42 52,42" fill="#FFAA00"/></svg> <span style="color:#f5f5f5">/</span><span style="color:#FF4400">slash</span> — Token Optimization for Context Engineers.
     </div>
   </div>
+
+  <!-- LIVE VERSION — reads the published npm version so the badge can never drift from reality -->
+  <script>
+    fetch('https://registry.npmjs.org/slash-tokens/latest')
+      .then(r => r.ok ? r.json() : null)
+      .then(d => { if (d && d.version) { const b = document.getElementById('versionBadge'); if (b) b.textContent = 'v' + d.version; } })
+      .catch(() => {});
+  </script>
 
 </body>
 </html>
