@@ -824,7 +824,7 @@
           <li>Multi-project attribution</li>
           <li>Slack / webhook alerts</li>
         </ul>
-        <a class="price-btn" href="mailto:team@faf.one?subject=Slash%20Team%20%E2%80%94%20%2439/mo">Get Team</a>
+        <a class="price-btn js-mail" data-subject="Slash Team — $39/mo" href="#">Get Team</a>
       </div>
       <div class="price-card">
         <div class="tier">Pro</div>
@@ -836,12 +836,12 @@
           <li>Finance-ready monthly receipt</li>
           <li>Priority support</li>
         </ul>
-        <a class="price-btn" href="mailto:team@faf.one?subject=Slash%20Pro%20%E2%80%94%20%2499/mo">Get Pro</a>
+        <a class="price-btn js-mail" data-subject="Slash Pro — $99/mo" href="#">Get Pro</a>
       </div>
     </div>
     <p class="price-enterprise">
       Enterprise — custom. SSO, VPC, longer retention.
-      <a href="mailto:team@faf.one?subject=Slash%20Enterprise">Talk to us</a>.
+      <a class="js-mail" data-subject="Slash Enterprise" href="#">Talk to us</a>.
     </p>
 
     <!-- FLYWHEEL -->
@@ -981,6 +981,10 @@
 
   <!-- LIVE VERSION — reads the published npm version so the badge can never drift from reality -->
   <script>
+    document.querySelectorAll('.js-mail').forEach(function (a) {
+      var sub = a.getAttribute('data-subject') || '';
+      a.href = 'mailto:' + 'team' + '@' + 'faf.one' + '?subject=' + encodeURIComponent(sub);
+    });
     fetch('https://registry.npmjs.org/slash-tokens/latest')
       .then(r => r.ok ? r.json() : null)
       .then(d => { if (d && d.version) { const b = document.getElementById('versionBadge'); if (b) b.textContent = 'v' + d.version; } })
