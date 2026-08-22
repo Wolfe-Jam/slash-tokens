@@ -334,9 +334,24 @@
       color: #888;
       text-align: center;
       margin-top: 0.5rem;
+      line-height: 1.6;
     }
     .price-enterprise a { color: #FF4400; text-decoration: none; font-weight: 700; }
     .price-enterprise a:hover { text-decoration: underline; }
+    .price-close {
+      text-align: center;
+      margin: 1.5rem 0 0;
+    }
+    .price-close p {
+      font-size: 1.05rem;
+      font-weight: 800;
+      color: #f5f5f5;
+      margin-bottom: 0.35rem;
+    }
+    .price-close .sub {
+      font-size: 0.9rem;
+      color: #888;
+    }
 
     /* Prose blocks */
     .prose {
@@ -796,59 +811,67 @@
 
   <hr class="divider">
 
-  <!-- THE MODEL -->
+  <!-- PRICING -->
   <div class="section">
-    <h2>The model</h2>
+    <h2>Pricing</h2>
 
     <div class="model-equation">
-      <div class="line1">The library stays free. Forever. No account.</div>
-      <div class="line2">Paid is <span class="green">visibility and control</span></div>
-      <div class="line3">History, teams, reports, alerts. Stripe. Same stack you already know.</div>
+      <div class="line1">The library is free forever.</div>
+      <div class="line2">You only pay when you want <span class="green">history, teams, and control</span>.</div>
     </div>
 
     <div class="price-grid">
       <div class="price-card featured">
         <div class="tier">Free</div>
         <div class="amount">$0 <span>forever</span></div>
-        <div class="cadence">No account. Local pre-flight.</div>
+        <div class="cadence">&nbsp;</div>
         <ul>
-          <li><code style="font-family:'Roboto Mono',monospace;color:#FF4400;font-size:0.78rem;">preflight()</code> / <code style="font-family:'Roboto Mono',monospace;color:#FF4400;font-size:0.78rem;">preflightRoute()</code></li>
-          <li>Auto intercept</li>
-          <li>Local cost estimate</li>
-          <li>Session summary</li>
+          <li>Full pre-flight (<code style="font-family:'Roboto Mono',monospace;color:#FF4400;font-size:0.78rem;">preflight</code>, <code style="font-family:'Roboto Mono',monospace;color:#FF4400;font-size:0.78rem;">preflightRoute</code>, auto intercept)</li>
+          <li>Local cost estimate before every call</li>
+          <li>Session summary on exit</li>
+          <li>Unlimited local use</li>
+          <li>No account required</li>
         </ul>
         <a class="price-btn" href="#try">bunx slash-tokens</a>
       </div>
       <div class="price-card">
         <div class="tier">Team</div>
         <div class="amount">$39 <span>/ month</span></div>
-        <div class="cadence">or <a href="https://buy.stripe.com/14AdRb8cdbfodDl1EAbV60t" target="_blank" rel="noopener">$390 / year</a> · up to 5 seats</div>
+        <div class="cadence">or <a href="https://buy.stripe.com/14AdRb8cdbfodDl1EAbV60t" target="_blank" rel="noopener">$390 / year</a></div>
         <ul>
-          <li>Everything in Free</li>
-          <li>Persistent dashboard &amp; history</li>
-          <li>Savings reports + export</li>
-          <li>Multi-project attribution</li>
-          <li>Slack / webhook alerts</li>
+          <li>Everything in Free, plus:</li>
+          <li>Persistent savings dashboard &amp; history</li>
+          <li>Up to 5 seats</li>
+          <li>Monthly / weekly savings reports (exportable)</li>
+          <li>Multi-project / multi-key attribution</li>
+          <li>Slack &amp; webhook alerts on expensive calls</li>
         </ul>
         <a class="price-btn" href="https://buy.stripe.com/3cI8wR2RTerAczh4QMbV60s" target="_blank" rel="noopener">Get Team</a>
       </div>
       <div class="price-card">
         <div class="tier">Pro</div>
         <div class="amount">$99 <span>/ month</span></div>
-        <div class="cadence">or $990 / year · unlimited seats</div>
+        <div class="cadence">or $990 / year</div>
         <ul>
-          <li>Everything in Team</li>
-          <li>Optional hosted proxy</li>
-          <li>Finance-ready monthly receipt</li>
+          <li>Everything in Team, plus:</li>
+          <li>Unlimited seats</li>
+          <li>Optional hosted proxy (enforce routing decisions)</li>
+          <li>Finance-ready Token Spend &amp; Savings Receipt</li>
           <li>Priority support</li>
         </ul>
         <a class="price-btn js-mail" data-subject="Slash Pro — $99/mo" href="#">Get Pro</a>
       </div>
     </div>
     <p class="price-enterprise">
-      Enterprise — custom. SSO, VPC, longer retention.
+      <strong style="color:#f5f5f5;">Enterprise</strong> — custom.<br>
+      SSO, VPC, longer retention, dedicated support, custom reporting.<br>
+      Optional performance-based component available once measured savings exist.
       <a class="js-mail" data-subject="Slash Enterprise" href="#">Talk to us</a>.
     </p>
+    <div class="price-close">
+      <p>The more you build, the more you save.</p>
+      <div class="sub">Core stays free. Visibility and control are what teams pay for.</div>
+    </div>
 
     <!-- FLYWHEEL -->
     <div class="flywheel">
