@@ -262,9 +262,9 @@
       display: flex;
       flex-direction: column;
     }
-    .price-card.featured {
-      border-color: #FF4400;
-      background: rgba(255, 68, 0, 0.06);
+    .price-card.go {
+      border-color: #4ade80;
+      background: rgba(74, 222, 128, 0.06);
     }
     .price-card .tier {
       font-size: 0.7rem;
@@ -274,7 +274,8 @@
       color: #888;
       margin-bottom: 0.4rem;
     }
-    .price-card.featured .tier { color: #FF4400; }
+    .price-card.go .tier { color: #4ade80; }
+    .price-card.go .cadence a { color: #4ade80; }
     .price-card .amount {
       font-family: 'Roboto Mono', monospace;
       font-size: 1.6rem;
@@ -323,12 +324,13 @@
       background: rgba(255, 68, 0, 0.08);
     }
     .price-btn:hover { background: rgba(255, 68, 0, 0.16); }
-    .price-card.featured .price-btn {
-      background: #FF4400;
+    .price-card.go .price-btn {
+      background: #4ade80;
       color: #0a0a0a;
-      border-color: #FF4400;
+      border-color: #4ade80;
     }
-    .price-card.featured .price-btn:hover { background: #ff5a1f; }
+    .price-card.go .price-btn:hover { background: #22c55e; }
+    .price-card.go .price-alt:hover { color: #4ade80; }
     .price-alt {
       display: block;
       text-align: center;
@@ -843,7 +845,7 @@
         </ul>
         <a class="price-btn" href="#try">bunx slash-tokens</a>
       </div>
-      <div class="price-card featured">
+      <div class="price-card go">
         <div class="tier">Team</div>
         <div class="amount">$390 <span>/ year</span></div>
         <div class="cadence">2 months free · or <a href="https://buy.stripe.com/3cI8wR2RTerAczh4QMbV60s" target="_blank" rel="noopener">$39 / month</a></div>
