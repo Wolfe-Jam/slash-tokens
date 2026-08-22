@@ -329,6 +329,15 @@
       border-color: #FF4400;
     }
     .price-card.featured .price-btn:hover { background: #ff5a1f; }
+    .price-alt {
+      display: block;
+      text-align: center;
+      margin-top: 0.55rem;
+      font-size: 0.75rem;
+      color: #888;
+      text-decoration: none;
+    }
+    .price-alt:hover { color: #FF4400; }
     .price-enterprise {
       font-size: 0.85rem;
       color: #888;
@@ -821,7 +830,7 @@
     </div>
 
     <div class="price-grid">
-      <div class="price-card featured">
+      <div class="price-card">
         <div class="tier">Free</div>
         <div class="amount">$0 <span>forever</span></div>
         <div class="cadence">&nbsp;</div>
@@ -834,10 +843,10 @@
         </ul>
         <a class="price-btn" href="#try">bunx slash-tokens</a>
       </div>
-      <div class="price-card">
+      <div class="price-card featured">
         <div class="tier">Team</div>
-        <div class="amount">$39 <span>/ month</span></div>
-        <div class="cadence">or <a href="https://buy.stripe.com/14AdRb8cdbfodDl1EAbV60t" target="_blank" rel="noopener">$390 / year</a></div>
+        <div class="amount">$390 <span>/ year</span></div>
+        <div class="cadence">2 months free · or <a href="https://buy.stripe.com/3cI8wR2RTerAczh4QMbV60s" target="_blank" rel="noopener">$39 / month</a></div>
         <ul>
           <li>Everything in Free, plus:</li>
           <li>Persistent savings dashboard &amp; history</li>
@@ -846,12 +855,13 @@
           <li>Multi-project / multi-key attribution</li>
           <li>Slack &amp; webhook alerts on expensive calls</li>
         </ul>
-        <a class="price-btn" href="https://buy.stripe.com/3cI8wR2RTerAczh4QMbV60s" target="_blank" rel="noopener">Get Team</a>
+        <a class="price-btn" href="https://buy.stripe.com/14AdRb8cdbfodDl1EAbV60t" target="_blank" rel="noopener">Get Annual</a>
+        <a class="price-alt" href="https://buy.stripe.com/3cI8wR2RTerAczh4QMbV60s" target="_blank" rel="noopener">Get monthly — $39</a>
       </div>
       <div class="price-card">
         <div class="tier">Pro</div>
         <div class="amount">$99 <span>/ month</span></div>
-        <div class="cadence">or $990 / year</div>
+        <div class="cadence">Team for a limited time. Pro checkout isn't live.</div>
         <ul>
           <li>Everything in Team, plus:</li>
           <li>Unlimited seats</li>
@@ -859,7 +869,8 @@
           <li>Finance-ready Token Spend &amp; Savings Receipt</li>
           <li>Priority support</li>
         </ul>
-        <a class="price-btn js-mail" data-subject="Slash Pro — $99/mo" href="#">Get Pro</a>
+        <a class="price-btn" href="https://buy.stripe.com/14AdRb8cdbfodDl1EAbV60t" target="_blank" rel="noopener">Get Team</a>
+        <a class="price-alt" href="https://buy.stripe.com/3cI8wR2RTerAczh4QMbV60s" target="_blank" rel="noopener">or $39 / month</a>
       </div>
     </div>
     <p class="price-enterprise">
