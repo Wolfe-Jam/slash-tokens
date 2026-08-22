@@ -247,6 +247,91 @@
       margin-top: 0.8rem;
     }
 
+    /* Pricing */
+    .price-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 2rem 0 1.5rem;
+    }
+    .price-card {
+      background: #111;
+      border: 1px solid #222;
+      border-radius: 12px;
+      padding: 1.4rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+    }
+    .price-card.featured {
+      border-color: #FF4400;
+      background: rgba(255, 68, 0, 0.06);
+    }
+    .price-card .tier {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 0.4rem;
+    }
+    .price-card.featured .tier { color: #FF4400; }
+    .price-card .amount {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #f5f5f5;
+      margin-bottom: 0.2rem;
+    }
+    .price-card .amount span {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #888;
+    }
+    .price-card .cadence {
+      font-size: 0.75rem;
+      color: #666;
+      margin-bottom: 1rem;
+    }
+    .price-card ul {
+      list-style: none;
+      flex: 1;
+      margin-bottom: 1.2rem;
+    }
+    .price-card li {
+      font-size: 0.82rem;
+      color: #bbb;
+      padding: 0.28rem 0;
+      border-top: 1px solid #1a1a1a;
+    }
+    .price-card li:first-child { border-top: none; }
+    .price-btn {
+      display: block;
+      text-align: center;
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 0.85rem;
+      padding: 0.7rem 1rem;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 68, 0, 0.35);
+      color: #FF4400;
+      background: rgba(255, 68, 0, 0.08);
+    }
+    .price-btn:hover { background: rgba(255, 68, 0, 0.16); }
+    .price-card.featured .price-btn {
+      background: #FF4400;
+      color: #0a0a0a;
+      border-color: #FF4400;
+    }
+    .price-card.featured .price-btn:hover { background: #ff5a1f; }
+    .price-enterprise {
+      font-size: 0.85rem;
+      color: #888;
+      text-align: center;
+      margin-top: 0.5rem;
+    }
+    .price-enterprise a { color: #FF4400; text-decoration: none; font-weight: 700; }
+    .price-enterprise a:hover { text-decoration: underline; }
+
     /* Prose blocks */
     .prose {
       margin-bottom: 2rem;
@@ -462,7 +547,7 @@
 
     @media (max-width: 600px) {
       .hero h1 { font-size: 2.5rem; }
-      .problem-grid, .stats-row, .zero-risk, .proof-grid { grid-template-columns: 1fr; }
+      .problem-grid, .stats-row, .zero-risk, .proof-grid, .price-grid { grid-template-columns: 1fr; }
       .gate-flow { flex-direction: column; }
       .flywheel { width: 100%; height: 500px; }
       .wheel-node { width: 120px; padding: 0.7rem; }
@@ -710,10 +795,54 @@
     <h2>The model</h2>
 
     <div class="model-equation">
-      <div class="line1">Our fee: 10% of pre-agreed metered savings</div>
-      <div class="line2">You <span class="green">save 90%</span></div>
-      <div class="line3">The more you pay us, the more you save.</div>
+      <div class="line1">The library stays free. Forever. No account.</div>
+      <div class="line2">Paid is <span class="green">visibility and control</span></div>
+      <div class="line3">History, teams, reports, alerts. Stripe. Same stack you already know.</div>
     </div>
+
+    <div class="price-grid">
+      <div class="price-card featured">
+        <div class="tier">Free</div>
+        <div class="amount">$0 <span>forever</span></div>
+        <div class="cadence">No account. Local pre-flight.</div>
+        <ul>
+          <li><code style="font-family:'Roboto Mono',monospace;color:#FF4400;font-size:0.78rem;">preflight()</code> / <code style="font-family:'Roboto Mono',monospace;color:#FF4400;font-size:0.78rem;">preflightRoute()</code></li>
+          <li>Auto intercept</li>
+          <li>Local cost estimate</li>
+          <li>Session summary</li>
+        </ul>
+        <a class="price-btn" href="#try">bunx slash-tokens</a>
+      </div>
+      <div class="price-card">
+        <div class="tier">Team</div>
+        <div class="amount">$39 <span>/ month</span></div>
+        <div class="cadence">or $390 / year · up to 5 seats</div>
+        <ul>
+          <li>Everything in Free</li>
+          <li>Persistent dashboard &amp; history</li>
+          <li>Savings reports + export</li>
+          <li>Multi-project attribution</li>
+          <li>Slack / webhook alerts</li>
+        </ul>
+        <a class="price-btn" href="mailto:team@faf.one?subject=Slash%20Team%20%E2%80%94%20%2439/mo">Get Team</a>
+      </div>
+      <div class="price-card">
+        <div class="tier">Pro</div>
+        <div class="amount">$99 <span>/ month</span></div>
+        <div class="cadence">or $990 / year · unlimited seats</div>
+        <ul>
+          <li>Everything in Team</li>
+          <li>Optional hosted proxy</li>
+          <li>Finance-ready monthly receipt</li>
+          <li>Priority support</li>
+        </ul>
+        <a class="price-btn" href="mailto:team@faf.one?subject=Slash%20Pro%20%E2%80%94%20%2499/mo">Get Pro</a>
+      </div>
+    </div>
+    <p class="price-enterprise">
+      Enterprise — custom. SSO, VPC, longer retention.
+      <a href="mailto:team@faf.one?subject=Slash%20Enterprise">Talk to us</a>.
+    </p>
 
     <!-- FLYWHEEL -->
     <div class="flywheel">
@@ -737,8 +866,8 @@
       <div class="wheel-arrow arrow-3-4">→</div>
       <div class="wheel-node node-4">
         <div class="num">Step 4</div>
-        <div class="wlabel">Customer Keeps 90% Savings</div>
-        <div class="wdetail">we take 10% of savings</div>
+        <div class="wlabel">You keep the savings</div>
+        <div class="wdetail">receipt on the dashboard</div>
       </div>
       <div class="wheel-arrow arrow-4-5">→</div>
       <div class="wheel-node node-5">
@@ -762,9 +891,8 @@
 
     <div class="prose">
       <p><strong>Traditional SaaS:</strong> "Here's your bill. It goes up every month. You hate us a little more each quarter."</p>
-      <p><strong><span style="color:#f5f5f5">/</span><span style="color:#FF4400">slash:</span></strong> "Here's what you saved. We took 10% of that. You saved 90%. You're welcome."</p>
-      <p>Every invoice is proof the product works.</p>
-      <p>You're not a line item on the cost sheet. You're on the <span class="green">savings sheet</span>. Finance teams don't cut the thing that's saving them money. They give it more surface area.</p>
+      <p><strong><span style="color:#f5f5f5">/</span><span style="color:#FF4400">slash:</span></strong> "Here's what you saved. The library was free. The dashboard is how finance sees it."</p>
+      <p>You're not a line item on the cost sheet. You're on the <span class="green">savings sheet</span>.</p>
     </div>
   </div>
 
@@ -781,7 +909,7 @@
       <p>Copy the red box below. Send it to your dev. That's it.</p>
     </div>
 
-    <div class="punchline" style="border: 1px solid #FF4400; background: rgba(255, 68, 0, 0.04); cursor: pointer; position: relative;" onclick="navigator.clipboard.writeText('bunx slash-tokens').then(() => { const fb = this.querySelector('.copy-feedback'); fb.style.opacity = '1'; setTimeout(() => fb.style.opacity = '0', 1500); })">
+    <div id="try" class="punchline" style="border: 1px solid #FF4400; background: rgba(255, 68, 0, 0.04); cursor: pointer; position: relative;" onclick="navigator.clipboard.writeText('bunx slash-tokens').then(() => { const fb = this.querySelector('.copy-feedback'); fb.style.opacity = '1'; setTimeout(() => fb.style.opacity = '0', 1500); })">
       <p style="font-family: 'Roboto Mono', monospace; font-size: 1.4rem; letter-spacing: 0.02em;"><span style="color:#FF4400">bunx slash-tokens</span></p>
       <div class="sub" style="margin-top: 0.8rem;">Click to copy</div>
       <div class="copy-feedback" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #4ade80; color: #0a0a0a; font-weight: 800; font-size: 1rem; padding: 0.4rem 1.2rem; border-radius: 6px; opacity: 0; transition: opacity 0.3s; pointer-events: none;">Copied!</div>
