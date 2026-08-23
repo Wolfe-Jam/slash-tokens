@@ -31,6 +31,8 @@ console.log(`Auth: ${USE_PROXY ? 'proxy (' + BASE_URL + ')' : 'direct API key'}`
 const MODELS = [
   { id: 'claude-opus-4-20250514', name: 'opus-4.6' },
   { id: 'claude-opus-4-7', name: 'opus-4.7' },
+  { id: 'claude-sonnet-5', name: 'sonnet-5' },
+  { id: 'claude-haiku-4-5-20251001', name: 'haiku-4.5' },
 ];
 
 interface CountResult {

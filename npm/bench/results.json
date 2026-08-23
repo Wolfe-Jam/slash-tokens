@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-23T15:21:04.948Z",
+  "timestamp": "2026-08-23T16:30:36.645Z",
   "results": [
     {
       "model": "claude-opus-4-7",
@@ -12,6 +12,26 @@
       "delta": -6.2
     },
     {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "ts-function",
+      "type": "code",
+      "actual": 155,
+      "estimated": 150,
+      "ratio": 0.968,
+      "delta": -3.2
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "ts-function",
+      "type": "code",
+      "actual": 141,
+      "estimated": 150,
+      "ratio": 1.064,
+      "delta": 6.4
+    },
+    {
       "model": "claude-opus-4-7",
       "modelName": "opus-4.7",
       "corpus": "python-class",
@@ -20,6 +40,26 @@
       "estimated": 255,
       "ratio": 0.731,
       "delta": -26.9
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "python-class",
+      "type": "code",
+      "actual": 344,
+      "estimated": 255,
+      "ratio": 0.741,
+      "delta": -25.9
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "python-class",
+      "type": "code",
+      "actual": 282,
+      "estimated": 255,
+      "ratio": 0.904,
+      "delta": -9.6
     },
     {
       "model": "claude-opus-4-7",
@@ -32,6 +72,26 @@
       "delta": -33.8
     },
     {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "rust-struct",
+      "type": "code",
+      "actual": 362,
+      "estimated": 243,
+      "ratio": 0.671,
+      "delta": -32.9
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "rust-struct",
+      "type": "code",
+      "actual": 292,
+      "estimated": 243,
+      "ratio": 0.832,
+      "delta": -16.8
+    },
+    {
       "model": "claude-opus-4-7",
       "modelName": "opus-4.7",
       "corpus": "technical-docs",
@@ -40,6 +100,26 @@
       "estimated": 192,
       "ratio": 0.571,
       "delta": -42.9
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "technical-docs",
+      "type": "prose",
+      "actual": 331,
+      "estimated": 192,
+      "ratio": 0.58,
+      "delta": -42
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "technical-docs",
+      "type": "prose",
+      "actual": 239,
+      "estimated": 192,
+      "ratio": 0.803,
+      "delta": -19.7
     },
     {
       "model": "claude-opus-4-7",
@@ -52,6 +132,26 @@
       "delta": -42
     },
     {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "conversational",
+      "type": "prose",
+      "actual": 252,
+      "estimated": 149,
+      "ratio": 0.591,
+      "delta": -40.9
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "conversational",
+      "type": "prose",
+      "actual": 170,
+      "estimated": 149,
+      "ratio": 0.876,
+      "delta": -12.4
+    },
+    {
       "model": "claude-opus-4-7",
       "modelName": "opus-4.7",
       "corpus": "api-response",
@@ -60,6 +160,26 @@
       "estimated": 1556,
       "ratio": 0.75,
       "delta": -25
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "api-response",
+      "type": "json",
+      "actual": 2071,
+      "estimated": 1556,
+      "ratio": 0.751,
+      "delta": -24.9
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "api-response",
+      "type": "json",
+      "actual": 1789,
+      "estimated": 1556,
+      "ratio": 0.87,
+      "delta": -13
     },
     {
       "model": "claude-opus-4-7",
@@ -72,6 +192,26 @@
       "delta": -24.6
     },
     {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "config-yaml-as-json",
+      "type": "json",
+      "actual": 279,
+      "estimated": 214,
+      "ratio": 0.767,
+      "delta": -23.3
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "config-yaml-as-json",
+      "type": "json",
+      "actual": 237,
+      "estimated": 214,
+      "ratio": 0.903,
+      "delta": -9.7
+    },
+    {
       "model": "claude-opus-4-7",
       "modelName": "opus-4.7",
       "corpus": "readme-excerpt",
@@ -82,6 +222,26 @@
       "delta": -41
     },
     {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "readme-excerpt",
+      "type": "markdown",
+      "actual": 283,
+      "estimated": 170,
+      "ratio": 0.601,
+      "delta": -39.9
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "readme-excerpt",
+      "type": "markdown",
+      "actual": 223,
+      "estimated": 170,
+      "ratio": 0.762,
+      "delta": -23.8
+    },
+    {
       "model": "claude-opus-4-7",
       "modelName": "opus-4.7",
       "corpus": "mixed-code-prose",
@@ -90,6 +250,26 @@
       "estimated": 235,
       "ratio": 0.716,
       "delta": -28.4
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "mixed-code-prose",
+      "type": "mixed",
+      "actual": 323,
+      "estimated": 235,
+      "ratio": 0.728,
+      "delta": -27.2
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "mixed-code-prose",
+      "type": "mixed",
+      "actual": 245,
+      "estimated": 235,
+      "ratio": 0.959,
+      "delta": -4.1
     }
   ],
   "summary": {
@@ -100,6 +280,22 @@
       "min_delta": -42.9,
       "median_delta": -28.4,
       "max_delta": -6.2
+    },
+    "sonnet-5": {
+      "min_ratio": 0.58,
+      "median_ratio": 0.728,
+      "max_ratio": 0.968,
+      "min_delta": -42,
+      "median_delta": -27.2,
+      "max_delta": -3.2
+    },
+    "haiku-4.5": {
+      "min_ratio": 0.762,
+      "median_ratio": 0.876,
+      "max_ratio": 1.064,
+      "min_delta": -23.8,
+      "median_delta": -12.4,
+      "max_delta": 6.4
     }
   },
   "crossModel": []
