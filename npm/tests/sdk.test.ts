@@ -108,15 +108,20 @@ describe('TIER 1: BRAKE — Core Estimation', () => {
       expect(unknown).toBe(known);
     });
 
-    it('Gemini and Grok are calibrated too, not left on the raw estimate', () => {
+    it('Gemini, Grok, and GPT are calibrated too, not left on the raw estimate', () => {
       // Regression guard for 2026-08-23: Gemini and Grok were measured and
-      // added to CALIBRATION the same day as the Claude fixes — this would
-      // have caught either one silently missing its factor.
+      // added to CALIBRATION the same day as the Claude fixes. GPT had a
+      // calibration script from that same day but no table entry — it was
+      // silently falling through to the unknown-model default (still safe,
+      // just needlessly inflated) until the corpus expansion caught it.
       const raw = slash(text);
       expect(slash(text, 'gemini-3.1-pro')).toBeGreaterThan(raw);
       expect(slash(text, 'gemini-2.5-flash')).toBeGreaterThan(raw);
       expect(slash(text, 'grok-4.20')).toBeGreaterThan(raw);
       expect(slash(text, 'grok-4-1-fast')).toBeGreaterThan(raw);
+      expect(slash(text, 'gpt-5.4')).toBeGreaterThan(raw);
+      expect(slash(text, 'gpt-5.4-mini')).toBeGreaterThan(raw);
+      expect(slash(text, 'gpt-5.4-nano')).toBeGreaterThan(raw);
     });
   });
 });

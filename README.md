@@ -13,7 +13,7 @@ Token Optimization for Context Engineers.
 
 Know the cost before the call leaves your machine.
 
-> 🆕 **v1.5 — The Calibration Fix Edition.** Per-model calibration is now actually wired into every call path (it wasn't — found and fixed 2026-08-23). Unknown models get a safe default instead of zero correction. Gemini and Grok are calibrated for the first time; Claude's factors were re-measured against current models. Several internal model names were quietly routing to retired API IDs across Claude, Gemini, and Grok — all fixed.
+> 🆕 **v1.5 — The Calibration Fix Edition.** Per-model calibration is now actually wired into every call path (it wasn't — found and fixed 2026-08-23). Unknown models get a safe default instead of zero correction. Gemini and Grok are calibrated for the first time; Claude's factors were re-measured against current models, then corrected again same-day (1.85→2.05) after expanding the benchmark corpus surfaced worse drift on Spanish-language and SQL/bash content the original 9-sample set never tested. Several internal model names were quietly routing to retired API IDs across Claude, Gemini, and Grok — all fixed.
 >
 > **v1.4 — The Single-Source-of-Truth Edition.** New `preflightRoute()` matches the Slash proxy exactly — same-provider only, zero routing drift. `PROVIDER_MODELS` is now the single source of truth across the SDK.
 >

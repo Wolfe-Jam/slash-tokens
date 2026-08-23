@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-23T16:30:36.645Z",
+  "timestamp": "2026-08-23T21:01:12.256Z",
   "results": [
     {
       "model": "claude-opus-4-7",
@@ -270,32 +270,632 @@
       "estimated": 235,
       "ratio": 0.959,
       "delta": -4.1
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "go-http-handler",
+      "type": "code",
+      "actual": 359,
+      "estimated": 289,
+      "ratio": 0.805,
+      "delta": -19.5
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "go-http-handler",
+      "type": "code",
+      "actual": 354,
+      "estimated": 289,
+      "ratio": 0.816,
+      "delta": -18.4
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "go-http-handler",
+      "type": "code",
+      "actual": 267,
+      "estimated": 289,
+      "ratio": 1.082,
+      "delta": 8.2
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "java-spring-service",
+      "type": "code",
+      "actual": 337,
+      "estimated": 266,
+      "ratio": 0.789,
+      "delta": -21.1
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "java-spring-service",
+      "type": "code",
+      "actual": 332,
+      "estimated": 266,
+      "ratio": 0.801,
+      "delta": -19.9
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "java-spring-service",
+      "type": "code",
+      "actual": 256,
+      "estimated": 266,
+      "ratio": 1.039,
+      "delta": 3.9
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "sql-schema-queries",
+      "type": "code",
+      "actual": 420,
+      "estimated": 222,
+      "ratio": 0.529,
+      "delta": -47.1
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "sql-schema-queries",
+      "type": "code",
+      "actual": 415,
+      "estimated": 222,
+      "ratio": 0.535,
+      "delta": -46.5
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "sql-schema-queries",
+      "type": "code",
+      "actual": 253,
+      "estimated": 222,
+      "ratio": 0.877,
+      "delta": -12.3
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "bash-deploy-script",
+      "type": "code",
+      "actual": 405,
+      "estimated": 215,
+      "ratio": 0.531,
+      "delta": -46.9
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "bash-deploy-script",
+      "type": "code",
+      "actual": 400,
+      "estimated": 215,
+      "ratio": 0.538,
+      "delta": -46.2
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "bash-deploy-script",
+      "type": "code",
+      "actual": 238,
+      "estimated": 215,
+      "ratio": 0.903,
+      "delta": -9.7
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "react-component",
+      "type": "code",
+      "actual": 397,
+      "estimated": 284,
+      "ratio": 0.715,
+      "delta": -28.5
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "react-component",
+      "type": "code",
+      "actual": 392,
+      "estimated": 284,
+      "ratio": 0.724,
+      "delta": -27.6
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "react-component",
+      "type": "code",
+      "actual": 317,
+      "estimated": 284,
+      "ratio": 0.896,
+      "delta": -10.4
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "news-style",
+      "type": "prose",
+      "actual": 284,
+      "estimated": 178,
+      "ratio": 0.627,
+      "delta": -37.3
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "news-style",
+      "type": "prose",
+      "actual": 279,
+      "estimated": 178,
+      "ratio": 0.638,
+      "delta": -36.2
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "news-style",
+      "type": "prose",
+      "actual": 184,
+      "estimated": 178,
+      "ratio": 0.967,
+      "delta": -3.3
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "legal-clause",
+      "type": "prose",
+      "actual": 266,
+      "estimated": 163,
+      "ratio": 0.613,
+      "delta": -38.7
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "legal-clause",
+      "type": "prose",
+      "actual": 261,
+      "estimated": 163,
+      "ratio": 0.625,
+      "delta": -37.5
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "legal-clause",
+      "type": "prose",
+      "actual": 183,
+      "estimated": 163,
+      "ratio": 0.891,
+      "delta": -10.9
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "academic-abstract",
+      "type": "prose",
+      "actual": 319,
+      "estimated": 208,
+      "ratio": 0.652,
+      "delta": -34.8
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "academic-abstract",
+      "type": "prose",
+      "actual": 314,
+      "estimated": 208,
+      "ratio": 0.662,
+      "delta": -33.8
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "academic-abstract",
+      "type": "prose",
+      "actual": 214,
+      "estimated": 208,
+      "ratio": 0.972,
+      "delta": -2.8
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "marketing-landing-copy",
+      "type": "prose",
+      "actual": 243,
+      "estimated": 139,
+      "ratio": 0.572,
+      "delta": -42.8
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "marketing-landing-copy",
+      "type": "prose",
+      "actual": 238,
+      "estimated": 139,
+      "ratio": 0.584,
+      "delta": -41.6
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "marketing-landing-copy",
+      "type": "prose",
+      "actual": 168,
+      "estimated": 139,
+      "ratio": 0.827,
+      "delta": -17.3
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "prose-spanish",
+      "type": "prose",
+      "actual": 321,
+      "estimated": 166,
+      "ratio": 0.517,
+      "delta": -48.3
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "prose-spanish",
+      "type": "prose",
+      "actual": 316,
+      "estimated": 166,
+      "ratio": 0.525,
+      "delta": -47.5
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "prose-spanish",
+      "type": "prose",
+      "actual": 220,
+      "estimated": 166,
+      "ratio": 0.755,
+      "delta": -24.5
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "prose-japanese",
+      "type": "prose",
+      "actual": 272,
+      "estimated": 309,
+      "ratio": 1.136,
+      "delta": 13.6
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "prose-japanese",
+      "type": "prose",
+      "actual": 266,
+      "estimated": 309,
+      "ratio": 1.162,
+      "delta": 16.2
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "prose-japanese",
+      "type": "prose",
+      "actual": 262,
+      "estimated": 309,
+      "ratio": 1.179,
+      "delta": 17.9
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "emoji-social-post",
+      "type": "prose",
+      "actual": 234,
+      "estimated": 181,
+      "ratio": 0.774,
+      "delta": -22.6
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "emoji-social-post",
+      "type": "prose",
+      "actual": 229,
+      "estimated": 181,
+      "ratio": 0.79,
+      "delta": -21
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "emoji-social-post",
+      "type": "prose",
+      "actual": 174,
+      "estimated": 181,
+      "ratio": 1.04,
+      "delta": 4
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "graphql-response",
+      "type": "json",
+      "actual": 1340,
+      "estimated": 867,
+      "ratio": 0.647,
+      "delta": -35.3
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "graphql-response",
+      "type": "json",
+      "actual": 1335,
+      "estimated": 867,
+      "ratio": 0.649,
+      "delta": -35.1
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "graphql-response",
+      "type": "json",
+      "actual": 1165,
+      "estimated": 867,
+      "ratio": 0.744,
+      "delta": -25.6
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "ecommerce-order",
+      "type": "json",
+      "actual": 477,
+      "estimated": 349,
+      "ratio": 0.732,
+      "delta": -26.8
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "ecommerce-order",
+      "type": "json",
+      "actual": 472,
+      "estimated": 349,
+      "ratio": 0.739,
+      "delta": -26.1
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "ecommerce-order",
+      "type": "json",
+      "actual": 416,
+      "estimated": 349,
+      "ratio": 0.839,
+      "delta": -16.1
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "error-response",
+      "type": "json",
+      "actual": 279,
+      "estimated": 195,
+      "ratio": 0.699,
+      "delta": -30.1
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "error-response",
+      "type": "json",
+      "actual": 274,
+      "estimated": 195,
+      "ratio": 0.712,
+      "delta": -28.8
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "error-response",
+      "type": "json",
+      "actual": 235,
+      "estimated": 195,
+      "ratio": 0.83,
+      "delta": -17
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "changelog",
+      "type": "markdown",
+      "actual": 278,
+      "estimated": 204,
+      "ratio": 0.734,
+      "delta": -26.6
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "changelog",
+      "type": "markdown",
+      "actual": 273,
+      "estimated": 204,
+      "ratio": 0.747,
+      "delta": -25.3
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "changelog",
+      "type": "markdown",
+      "actual": 208,
+      "estimated": 204,
+      "ratio": 0.981,
+      "delta": -1.9
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "tutorial-howto",
+      "type": "markdown",
+      "actual": 268,
+      "estimated": 220,
+      "ratio": 0.821,
+      "delta": -17.9
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "tutorial-howto",
+      "type": "markdown",
+      "actual": 262,
+      "estimated": 220,
+      "ratio": 0.84,
+      "delta": -16
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "tutorial-howto",
+      "type": "markdown",
+      "actual": 205,
+      "estimated": 220,
+      "ratio": 1.073,
+      "delta": 7.3
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "chat-transcript",
+      "type": "mixed",
+      "actual": 350,
+      "estimated": 268,
+      "ratio": 0.766,
+      "delta": -23.4
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "chat-transcript",
+      "type": "mixed",
+      "actual": 345,
+      "estimated": 268,
+      "ratio": 0.777,
+      "delta": -22.3
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "chat-transcript",
+      "type": "mixed",
+      "actual": 239,
+      "estimated": 268,
+      "ratio": 1.121,
+      "delta": 12.1
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "stack-trace-debug",
+      "type": "mixed",
+      "actual": 424,
+      "estimated": 328,
+      "ratio": 0.774,
+      "delta": -22.6
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "stack-trace-debug",
+      "type": "mixed",
+      "actual": 419,
+      "estimated": 328,
+      "ratio": 0.783,
+      "delta": -21.7
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "stack-trace-debug",
+      "type": "mixed",
+      "actual": 316,
+      "estimated": 328,
+      "ratio": 1.038,
+      "delta": 3.8
+    },
+    {
+      "model": "claude-opus-4-7",
+      "modelName": "opus-4.7",
+      "corpus": "financial-report-table",
+      "type": "mixed",
+      "actual": 388,
+      "estimated": 299,
+      "ratio": 0.771,
+      "delta": -22.9
+    },
+    {
+      "model": "claude-sonnet-5",
+      "modelName": "sonnet-5",
+      "corpus": "financial-report-table",
+      "type": "mixed",
+      "actual": 382,
+      "estimated": 299,
+      "ratio": 0.783,
+      "delta": -21.7
+    },
+    {
+      "model": "claude-haiku-4-5-20251001",
+      "modelName": "haiku-4.5",
+      "corpus": "financial-report-table",
+      "type": "mixed",
+      "actual": 304,
+      "estimated": 299,
+      "ratio": 0.984,
+      "delta": -1.6
     }
   ],
   "summary": {
     "opus-4.7": {
-      "min_ratio": 0.571,
+      "min_ratio": 0.517,
       "median_ratio": 0.716,
-      "max_ratio": 0.938,
-      "min_delta": -42.9,
+      "max_ratio": 1.136,
+      "min_delta": -48.3,
       "median_delta": -28.4,
-      "max_delta": -6.2
+      "max_delta": 13.6
     },
     "sonnet-5": {
-      "min_ratio": 0.58,
+      "min_ratio": 0.525,
       "median_ratio": 0.728,
-      "max_ratio": 0.968,
-      "min_delta": -42,
+      "max_ratio": 1.162,
+      "min_delta": -47.5,
       "median_delta": -27.2,
-      "max_delta": -3.2
+      "max_delta": 16.2
     },
     "haiku-4.5": {
-      "min_ratio": 0.762,
-      "median_ratio": 0.876,
-      "max_ratio": 1.064,
-      "min_delta": -23.8,
-      "median_delta": -12.4,
-      "max_delta": 6.4
+      "min_ratio": 0.744,
+      "median_ratio": 0.903,
+      "max_ratio": 1.179,
+      "min_delta": -25.6,
+      "median_delta": -9.7,
+      "max_delta": 17.9
     }
   },
   "crossModel": []
