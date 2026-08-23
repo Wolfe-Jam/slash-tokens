@@ -38,20 +38,24 @@ const WASM_INPUT_OFFSET = 4096;
  * claude-haiku (routed to claude-haiku-4.5): 1.45 (was 1.40) — drifts
  *             less than the two above but still worsened under the
  *             bigger corpus (min ratio 0.744, was 0.762)
- * gemini-3.1-pro / gemini-2.5-flash: 1.40 — measured 2026-08-23 against
- *             Google's free countTokens endpoint via the gemini-pro-latest
- *             / gemini-flash-latest aliases (min ratio 0.768, identical
- *             for both — pro/flash share one tokenizer this generation).
+ * gemini-3.1-pro / gemini-2.5-flash: 1.45 (was 1.40) — re-verified
+ *             2026-08-23 against the 29-sample corpus via Google's free
+ *             countTokens endpoint (gemini-pro-latest / gemini-flash-latest
+ *             aliases; identical ratios for both — pro/flash share one
+ *             tokenizer this generation). Worst case shifted from the
+ *             original 9-sample corpus: now graphql-response JSON (ratio
+ *             0.749, needs >=1.335), not the prose sample that mattered
+ *             before. 1.40 was technically still safe here (unlike
+ *             Claude's factor, which actually failed) but at the thinnest
+ *             margin of any provider (4.9%) — bumped to match the ~6-8%
+ *             band used everywhere else rather than leave the one factor
+ *             most likely to fail next time this corpus grows again.
  *             Note: 'gemini-3.1-pro' as a literal model ID does not exist
  *             on the live API (404) — same stale-hardcoded-ID class of bug
  *             as the retired Claude snapshots, caught the same day. See
  *             intercept.ts MODEL_API_NAMES: the wire name is now the
  *             '-latest' alias, which sidesteps this whole bug class going
  *             forward since Google repoints it, not us.
- *             ⚠ NOT YET RE-VERIFIED against the 29-sample corpus — measured
- *             only against the original 9. Given Claude's factor needed a
- *             ~11% bump once Spanish/SQL/bash samples were added, treat
- *             this number as provisional until re-run.
  * gpt-5.4 / gpt-5.4-mini / gpt-5.4-nano: 1.15 — measured 2026-08-23
  *             against js-tiktoken's o200k_base (free, local, exact — same
  *             encoding for the whole GPT-5.4 family per OpenAI's own
@@ -63,31 +67,28 @@ const WASM_INPUT_OFFSET = 4096;
  *             DEFAULT_UNKNOWN_MODEL_FACTOR (1.85), a ~60% larger correction
  *             than it needed. Still safe either way (1.85 > required
  *             minimum), just needlessly inflated for real GPT users.
- * grok-4.20 / grok-4-1-fast: 1.15 — measured 2026-08-23 (min ratio 0.928,
- *             the least drift of any provider tested — Grok's tokenizer
- *             runs fewer tokens per content than the others, so raw WASM
- *             already over-reports on most samples). xAI has no free
- *             count-tokens endpoint; this used real chat completions
- *             (max_tokens: 1) with a per-model baseline subtracted to
- *             remove xAI's fixed system-preamble overhead (~185-193
- *             tokens, mostly cached) from the content-only count.
+ * grok-4.20 / grok-4-1-fast: 1.15 — re-verified 2026-08-23 against the
+ *             29-sample corpus (20 new samples: more languages, Spanish/
+ *             Japanese prose, more JSON shapes) and UNCHANGED — same
+ *             worst case (technical-docs prose, ratio 0.928) as the
+ *             original 9-sample measurement. The only one of the three
+ *             non-GPT providers whose factor held without a bump; Claude
+ *             and Gemini both needed one, on different content types each
+ *             (Spanish prose, then JSON). xAI has no free count-tokens
+ *             endpoint; this used real chat completions (max_tokens: 1)
+ *             with a per-model baseline subtracted to remove xAI's fixed
+ *             system-preamble overhead (~185-193 tokens, mostly cached)
+ *             from the content-only count.
  *             Both literal API IDs ('grok-4.20', 'grok-4-1-fast') are
  *             fully retired — not just old snapshots, gone entirely —
  *             remapped to grok-4.20-0309-non-reasoning / grok-4.3 in
  *             intercept.ts MODEL_API_NAMES the same day this was found.
- *             ⚠ NOT YET RE-VERIFIED against the 29-sample corpus — same
- *             caveat as Gemini above. Costs real (small) money per run,
- *             unlike Gemini/Anthropic, so re-verify deliberately, not
- *             reflexively, but don't skip it — Grok has not been tested
- *             against non-English content or SQL/bash at all yet, and
- *             those are exactly what broke Claude's factor.
  *
- * Known limitation: Claude's factors are now verified against a 29-sample
- * corpus (expanded 2026-08-23 from the original 9, which was mostly
- * slash-tokens' own code/docs — not representative third-party content).
- * Gemini and Grok above are still only verified against the old 9-sample
- * set — re-run bench/calibrate-gemini.ts and bench/calibrate-grok.ts
- * before trusting those two numbers as final.
+ * All four providers (Claude, Gemini, Grok, GPT) are now verified against
+ * the same 29-sample corpus (expanded 2026-08-23 from the original 9,
+ * which was mostly slash-tokens' own code/docs — not representative
+ * third-party content). Re-verify again if the corpus grows further —
+ * Claude and Gemini both needed real bumps the first time it grew.
  *
  * Slash must NEVER under-report. Over-reporting is safe (go/no-go only).
  */
@@ -96,8 +97,8 @@ const CALIBRATION: Record<string, number> = {
   'claude-opus-4.7':  2.05,
   'claude-sonnet':    2.05,
   'claude-haiku':     1.45,
-  'gemini-3.1-pro':   1.40,
-  'gemini-2.5-flash': 1.40,
+  'gemini-3.1-pro':   1.45,
+  'gemini-2.5-flash': 1.45,
   'grok-4.20':        1.15,
   'grok-4-1-fast':    1.15,
   'gpt-5.4':          1.15,

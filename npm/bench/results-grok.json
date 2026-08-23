@@ -1,5 +1,5 @@
 {
-  "timestamp": "2026-08-23T20:45:25.295Z",
+  "timestamp": "2026-08-23T21:19:49.416Z",
   "baselines": {
     "grok-4.20": 185,
     "grok-4-1-fast": 193
@@ -111,9 +111,9 @@
       "corpus": "api-response",
       "type": "json",
       "actual": 1561,
-      "estimated": 1555,
-      "ratio": 0.996,
-      "delta": -0.4
+      "estimated": 1556,
+      "ratio": 0.997,
+      "delta": -0.3
     },
     {
       "model": "grok-4.3",
@@ -121,9 +121,9 @@
       "corpus": "api-response",
       "type": "json",
       "actual": 1561,
-      "estimated": 1555,
-      "ratio": 0.996,
-      "delta": -0.4
+      "estimated": 1556,
+      "ratio": 0.997,
+      "delta": -0.3
     },
     {
       "model": "grok-4.20-0309-non-reasoning",
@@ -184,24 +184,424 @@
       "estimated": 235,
       "ratio": 1.211,
       "delta": 21.1
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "go-http-handler",
+      "type": "code",
+      "actual": 186,
+      "estimated": 289,
+      "ratio": 1.554,
+      "delta": 55.4
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "go-http-handler",
+      "type": "code",
+      "actual": 186,
+      "estimated": 289,
+      "ratio": 1.554,
+      "delta": 55.4
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "java-spring-service",
+      "type": "code",
+      "actual": 169,
+      "estimated": 266,
+      "ratio": 1.574,
+      "delta": 57.4
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "java-spring-service",
+      "type": "code",
+      "actual": 169,
+      "estimated": 266,
+      "ratio": 1.574,
+      "delta": 57.4
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "sql-schema-queries",
+      "type": "code",
+      "actual": 197,
+      "estimated": 222,
+      "ratio": 1.127,
+      "delta": 12.7
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "sql-schema-queries",
+      "type": "code",
+      "actual": 197,
+      "estimated": 222,
+      "ratio": 1.127,
+      "delta": 12.7
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "bash-deploy-script",
+      "type": "code",
+      "actual": 185,
+      "estimated": 215,
+      "ratio": 1.162,
+      "delta": 16.2
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "bash-deploy-script",
+      "type": "code",
+      "actual": 185,
+      "estimated": 215,
+      "ratio": 1.162,
+      "delta": 16.2
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "react-component",
+      "type": "code",
+      "actual": 254,
+      "estimated": 284,
+      "ratio": 1.118,
+      "delta": 11.8
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "react-component",
+      "type": "code",
+      "actual": 254,
+      "estimated": 284,
+      "ratio": 1.118,
+      "delta": 11.8
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "news-style",
+      "type": "prose",
+      "actual": 164,
+      "estimated": 178,
+      "ratio": 1.085,
+      "delta": 8.5
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "news-style",
+      "type": "prose",
+      "actual": 164,
+      "estimated": 178,
+      "ratio": 1.085,
+      "delta": 8.5
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "legal-clause",
+      "type": "prose",
+      "actual": 161,
+      "estimated": 163,
+      "ratio": 1.012,
+      "delta": 1.2
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "legal-clause",
+      "type": "prose",
+      "actual": 161,
+      "estimated": 163,
+      "ratio": 1.012,
+      "delta": 1.2
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "academic-abstract",
+      "type": "prose",
+      "actual": 188,
+      "estimated": 208,
+      "ratio": 1.106,
+      "delta": 10.6
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "academic-abstract",
+      "type": "prose",
+      "actual": 188,
+      "estimated": 208,
+      "ratio": 1.106,
+      "delta": 10.6
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "marketing-landing-copy",
+      "type": "prose",
+      "actual": 143,
+      "estimated": 139,
+      "ratio": 0.972,
+      "delta": -2.8
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "marketing-landing-copy",
+      "type": "prose",
+      "actual": 143,
+      "estimated": 139,
+      "ratio": 0.972,
+      "delta": -2.8
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "prose-spanish",
+      "type": "prose",
+      "actual": 148,
+      "estimated": 166,
+      "ratio": 1.122,
+      "delta": 12.2
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "prose-spanish",
+      "type": "prose",
+      "actual": 148,
+      "estimated": 166,
+      "ratio": 1.122,
+      "delta": 12.2
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "prose-japanese",
+      "type": "prose",
+      "actual": 145,
+      "estimated": 309,
+      "ratio": 2.131,
+      "delta": 113.1
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "prose-japanese",
+      "type": "prose",
+      "actual": 145,
+      "estimated": 309,
+      "ratio": 2.131,
+      "delta": 113.1
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "emoji-social-post",
+      "type": "prose",
+      "actual": 137,
+      "estimated": 181,
+      "ratio": 1.321,
+      "delta": 32.1
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "emoji-social-post",
+      "type": "prose",
+      "actual": 137,
+      "estimated": 181,
+      "ratio": 1.321,
+      "delta": 32.1
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "graphql-response",
+      "type": "json",
+      "actual": 921,
+      "estimated": 867,
+      "ratio": 0.941,
+      "delta": -5.9
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "graphql-response",
+      "type": "json",
+      "actual": 921,
+      "estimated": 867,
+      "ratio": 0.941,
+      "delta": -5.9
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "ecommerce-order",
+      "type": "json",
+      "actual": 346,
+      "estimated": 349,
+      "ratio": 1.009,
+      "delta": 0.9
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "ecommerce-order",
+      "type": "json",
+      "actual": 346,
+      "estimated": 349,
+      "ratio": 1.009,
+      "delta": 0.9
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "error-response",
+      "type": "json",
+      "actual": 190,
+      "estimated": 195,
+      "ratio": 1.026,
+      "delta": 2.6
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "error-response",
+      "type": "json",
+      "actual": 190,
+      "estimated": 195,
+      "ratio": 1.026,
+      "delta": 2.6
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "changelog",
+      "type": "markdown",
+      "actual": 184,
+      "estimated": 204,
+      "ratio": 1.109,
+      "delta": 10.9
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "changelog",
+      "type": "markdown",
+      "actual": 184,
+      "estimated": 204,
+      "ratio": 1.109,
+      "delta": 10.9
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "tutorial-howto",
+      "type": "markdown",
+      "actual": 178,
+      "estimated": 220,
+      "ratio": 1.236,
+      "delta": 23.6
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "tutorial-howto",
+      "type": "markdown",
+      "actual": 178,
+      "estimated": 220,
+      "ratio": 1.236,
+      "delta": 23.6
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "chat-transcript",
+      "type": "mixed",
+      "actual": 202,
+      "estimated": 268,
+      "ratio": 1.327,
+      "delta": 32.7
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "chat-transcript",
+      "type": "mixed",
+      "actual": 202,
+      "estimated": 268,
+      "ratio": 1.327,
+      "delta": 32.7
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "stack-trace-debug",
+      "type": "mixed",
+      "actual": 246,
+      "estimated": 328,
+      "ratio": 1.333,
+      "delta": 33.3
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "stack-trace-debug",
+      "type": "mixed",
+      "actual": 246,
+      "estimated": 328,
+      "ratio": 1.333,
+      "delta": 33.3
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "financial-report-table",
+      "type": "mixed",
+      "actual": 260,
+      "estimated": 299,
+      "ratio": 1.15,
+      "delta": 15
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "financial-report-table",
+      "type": "mixed",
+      "actual": 260,
+      "estimated": 299,
+      "ratio": 1.15,
+      "delta": 15
     }
   ],
   "summary": {
     "grok-4.20": {
       "min_ratio": 0.928,
-      "median_ratio": 1.037,
-      "max_ratio": 1.471,
+      "median_ratio": 1.118,
+      "max_ratio": 2.131,
       "min_delta": -7.2,
-      "median_delta": 3.7,
-      "max_delta": 47.1
+      "median_delta": 11.8,
+      "max_delta": 113.1
     },
     "grok-4-1-fast": {
       "min_ratio": 0.928,
-      "median_ratio": 1.037,
-      "max_ratio": 1.471,
+      "median_ratio": 1.118,
+      "max_ratio": 2.131,
       "min_delta": -7.2,
-      "median_delta": 3.7,
-      "max_delta": 47.1
+      "median_delta": 11.8,
+      "max_delta": 113.1
     }
   }
 }
