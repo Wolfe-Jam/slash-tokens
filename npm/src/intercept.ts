@@ -31,10 +31,10 @@ const MODEL_API_NAMES: Record<string, string> = {
   'gpt-5.4': 'gpt-5.4',
   'gpt-5.4-mini': 'gpt-5.4-mini',
   'gpt-5.4-nano': 'gpt-5.4-nano',
-  'grok-4.20': 'grok-4.20',
-  'grok-4-1-fast': 'grok-4-1-fast',
-  'gemini-3.1-pro': 'gemini-3.1-pro',
-  'gemini-2.5-flash': 'gemini-2.5-flash',
+  'grok-4.20': 'grok-4.20-0309-non-reasoning',
+  'grok-4-1-fast': 'grok-4.3',
+  'gemini-3.1-pro': 'gemini-pro-latest',
+  'gemini-2.5-flash': 'gemini-flash-latest',
 };
 
 // AI API endpoint detection

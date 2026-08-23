@@ -1,0 +1,207 @@
+{
+  "timestamp": "2026-08-23T20:45:25.295Z",
+  "baselines": {
+    "grok-4.20": 185,
+    "grok-4-1-fast": 193
+  },
+  "results": [
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "ts-function",
+      "type": "code",
+      "actual": 102,
+      "estimated": 150,
+      "ratio": 1.471,
+      "delta": 47.1
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "ts-function",
+      "type": "code",
+      "actual": 102,
+      "estimated": 150,
+      "ratio": 1.471,
+      "delta": 47.1
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "python-class",
+      "type": "code",
+      "actual": 246,
+      "estimated": 255,
+      "ratio": 1.037,
+      "delta": 3.7
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "python-class",
+      "type": "code",
+      "actual": 246,
+      "estimated": 255,
+      "ratio": 1.037,
+      "delta": 3.7
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "rust-struct",
+      "type": "code",
+      "actual": 219,
+      "estimated": 243,
+      "ratio": 1.11,
+      "delta": 11
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "rust-struct",
+      "type": "code",
+      "actual": 219,
+      "estimated": 243,
+      "ratio": 1.11,
+      "delta": 11
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "technical-docs",
+      "type": "prose",
+      "actual": 207,
+      "estimated": 192,
+      "ratio": 0.928,
+      "delta": -7.2
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "technical-docs",
+      "type": "prose",
+      "actual": 207,
+      "estimated": 192,
+      "ratio": 0.928,
+      "delta": -7.2
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "conversational",
+      "type": "prose",
+      "actual": 150,
+      "estimated": 149,
+      "ratio": 0.993,
+      "delta": -0.7
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "conversational",
+      "type": "prose",
+      "actual": 150,
+      "estimated": 149,
+      "ratio": 0.993,
+      "delta": -0.7
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "api-response",
+      "type": "json",
+      "actual": 1561,
+      "estimated": 1555,
+      "ratio": 0.996,
+      "delta": -0.4
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "api-response",
+      "type": "json",
+      "actual": 1561,
+      "estimated": 1555,
+      "ratio": 0.996,
+      "delta": -0.4
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "config-yaml-as-json",
+      "type": "json",
+      "actual": 188,
+      "estimated": 214,
+      "ratio": 1.138,
+      "delta": 13.8
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "config-yaml-as-json",
+      "type": "json",
+      "actual": 188,
+      "estimated": 214,
+      "ratio": 1.138,
+      "delta": 13.8
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "readme-excerpt",
+      "type": "markdown",
+      "actual": 169,
+      "estimated": 170,
+      "ratio": 1.006,
+      "delta": 0.6
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "readme-excerpt",
+      "type": "markdown",
+      "actual": 169,
+      "estimated": 170,
+      "ratio": 1.006,
+      "delta": 0.6
+    },
+    {
+      "model": "grok-4.20-0309-non-reasoning",
+      "modelName": "grok-4.20",
+      "corpus": "mixed-code-prose",
+      "type": "mixed",
+      "actual": 194,
+      "estimated": 235,
+      "ratio": 1.211,
+      "delta": 21.1
+    },
+    {
+      "model": "grok-4.3",
+      "modelName": "grok-4-1-fast",
+      "corpus": "mixed-code-prose",
+      "type": "mixed",
+      "actual": 194,
+      "estimated": 235,
+      "ratio": 1.211,
+      "delta": 21.1
+    }
+  ],
+  "summary": {
+    "grok-4.20": {
+      "min_ratio": 0.928,
+      "median_ratio": 1.037,
+      "max_ratio": 1.471,
+      "min_delta": -7.2,
+      "median_delta": 3.7,
+      "max_delta": 47.1
+    },
+    "grok-4-1-fast": {
+      "min_ratio": 0.928,
+      "median_ratio": 1.037,
+      "max_ratio": 1.471,
+      "min_delta": -7.2,
+      "median_delta": 3.7,
+      "max_delta": 47.1
+    }
+  }
+}

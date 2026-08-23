@@ -13,7 +13,9 @@ Token Optimization for Context Engineers.
 
 Know the cost before the call leaves your machine.
 
-> 🆕 **v1.4 — The Single-Source-of-Truth Edition.** New `preflightRoute()` matches the Slash proxy exactly — same-provider only, zero routing drift. `PROVIDER_MODELS` is now the single source of truth across the SDK.
+> 🆕 **v1.5 — The Calibration Fix Edition.** Per-model calibration is now actually wired into every call path (it wasn't — found and fixed 2026-08-23). Unknown models get a safe default instead of zero correction. Gemini and Grok are calibrated for the first time; Claude's factors were re-measured against current models. Several internal model names were quietly routing to retired API IDs across Claude, Gemini, and Grok — all fixed.
+>
+> **v1.4 — The Single-Source-of-Truth Edition.** New `preflightRoute()` matches the Slash proxy exactly — same-provider only, zero routing drift. `PROVIDER_MODELS` is now the single source of truth across the SDK.
 >
 > **v1.3 — The Opus 4.7 Edition.** Same-day support for Claude Opus 4.7 with measured token calibration (1.16–1.51x). Plus Gemini proxy fix and benchmark harness for any upstream.
 
@@ -87,8 +89,8 @@ Works with all models. 10 with built-in pricing (as of April 2026). Don't see yo
 | claude-opus | 5.00 | 25.00 | 1M |
 | claude-sonnet | 3.00 | 15.00 | 1M |
 | claude-haiku | 1.00 | 5.00 | 200K |
-| grok-4.20 | 2.00 | 6.00 | 2M |
-| grok-4-1-fast | 0.20 | 0.50 | 2M |
+| grok-4.20 | 1.25 | 2.50 | 1M |
+| grok-4-1-fast | 1.25 | 2.50 | 1M |
 | gemini-3.1-pro | 2.00 | 12.00 | 1M |
 | gemini-2.5-flash | 0.30 | 2.50 | 1M |
 | gpt-5.4 | 2.50 | 15.00 | 1M |

@@ -107,6 +107,17 @@ describe('TIER 1: BRAKE — Core Estimation', () => {
       const unknown = slash(text, 'totally-unknown-model-xyz');
       expect(unknown).toBe(known);
     });
+
+    it('Gemini and Grok are calibrated too, not left on the raw estimate', () => {
+      // Regression guard for 2026-08-23: Gemini and Grok were measured and
+      // added to CALIBRATION the same day as the Claude fixes — this would
+      // have caught either one silently missing its factor.
+      const raw = slash(text);
+      expect(slash(text, 'gemini-3.1-pro')).toBeGreaterThan(raw);
+      expect(slash(text, 'gemini-2.5-flash')).toBeGreaterThan(raw);
+      expect(slash(text, 'grok-4.20')).toBeGreaterThan(raw);
+      expect(slash(text, 'grok-4-1-fast')).toBeGreaterThan(raw);
+    });
   });
 });
 

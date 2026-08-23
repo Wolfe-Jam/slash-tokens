@@ -28,6 +28,28 @@ const WASM_INPUT_OFFSET = 4096;
  *             nearly identical drift to opus-4.7 (min ratio 0.580)
  * claude-haiku (routed to claude-haiku-4.5): 1.40 — measured directly,
  *             drifts less than the two above (min ratio 0.762)
+ * gemini-3.1-pro / gemini-2.5-flash: 1.40 — measured 2026-08-23 against
+ *             Google's free countTokens endpoint via the gemini-pro-latest
+ *             / gemini-flash-latest aliases (min ratio 0.768, identical
+ *             for both — pro/flash share one tokenizer this generation).
+ *             Note: 'gemini-3.1-pro' as a literal model ID does not exist
+ *             on the live API (404) — same stale-hardcoded-ID class of bug
+ *             as the retired Claude snapshots, caught the same day. See
+ *             intercept.ts MODEL_API_NAMES: the wire name is now the
+ *             '-latest' alias, which sidesteps this whole bug class going
+ *             forward since Google repoints it, not us.
+ * grok-4.20 / grok-4-1-fast: 1.15 — measured 2026-08-23 (min ratio 0.928,
+ *             the least drift of any provider tested — Grok's tokenizer
+ *             runs fewer tokens per content than the others, so raw WASM
+ *             already over-reports on most samples). xAI has no free
+ *             count-tokens endpoint; this used real chat completions
+ *             (max_tokens: 1) with a per-model baseline subtracted to
+ *             remove xAI's fixed system-preamble overhead (~185-193
+ *             tokens, mostly cached) from the content-only count.
+ *             Both literal API IDs ('grok-4.20', 'grok-4-1-fast') are
+ *             fully retired — not just old snapshots, gone entirely —
+ *             remapped to grok-4.20-0309-non-reasoning / grok-4.3 in
+ *             intercept.ts MODEL_API_NAMES the same day this was found.
  *
  * Known limitation: derived from a 9-sample benchmark corpus, several
  * of which are slash-tokens' own code/docs (not representative
@@ -41,6 +63,10 @@ const CALIBRATION: Record<string, number> = {
   'claude-opus-4.7':  1.85,
   'claude-sonnet':    1.85,
   'claude-haiku':     1.40,
+  'gemini-3.1-pro':   1.40,
+  'gemini-2.5-flash': 1.40,
+  'grok-4.20':        1.15,
+  'grok-4-1-fast':    1.15,
 };
 
 /**

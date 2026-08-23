@@ -1,0 +1,203 @@
+{
+  "timestamp": "2026-08-23T18:33:55.251Z",
+  "results": [
+    {
+      "model": "gemini-pro-latest",
+      "modelName": "gemini-3.1-pro",
+      "corpus": "ts-function",
+      "type": "code",
+      "actual": 123,
+      "estimated": 150,
+      "ratio": 1.22,
+      "delta": 22
+    },
+    {
+      "model": "gemini-flash-latest",
+      "modelName": "gemini-2.5-flash",
+      "corpus": "ts-function",
+      "type": "code",
+      "actual": 123,
+      "estimated": 150,
+      "ratio": 1.22,
+      "delta": 22
+    },
+    {
+      "model": "gemini-pro-latest",
+      "modelName": "gemini-3.1-pro",
+      "corpus": "python-class",
+      "type": "code",
+      "actual": 295,
+      "estimated": 255,
+      "ratio": 0.864,
+      "delta": -13.6
+    },
+    {
+      "model": "gemini-flash-latest",
+      "modelName": "gemini-2.5-flash",
+      "corpus": "python-class",
+      "type": "code",
+      "actual": 295,
+      "estimated": 255,
+      "ratio": 0.864,
+      "delta": -13.6
+    },
+    {
+      "model": "gemini-pro-latest",
+      "modelName": "gemini-3.1-pro",
+      "corpus": "rust-struct",
+      "type": "code",
+      "actual": 268,
+      "estimated": 243,
+      "ratio": 0.907,
+      "delta": -9.3
+    },
+    {
+      "model": "gemini-flash-latest",
+      "modelName": "gemini-2.5-flash",
+      "corpus": "rust-struct",
+      "type": "code",
+      "actual": 268,
+      "estimated": 243,
+      "ratio": 0.907,
+      "delta": -9.3
+    },
+    {
+      "model": "gemini-pro-latest",
+      "modelName": "gemini-3.1-pro",
+      "corpus": "technical-docs",
+      "type": "prose",
+      "actual": 213,
+      "estimated": 192,
+      "ratio": 0.901,
+      "delta": -9.9
+    },
+    {
+      "model": "gemini-flash-latest",
+      "modelName": "gemini-2.5-flash",
+      "corpus": "technical-docs",
+      "type": "prose",
+      "actual": 213,
+      "estimated": 192,
+      "ratio": 0.901,
+      "delta": -9.9
+    },
+    {
+      "model": "gemini-pro-latest",
+      "modelName": "gemini-3.1-pro",
+      "corpus": "conversational",
+      "type": "prose",
+      "actual": 171,
+      "estimated": 149,
+      "ratio": 0.871,
+      "delta": -12.9
+    },
+    {
+      "model": "gemini-flash-latest",
+      "modelName": "gemini-2.5-flash",
+      "corpus": "conversational",
+      "type": "prose",
+      "actual": 171,
+      "estimated": 149,
+      "ratio": 0.871,
+      "delta": -12.9
+    },
+    {
+      "model": "gemini-pro-latest",
+      "modelName": "gemini-3.1-pro",
+      "corpus": "api-response",
+      "type": "json",
+      "actual": 2026,
+      "estimated": 1556,
+      "ratio": 0.768,
+      "delta": -23.2
+    },
+    {
+      "model": "gemini-flash-latest",
+      "modelName": "gemini-2.5-flash",
+      "corpus": "api-response",
+      "type": "json",
+      "actual": 2026,
+      "estimated": 1556,
+      "ratio": 0.768,
+      "delta": -23.2
+    },
+    {
+      "model": "gemini-pro-latest",
+      "modelName": "gemini-3.1-pro",
+      "corpus": "config-yaml-as-json",
+      "type": "json",
+      "actual": 220,
+      "estimated": 214,
+      "ratio": 0.973,
+      "delta": -2.7
+    },
+    {
+      "model": "gemini-flash-latest",
+      "modelName": "gemini-2.5-flash",
+      "corpus": "config-yaml-as-json",
+      "type": "json",
+      "actual": 220,
+      "estimated": 214,
+      "ratio": 0.973,
+      "delta": -2.7
+    },
+    {
+      "model": "gemini-pro-latest",
+      "modelName": "gemini-3.1-pro",
+      "corpus": "readme-excerpt",
+      "type": "markdown",
+      "actual": 207,
+      "estimated": 170,
+      "ratio": 0.821,
+      "delta": -17.9
+    },
+    {
+      "model": "gemini-flash-latest",
+      "modelName": "gemini-2.5-flash",
+      "corpus": "readme-excerpt",
+      "type": "markdown",
+      "actual": 207,
+      "estimated": 170,
+      "ratio": 0.821,
+      "delta": -17.9
+    },
+    {
+      "model": "gemini-pro-latest",
+      "modelName": "gemini-3.1-pro",
+      "corpus": "mixed-code-prose",
+      "type": "mixed",
+      "actual": 222,
+      "estimated": 235,
+      "ratio": 1.059,
+      "delta": 5.9
+    },
+    {
+      "model": "gemini-flash-latest",
+      "modelName": "gemini-2.5-flash",
+      "corpus": "mixed-code-prose",
+      "type": "mixed",
+      "actual": 222,
+      "estimated": 235,
+      "ratio": 1.059,
+      "delta": 5.9
+    }
+  ],
+  "summary": {
+    "gemini-3.1-pro": {
+      "min_ratio": 0.768,
+      "median_ratio": 0.901,
+      "max_ratio": 1.22,
+      "min_delta": -23.2,
+      "median_delta": -9.9,
+      "max_delta": 22
+    },
+    "gemini-2.5-flash": {
+      "min_ratio": 0.768,
+      "median_ratio": 0.901,
+      "max_ratio": 1.22,
+      "min_delta": -23.2,
+      "median_delta": -9.9,
+      "max_delta": 22
+    }
+  }
+}
