@@ -1,4 +1,4 @@
-import { getInstance, writeToMemory } from './wasm.js';
+import { getInstance, writeToMemory, ensureCapacity } from './wasm.js';
 
 const WASM_INPUT_OFFSET = 4096;
 
@@ -142,6 +142,7 @@ export function slashBytes(bytes: Uint8Array): number {
   if (!bytes.length) return 0;
   const instance = getInstance();
   const memory = instance.exports.memory as WebAssembly.Memory;
+  ensureCapacity(memory, WASM_INPUT_OFFSET + bytes.length + 1);
   const buffer = new Uint8Array(memory.buffer);
   const maxLen = Math.min(bytes.length, buffer.length - WASM_INPUT_OFFSET - 1);
   buffer.set(bytes.subarray(0, maxLen), WASM_INPUT_OFFSET);

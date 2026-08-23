@@ -252,6 +252,27 @@ describe('TIER 3: AERO — Edge Cases', () => {
       expect(Number.isFinite(result)).toBe(true);
     });
 
+    it('SAFETY: does not silently truncate input above the old ~1.06MB WASM buffer ceiling', () => {
+      // Regression guard for 2026-08-23: writeToMemory()/slashBytes() used
+      // to silently cap input at the WASM module's initial memory and
+      // estimate tokens only on that truncated prefix — no error, no
+      // flag. Fixed by growing WASM linear memory on demand.
+      //
+      // The old ceiling was exactly buffer.length - WASM_INPUT_OFFSET - 1
+      // = 1,114,112 - 4,096 - 1 = 1,110,015 bytes (confirmed empirically:
+      // the shipped WASM module's initial memory is 17 pages = 1,114,112
+      // bytes). Under the old code, ANY input at or beyond that ceiling
+      // got truncated to exactly the same 1,110,015-byte slice — so two
+      // different-sized inputs, both past the ceiling, produced the
+      // IDENTICAL estimate. This test proves that's no longer true: this
+      // exact assertion was verified to FAIL against the pre-fix source
+      // (both estimates came out equal) before the fix, and pass after.
+      const OLD_CEILING_BYTES = 1_114_112 - 4096 - 1;
+      const atCeiling = slash('A'.repeat(OLD_CEILING_BYTES));
+      const wellBeyondCeiling = slash('A'.repeat(OLD_CEILING_BYTES + 500_000));
+      expect(wellBeyondCeiling).toBeGreaterThan(atCeiling);
+    });
+
     it('handles CJK characters', () => {
       const result = slash('你好世界 こんにちは 안녕하세요');
       expect(result).toBeGreaterThan(0);

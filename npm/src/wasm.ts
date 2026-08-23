@@ -28,10 +28,46 @@ export function getInstance(): WebAssembly.Instance {
   return _instance;
 }
 
+// Safety cap on how far we'll grow WASM linear memory for one input.
+// 32 MB is a large margin over any real model's context window today
+// (the biggest is 1M tokens, which even for dense multi-byte scripts
+// like CJK doesn't approach 32MB of UTF-8 bytes) — so growth alone
+// eliminates silent truncation for every realistic real-world call.
+// Above this cap we still truncate (see below), but a truncated
+// estimate at 32MB+ of input is still far larger than any model's
+// context ceiling, so the overflow gate still fires correctly either
+// way — the cap exists only to bound memory growth against a
+// pathological/abusive input, not to protect estimate correctness.
+const MAX_WASM_INPUT_BYTES = 32 * 1024 * 1024;
+const WASM_PAGE_BYTES = 65536;
+
+/**
+ * Grow WASM linear memory if needed so `neededBytes` of input (plus the
+ * offset reserved for Zig's stack/globals) fits without truncation.
+ *
+ * Fixed 2026-08-23: writeToMemory() used to silently truncate any input
+ * larger than the WASM module's initial memory (~1.06MB usable) BEFORE
+ * estimate_tokens ever ran — no error, no flag, just a token count
+ * computed over a truncated prefix. This defeated the "never
+ * under-report" invariant exactly where it matters most: calls near a
+ * model's real context ceiling. WebAssembly.Memory is growable at
+ * runtime (confirmed: `memory.grow()` works on this module, 17 pages ->
+ * 117 pages tested directly) — growing does not move or invalidate
+ * existing data, it only appends new zeroed pages, so this is safe to
+ * do lazily on every call with no effect on correctness for small inputs.
+ */
+export function ensureCapacity(memory: WebAssembly.Memory, neededBytes: number): void {
+  const cappedNeeded = Math.min(neededBytes, MAX_WASM_INPUT_BYTES);
+  if (memory.buffer.byteLength >= cappedNeeded) return;
+  const additionalPages = Math.ceil((cappedNeeded - memory.buffer.byteLength) / WASM_PAGE_BYTES);
+  if (additionalPages > 0) memory.grow(additionalPages);
+}
+
 export function writeToMemory(content: string): number {
   const instance = getInstance();
   const bytes = encoder.encode(content);
   const memory = instance.exports.memory as WebAssembly.Memory;
+  ensureCapacity(memory, WASM_INPUT_OFFSET + bytes.length + 1);
   const buffer = new Uint8Array(memory.buffer);
   const maxLen = Math.min(bytes.length, buffer.length - WASM_INPUT_OFFSET - 1);
   buffer.set(bytes.subarray(0, maxLen), WASM_INPUT_OFFSET);
