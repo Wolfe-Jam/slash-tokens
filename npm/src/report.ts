@@ -1,4 +1,6 @@
 import { CallSite } from './scanner.js';
+import { getModel } from './models.js';
+import { UNKNOWN_SDK_REPRESENTATIVE_MODEL } from './patterns.js';
 
 // ANSI — zero deps
 const R = '\x1b[0m';
@@ -48,11 +50,26 @@ export function printReport(sites: CallSite[], filesScanned: number, timeMs: num
   const dailyInput = sites.reduce((sum, s) => sum + s.tokensPerCall * callsPerDay, 0);
   const dailyOutput = dailyInput * 2; // Estimate output at 2x input
   const dailyTotal = dailyInput + dailyOutput;
-  const monthlyTotal = dailyTotal * 30;
 
-  // Cost at $3/MTok input, $15/MTok output (GPT-4o class)
-  const monthlyCostInput = (dailyInput * 30 / 1_000_000) * 3;
-  const monthlyCostOutput = (dailyOutput * 30 / 1_000_000) * 15;
+  // Cost per site using its own representative model's REAL current price
+  // (see patterns.ts SDK_REPRESENTATIVE_MODEL) — fixed 2026-08-23: this
+  // used to be one flat hardcoded $3/$15 "GPT-4o class" rate applied to
+  // every site regardless of detected provider, understating cost by up
+  // to ~67% for premium providers and overstating it for cheap ones.
+  let monthlyCostInput = 0;
+  let monthlyCostOutput = 0;
+  let unknownProviderSites = 0;
+  for (const site of sites) {
+    const info = getModel(site.estimatedModel);
+    if (!info) continue; // shouldn't happen — estimatedModel always maps to a real MODELS entry
+    if (site.estimatedModel === UNKNOWN_SDK_REPRESENTATIVE_MODEL && !['Anthropic'].includes(site.sdk)) {
+      unknownProviderSites++;
+    }
+    const siteDailyInput = site.tokensPerCall * callsPerDay;
+    const siteDailyOutput = siteDailyInput * 2;
+    monthlyCostInput += (siteDailyInput * 30 / 1_000_000) * info.input;
+    monthlyCostOutput += (siteDailyOutput * 30 / 1_000_000) * info.output;
+  }
   const monthlyCost = monthlyCostInput + monthlyCostOutput;
 
   console.log(`${ORANGE}  DAILY TOKEN VOLUME ${GRAY}(${callsPerDay} calls/site/day)${R}`);
@@ -62,11 +79,14 @@ export function printReport(sites: CallSite[], filesScanned: number, timeMs: num
   console.log(`${WHITE}  Total:           ${ORANGE}${B}${formatNum(dailyTotal)} tokens/day${R}`);
   console.log('');
 
-  console.log(`${ORANGE}  MONTHLY COST ${GRAY}($3/$15 per MTok)${R}`);
+  console.log(`${ORANGE}  MONTHLY COST ${GRAY}(real per-provider pricing)${R}`);
   console.log(`${DIM}  ${'─'.repeat(60)}${R}`);
   console.log(`${WHITE}  Input:           ${B}$${monthlyCostInput.toFixed(2)}/mo${R}`);
   console.log(`${WHITE}  Output:          ${B}$${monthlyCostOutput.toFixed(2)}/mo${R}`);
   console.log(`${WHITE}  Total:           ${ORANGE}${B}$${monthlyCost.toFixed(2)}/mo${R}`);
+  if (unknownProviderSites > 0) {
+    console.log(`${GRAY}  (${unknownProviderSites} call site${unknownProviderSites === 1 ? '' : 's'} use an assumed price — the detected SDK doesn't reveal the exact provider)${R}`);
+  }
   console.log('');
 
   // Slash — sunk cost recovery (conservative 10% gate efficiency)

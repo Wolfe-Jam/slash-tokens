@@ -1,13 +1,24 @@
 import { readdirSync, readFileSync, statSync } from 'fs';
 import { join, extname } from 'path';
 import { slash } from './slash.js';
-import { AI_PATTERNS, SKIP_DIRS, SCAN_EXTENSIONS, Pattern } from './patterns.js';
+import {
+  AI_PATTERNS,
+  SKIP_DIRS,
+  SCAN_EXTENSIONS,
+  Pattern,
+  SDK_REPRESENTATIVE_MODEL,
+  UNKNOWN_SDK_REPRESENTATIVE_MODEL,
+} from './patterns.js';
 
 export interface CallSite {
   file: string;
   line: number;
   sdk: string;
   tokensPerCall: number;
+  /** The representative model used to calibrate/price this site — see
+   * patterns.ts SDK_REPRESENTATIVE_MODEL. Not the actual runtime model
+   * (the scanner can't know that from source alone). */
+  estimatedModel: string;
 }
 
 function walkDir(dir: string, files: string[]): void {
@@ -43,7 +54,8 @@ function findCallSites(filePath: string, content: string): CallSite[] {
       const startLine = Math.max(0, lineNum - 5);
       const endLine = Math.min(lines.length, lineNum + 20);
       const context = lines.slice(startLine, endLine).join('\n');
-      const tokensPerCall = slash(context);
+      const estimatedModel = SDK_REPRESENTATIVE_MODEL[pattern.name] ?? UNKNOWN_SDK_REPRESENTATIVE_MODEL;
+      const tokensPerCall = slash(context, estimatedModel);
 
       // Avoid duplicates at same location
       if (!sites.some(s => s.line === lineNum && s.sdk === pattern.name)) {
@@ -52,6 +64,7 @@ function findCallSites(filePath: string, content: string): CallSite[] {
           line: lineNum,
           sdk: pattern.name,
           tokensPerCall,
+          estimatedModel,
         });
       }
     }

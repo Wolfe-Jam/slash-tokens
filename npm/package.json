@@ -1,6 +1,6 @@
 {
   "name": "slash-tokens",
-  "version": "1.5.4",
+  "version": "1.5.5",
   "description": "Token Optimization for Context Engineers. 4.8 KB WASM. Sub-millisecond. Zero dependencies.",
   "main": "dist/index.js",
   "module": "dist/index.js",
