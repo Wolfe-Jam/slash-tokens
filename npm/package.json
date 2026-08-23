@@ -50,6 +50,7 @@
   "homepage": "https://slashtokens.com",
   "devDependencies": {
     "@types/node": "^25.5.0",
+    "js-tiktoken": "^1.0.21",
     "typescript": "^6.0.2"
   }
 }
