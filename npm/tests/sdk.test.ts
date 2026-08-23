@@ -82,6 +82,32 @@ describe('TIER 1: BRAKE — Core Estimation', () => {
     expect(a).toBe(b);
     expect(b).toBe(c);
   });
+
+  describe('per-model calibration', () => {
+    const text = 'A'.repeat(500);
+
+    it('applies a known model\'s calibration factor (raises the raw estimate)', () => {
+      const raw = slash(text);
+      const calibrated = slash(text, 'claude-sonnet');
+      expect(calibrated).toBeGreaterThan(raw);
+    });
+
+    it('SAFETY: an unrecognized model gets the safe fallback, never the raw (1.0) estimate', () => {
+      // Regression guard for 2026-08-23: `CALIBRATION[model] ?? 1.0` silently
+      // gave zero safety margin to any model not yet in the table — the most
+      // dangerous case, worse than any model we'd actually measured. A new
+      // model ID that isn't in CALIBRATION yet must still get a real margin.
+      const raw = slash(text);
+      const unknownModel = slash(text, 'some-brand-new-model-nobody-added-yet');
+      expect(unknownModel).toBeGreaterThan(raw);
+    });
+
+    it('the unrecognized-model fallback matches the highest known calibration factor', () => {
+      const known = slash(text, 'claude-sonnet');
+      const unknown = slash(text, 'totally-unknown-model-xyz');
+      expect(unknown).toBe(known);
+    });
+  });
 });
 
 // ============================================================================

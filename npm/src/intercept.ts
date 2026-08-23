@@ -25,8 +25,8 @@ export interface InterceptEvent {
 // Reverse lookup: model name → provider model names in the API
 // (what to put back in the request body)
 const MODEL_API_NAMES: Record<string, string> = {
-  'claude-opus': 'claude-opus-4-20250514',
-  'claude-sonnet': 'claude-sonnet-4-20250514',
+  'claude-opus': 'claude-opus-5',
+  'claude-sonnet': 'claude-sonnet-5',
   'claude-haiku': 'claude-haiku-4-5-20251001',
   'gpt-5.4': 'gpt-5.4',
   'gpt-5.4-mini': 'gpt-5.4-mini',
