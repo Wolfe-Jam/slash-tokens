@@ -155,7 +155,7 @@ export function patchFetch(): void {
           const content = extractContent(body);
           const rawModel = match.modelExtractor(body, url);
           const originalModel = normalizeModel(rawModel);
-          const tokens = slash(content);
+          const tokens = slash(content, originalModel);
           const originalInfo = getModel(originalModel);
           const originalCost = originalInfo ? Math.round(((tokens / 1_000_000) * originalInfo.input) * 1_000_000) / 1_000_000 : 0;
           const fits = originalInfo ? tokens <= originalInfo.context : true;

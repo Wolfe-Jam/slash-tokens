@@ -55,7 +55,7 @@ function buildAlternative(model: string, originalCost: number, tokens: number, i
  *     entries (e.g. given model='claude-opus', options[0]?.model CAN be 'grok-...').
  */
 export function preflight(content: string, model: string): PreflightResult {
-  const tokens = slash(content);
+  const tokens = slash(content, model);
   const info = getModel(model);
 
   if (!info) {
@@ -102,7 +102,7 @@ export function preflight(content: string, model: string): PreflightResult {
  *     both functions return the same model name.
  */
 export function preflightRoute(content: string, model: string): Alternative | null {
-  const tokens = slash(content);
+  const tokens = slash(content, model);
   const info = getModel(model);
   if (!info) return null;
 
