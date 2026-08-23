@@ -23,6 +23,14 @@ import { describe, it, expect, beforeAll } from 'bun:test';
 import { slash, init, report } from '../src/index';
 
 const BASE_URL = 'https://mcpaas.live';
+// Registration triggers real welcome/flight-alert emails via Resend. This
+// subdomain has its own MX + SPF records (Cloudflare Email Routing) with a
+// catch-all set to Drop — mail here is silently accepted and discarded, not
+// bounced. Fixed 2026-08-23: previously had no MX at all, so every run's
+// ~6 send attempts retried for hours before bouncing, dripping real bounce
+// events onto team@faf.one's Resend sending reputation every week (this
+// suite runs on a Monday cron). Do not repoint TEST_EMAIL at a domain
+// without an equivalent Drop catch-all.
 const TEST_EMAIL = `slash-test-${Date.now()}@test.slashtokens.com`;
 
 // Populated by TIER 0 registration
