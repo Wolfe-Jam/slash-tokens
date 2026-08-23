@@ -46,8 +46,8 @@ import 'slash-tokens/auto'
 Intercepts `fetch()` to Anthropic, OpenAI, xAI, and Google endpoints. Estimates tokens before the call leaves your machine. Sub-millisecond. Non-blocking.
 
 ```
-[slash] Anthropic claude-sonnet | 47,000 tokens | $0.1410 | OK
-[slash] xAI grok-4.20 | 12,300 tokens | $0.0246 | OK
+[slash] Anthropic claude-sonnet | 47,000 tokens | $0.0940 | OK
+[slash] xAI grok-4.20 | 12,300 tokens | $0.0154 | OK
 ```
 
 ## Pre-call check
@@ -60,7 +60,7 @@ const check = preflight('Your prompt here...', 'claude-opus-4.7')
 check.tokens       // 47000
 check.cost         // 0.235 (USD)
 check.fits         // true
-check.options[0]   // { model: 'grok-4-1-fast', cost: 0.0094, savings: 0.2256, savingsPercent: 96 }
+check.options[0]   // { model: 'gpt-5.4-nano', cost: 0.0094, savings: 0.2256, savingsPercent: 96 }
 ```
 
 Fully typed. Returns tokens, cost, context fit, and cheaper alternatives sorted by price.
@@ -81,13 +81,13 @@ Overestimates by design. The margin prevents overflow. Pre-call, you only need g
 
 ## Models
 
-Works with all models. 10 with built-in pricing (as of April 2026). Don't see yours? [Open an issue.](https://github.com/Wolfe-Jam/slash-tokens/issues)
+Works with all models. 11 with built-in pricing (as of April 2026). Don't see yours? [Open an issue.](https://github.com/Wolfe-Jam/slash-tokens/issues)
 
 | Model | $/M input | $/M output | Context |
 |---|---|---|---|
 | claude-opus-4.7 | 5.00 | 25.00 | 1M |
 | claude-opus | 5.00 | 25.00 | 1M |
-| claude-sonnet | 3.00 | 15.00 | 1M |
+| claude-sonnet | 2.00 | 10.00 | 1M |
 | claude-haiku | 1.00 | 5.00 | 200K |
 | grok-4.20 | 1.25 | 2.50 | 1M |
 | grok-4-1-fast | 1.25 | 2.50 | 1M |

@@ -5,6 +5,12 @@ export interface ModelInfo {
 }
 
 // Pricing as of April 2026 — USD per million tokens
+// Claude Sonnet 5 pricing corrected 2026-08-23: was hardcoded at $3.00/
+// $15.00 (the previously-scheduled Sept 1, 2026 increase), but Anthropic's
+// own pricing page confirms that increase will NOT occur — $2.00/$10.00
+// (the introductory rate) is now the permanent standard price. Found via
+// a full-codebase review that independently re-verified every provider's
+// live pricing, not just the model IDs already fixed that day.
 // xAI pricing re-derived 2026-08-23: grok-4.20 and grok-4-1-fast (the literal
 // API IDs, not just the generic keys below) were both fully retired — not
 // just old snapshots, they 404 on the live API. Current lineup has no cheap
@@ -18,7 +24,7 @@ export const MODELS: Record<string, ModelInfo> = {
   // Anthropic
   'claude-opus':     { input:  5.00, output: 25.00, context: 1000000 },
   'claude-opus-4.7': { input:  5.00, output: 25.00, context: 1000000 },
-  'claude-sonnet':   { input:  3.00, output: 15.00, context: 1000000 },
+  'claude-sonnet':   { input:  2.00, output: 10.00, context: 1000000 },
   'claude-haiku':    { input:  1.00, output:  5.00, context: 200000 },
   // xAI
   'grok-4.20':       { input:  1.25, output:  2.50, context: 1000000 },
