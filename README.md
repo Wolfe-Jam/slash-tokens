@@ -65,7 +65,7 @@ Fully typed. Returns tokens, cost, context fit, and cheaper alternatives sorted 
 
 ## Token estimation
 
-The engine underneath. 4.8 KB Zig-compiled WASM. 96-98% accurate.
+The engine underneath. 4.8 KB Zig-compiled WASM, calibrated against real provider tokenizers — not a flat chars/4 guess.
 
 ```js
 import { slash, slashBytes } from 'slash-tokens'

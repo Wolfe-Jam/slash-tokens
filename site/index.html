@@ -404,6 +404,57 @@
       margin-top: 0.5rem;
     }
 
+    /* Do nothing vs Slash */
+    .compare-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      margin: 2rem 0;
+    }
+    .compare-col {
+      padding: 1.2rem 1.4rem;
+      border-radius: 10px;
+    }
+    .compare-col.nothing {
+      background: #111;
+      border: 1px solid #222;
+    }
+    .compare-col.slash {
+      background: rgba(74, 222, 128, 0.05);
+      border: 1px solid rgba(74, 222, 128, 0.25);
+    }
+    .compare-col h3 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.9rem;
+    }
+    .compare-col.nothing h3 { color: #888; }
+    .compare-col.slash h3 { color: #4ade80; }
+    .compare-col ul { list-style: none; }
+    .compare-col li {
+      font-size: 0.9rem;
+      line-height: 1.6;
+      padding-left: 1.3rem;
+      position: relative;
+      margin-bottom: 0.7rem;
+    }
+    .compare-col li:last-child { margin-bottom: 0; }
+    .compare-col.nothing li { color: #999; }
+    .compare-col.nothing li::before {
+      content: '×';
+      position: absolute;
+      left: 0;
+      color: #666;
+    }
+    .compare-col.slash li { color: #ddd; }
+    .compare-col.slash li::before {
+      content: '✓';
+      position: absolute;
+      left: 0;
+      color: #4ade80;
+    }
+
     /* Risk section */
     .zero-risk {
       display: grid;
@@ -587,7 +638,7 @@
 
     @media (max-width: 600px) {
       .hero h1 { font-size: 2.5rem; }
-      .problem-grid, .stats-row, .zero-risk, .proof-grid, .price-grid { grid-template-columns: 1fr; }
+      .problem-grid, .stats-row, .zero-risk, .proof-grid, .price-grid, .compare-row { grid-template-columns: 1fr; }
       .gate-flow { flex-direction: column; }
       .flywheel { width: 100%; height: 500px; }
       .wheel-node { width: 120px; padding: 0.7rem; }
@@ -714,16 +765,31 @@
         <div class="val">0</div>
         <div class="lbl">deps</div>
       </div>
-      <div class="stat">
-        <div class="val">96-98%</div>
-        <div class="lbl">accuracy</div>
+    </div>
+
+    <div class="compare-row">
+      <div class="compare-col nothing">
+        <h3>Do nothing</h3>
+        <ul>
+          <li>Find out the cost when the invoice arrives</li>
+          <li>Find out about overflow when the call fails</li>
+          <li>No idea if a cheaper model would've done the same job</li>
+          <li>Duplicate, empty, or trivial calls get sent and billed anyway</li>
+        </ul>
+      </div>
+      <div class="compare-col slash">
+        <h3>With /slash</h3>
+        <ul>
+          <li>Cost estimate before the call leaves your machine</li>
+          <li>Overflow caught before it happens, not after it fails</li>
+          <li>Cheaper same-provider model surfaced when one fits</li>
+          <li>Duplicate/empty calls stopped — zero tokens spent</li>
+        </ul>
       </div>
     </div>
 
     <div class="punchline">
-      <p>Worst case: everything stays exactly the same.</p>
-      <p>Best case: you <span class="green">save millions</span>.</p>
-      <div class="sub">That's not a product pitch. That's a free option with unlimited upside.</div>
+      <div class="sub">Every real call still returns the API's own exact count. Slash's number is a fast go/no-go signal before you send it — not the final word.</div>
     </div>
   </div>
 
