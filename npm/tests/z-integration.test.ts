@@ -96,7 +96,7 @@ describe('TIER 1: BRAKE — SDK ↔ API Contract', () => {
     expect(result.timestamp).toMatch(/^\d{4}-\d{2}-\d{2}T/);
   });
 
-  it('fee = 10% of savings (contract invariant)', async () => {
+  it('trial fee = 10% of savings (Team is 0 — meter postponed)', async () => {
     init({ key: SLASH_KEY });
     const result = await report({
       tokens_estimated: 5000,
@@ -174,6 +174,8 @@ describe('TIER 2: ENGINE — API Response Shapes', () => {
     expect(data).toHaveProperty('transactions_count');
     expect(data).toHaveProperty('total_saved_usd');
     expect(data).toHaveProperty('total_fees_usd');
+    expect(data).toHaveProperty('counterfactual_fee_usd');
+    expect(typeof data.counterfactual_fee_usd).toBe('number');
 
     expect(typeof data.balance_usd).toBe('number');
     expect(typeof data.transactions_count).toBe('number');

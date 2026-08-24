@@ -14,6 +14,8 @@ export interface ReportResult {
   fee_usd: number;
   balance_remaining_usd: number;
   timestamp: string;
+  /** 10% of this call's savings — comparison only. Charged fee is fee_usd (0 on Team). */
+  counterfactual_fee_usd?: number;
 }
 
 export async function report(opts: ReportOptions): Promise<ReportResult> {

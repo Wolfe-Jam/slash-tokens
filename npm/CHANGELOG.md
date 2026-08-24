@@ -1,5 +1,43 @@
 # Changelog
 
+## 1.6.0 (2026-08-24)
+
+### Fixed Deal — 10% on the report, not the Team invoice
+
+Team/Pro is the live cart ($39/mo or $390/yr). 10% of measured savings is postponed UFN; it still appears on the weekly number as the comparison (what the meter would have been vs the plan). Trial keys still pay 10%. `report()` may return `counterfactual_fee_usd` from the worker. Site copy unchanged.
+
+## 1.5.7 (2026-08-24)
+
+Punch-list cleanup from the full-codebase review after calibration shipped.
+
+## 1.5.6 (2026-08-23)
+
+`preflightRoute()` respects `init({ route, models })`.
+
+## 1.5.5 (2026-08-23)
+
+CLI scanner/report calibrate and price per-provider, not one flat rate.
+
+## 1.5.4 (2026-08-23)
+
+Claude Sonnet 5 pricing corrected to $2/$10. Doc drift.
+
+## 1.5.3 (2026-08-23)
+
+WASM no longer silently truncates input above ~1.06 MB.
+
+## 1.5.2 (2026-08-23)
+
+Gemini and Grok factors re-verified against the 29-sample corpus.
+
+## 1.5.1 (2026-08-23)
+
+Corpus 9→29 samples. Claude factor 1.85→2.05 (Spanish under-report).
+
+## 1.5.0 (2026-08-23)
+
+Per-model calibration wired into every real call site. Gemini and Grok calibrated. Retired API IDs fixed.
+
 ## 1.4.1 (2026-04-20)
 
 ### Polish release — no code changes

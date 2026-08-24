@@ -607,7 +607,7 @@ describe('TIER 5: BILLING — Auto Report & Metering', () => {
       expect(fee).toBe(0);
     });
 
-    it('fee is always exactly 10% of savings', () => {
+    it('trial meter is exactly 10% of savings', () => {
       const cases = [0, 0.01, 0.10, 1.00, 100.00, 12345.67];
       for (const savings of cases) {
         const fee = Math.round((savings * 0.10) * 1_000_000) / 1_000_000;
