@@ -96,7 +96,7 @@ describe('TIER 1: BRAKE — SDK ↔ API Contract', () => {
     expect(result.timestamp).toMatch(/^\d{4}-\d{2}-\d{2}T/);
   });
 
-  it('trial fee = 10% of savings (Team is 0 — meter postponed)', async () => {
+  it('trial fee is waived — 10% is counterfactual only', async () => {
     init({ key: SLASH_KEY });
     const result = await report({
       tokens_estimated: 5000,
@@ -106,7 +106,8 @@ describe('TIER 1: BRAKE — SDK ↔ API Contract', () => {
       cost_saved_usd: 0.30,
     });
 
-    expect(result.fee_usd).toBe(0.03);
+    expect(result.fee_usd).toBe(0);
+    expect(result.counterfactual_fee_usd).toBe(0.03);
   });
 
   it('accepts action=prevented', async () => {

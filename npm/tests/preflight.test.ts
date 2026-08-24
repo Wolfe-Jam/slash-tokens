@@ -607,7 +607,7 @@ describe('TIER 5: BILLING — Auto Report & Metering', () => {
       expect(fee).toBe(0);
     });
 
-    it('trial meter is exactly 10% of savings', () => {
+    it('waived 10% cut is exactly 10% of savings', () => {
       const cases = [0, 0.01, 0.10, 1.00, 100.00, 12345.67];
       for (const savings of cases) {
         const fee = Math.round((savings * 0.10) * 1_000_000) / 1_000_000;
@@ -675,13 +675,15 @@ describe('TIER 5: BILLING — Auto Report & Metering', () => {
       expect(fee).toBe(0);
     });
 
-    it('real savings from preflight action trigger real fee', () => {
+    it('real savings from preflight action still compute the 10% as waived', () => {
       // When dev uses preflight() and acts on it:
       // preflight → skip → report(cost_saved_usd: 0.50)
-      // Fee: $0.05 (10%)
+      // Charged fee: $0. Counterfactual: $0.05 (10%)
       const savings = 0.50;
-      const fee = Math.round((savings * 0.10) * 1_000_000) / 1_000_000;
-      expect(fee).toBe(0.05);
+      const charged = 0;
+      const waived = Math.round((savings * 0.10) * 1_000_000) / 1_000_000;
+      expect(charged).toBe(0);
+      expect(waived).toBe(0.05);
     });
   });
 });
