@@ -126,6 +126,28 @@ describe('TIER 2: ENGINE — Pricing & Intelligence', () => {
       expect(haiku.cost).toBeLessThan(sonnet.cost);
     });
 
+    it('SAFETY: preflight().tokens is ground-truth calibrated, not just internally consistent', () => {
+      // Regression guard for 2026-08-23. Found during a full-codebase
+      // review: the existing calibration tests in this file only ever
+      // compare preflight() outputs against EACH OTHER (e.g. "opus costs
+      // more than sonnet") — every one of them would still pass even if
+      // preflight() silently stopped passing `model` into slash() again
+      // (the exact 2026-08-23 wiring bug), because opus and sonnet share
+      // the same calibration factor and the comparison never touches an
+      // independent ground truth. This asserts against slash() directly,
+      // called the same way preflight() is supposed to call it internally.
+      const content = 'A'.repeat(500);
+      expect(preflight(content, 'claude-sonnet').tokens).toBe(slash(content, 'claude-sonnet'));
+      expect(preflight(content, 'gpt-5.4-nano').tokens).toBe(slash(content, 'gpt-5.4-nano'));
+
+      // Cross-check with an assertion the old bug WOULD have failed:
+      // claude-sonnet's factor (2.05) is materially higher than
+      // gpt-5.4-nano's (1.15) for identical content, so calibrated
+      // token counts must differ even though the raw WASM estimate is
+      // the same for both.
+      expect(preflight(content, 'claude-sonnet').tokens).toBeGreaterThan(preflight(content, 'gpt-5.4-nano').tokens);
+    });
+
     it('cost formula: (tokens / 1M) * input_rate', () => {
       const content = 'test';
       const check = preflight(content, 'claude-opus');
@@ -708,6 +730,29 @@ describe('TIER 1: BRAKE — preflightRoute same-provider invariant', () => {
         }
       }
     }
+  });
+
+  it('SAFETY: preflightRoute().cost matches an independently-computed ground truth', () => {
+    // Regression guard for 2026-08-23. The test above only proves
+    // route.cost < preflight(...).cost — a RELATIVE check computed by the
+    // same internal code path on both sides. If preflight()'s calibration
+    // wiring silently broke (the original bug), both sides would shrink
+    // together and this relative check would keep passing. This computes
+    // the expected cost independently, from slash() + getModel() directly,
+    // bypassing preflight()/preflightRoute() entirely on the right-hand
+    // side, so a wiring regression on either function actually surfaces.
+    const content = 'test prompt for routing check';
+    const route = preflightRoute(content, 'claude-opus');
+    expect(route).not.toBeNull();
+    expect(route!.model).toBe('claude-haiku'); // cheapest same-provider alternative
+
+    // preflight.ts's computeCost() uses input-token price ONLY (output is
+    // not known at preflight time) — confirmed by reading the source
+    // before trusting this assertion, not assumed.
+    const groundTruthTokens = slash(content, 'claude-opus');
+    const haikuInfo = getModel('claude-haiku')!;
+    const expectedCost = Math.round(((groundTruthTokens / 1_000_000) * haikuInfo.input) * 1_000_000) / 1_000_000;
+    expect(route!.cost).toBeCloseTo(expectedCost, 6);
   });
 
   it('providerOf returns correct provider for every model in MODELS', () => {
