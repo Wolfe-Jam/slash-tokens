@@ -13,9 +13,19 @@ For anyone building with LLMs. 4.8 KB WASM. Sub-millisecond. Zero dependencies.
 
 Know the cost before the call leaves your machine.
 
-> 🆕 **v1.4 — The Single-Source-of-Truth Edition.** New `preflightRoute()` matches the Slash proxy exactly — same-provider only, zero routing drift. `PROVIDER_MODELS` is now the single source of truth across the SDK.
+> 🆕 **v1.6.1 — The Fixed Deal Edition.** Team/Pro is the live cart; 10% of savings shows on the weekly number as the comparison, not as what Team is charged.
+>
+> **v1.5 — The Calibration Fix Edition.** Per-model calibration is wired into every call path. All four providers checked against the same 29-sample corpus.
+>
+> **v1.4 — The Single-Source-of-Truth Edition.** New `preflightRoute()` matches the Slash proxy exactly — same-provider only, zero routing drift. `PROVIDER_MODELS` is now the single source of truth across the SDK.
 >
 > **v1.3 — The Opus 4.7 Edition.** Same-day support for Claude Opus 4.7 with measured token calibration (1.16–1.51x). Plus Gemini proxy fix and benchmark harness for any upstream.
+
+## v1.6.1 — The Fixed Deal Edition
+
+Team/Pro is the live cart; 10% of savings shows on the weekly number as the comparison, not as what Team is charged.
+
+The library stays free. Trial still takes 10% of measured savings on the $5 meter. Team is $39/month or $390/year: the weekly number shows what 10% would have been next to the plan. Team is not charged that 10%.
 
 ```bash
 npm install slash-tokens

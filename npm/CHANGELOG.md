@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.6.1] — The Fixed Deal Edition
+
+*2026-08-24*
+
+Team/Pro is the live cart; 10% of savings shows on the weekly number as the comparison, not as what Team is charged.
+
+1.6.0 put `counterfactual_fee_usd` on npm without Doc Gate (the tarball README still headlined v1.4). This patch is the public identity for that ship. Trial still meters 10% on the $5 credit. Team `fee_usd` is 0. slashtokens.com copy is unchanged.
+
+**Not claimed:** a walked Team checkout (cart unbought). 10% is postponed until-further-notice, not dropped. CLI scanner “10% gate efficiency” is a different 10% (salvage rate).
+
+**Verification:** `cd npm && bun test` (157 pass, 2 skip). Worker: `npx vitest run tests/wjttc/slash-usage-counterfactual.test.ts tests/wjttc/slash-statement-comparison.test.ts`.
+
 ## 1.6.0 (2026-08-24)
 
 ### Fixed Deal — 10% on the report, not the Team invoice
