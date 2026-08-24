@@ -136,22 +136,21 @@
     <div class="faq-item">
       <div class="faq-q"><span class="num">3.</span> What does it cost?</div>
       <div class="faq-a">
-        The library is <span class="highlight">free forever</span>. You pay for the number that lands in your inbox every week. <code style="color:#FF4400;background:rgba(255,68,0,0.08);padding:0.15rem 0.4rem;border-radius:4px;">bunx slash-tokens</code> and <code style="color:#FF4400;background:rgba(255,68,0,0.08);padding:0.15rem 0.4rem;border-radius:4px;">import 'slash-tokens/auto'</code> stay unrestricted.
+        The library is <span class="highlight">free forever</span>. Team is the weekly number — dashboard, history, alerts. <span class="highlight">You keep the savings.</span> <code style="color:#FF4400;background:rgba(255,68,0,0.08);padding:0.15rem 0.4rem;border-radius:4px;">bunx slash-tokens</code> and <code style="color:#FF4400;background:rgba(255,68,0,0.08);padding:0.15rem 0.4rem;border-radius:4px;">import 'slash-tokens/auto'</code> stay unrestricted.
 
         <div class="example">
-          <strong>Free</strong> — $0 forever. Full pre-flight, local cost estimate, session summary, unlimited local use. No account.<br>
-          <strong>Team = Pro</strong> — <span class="orange">Pro for the price of Team</span>. $390 / year or $39 / month. Save $60 / month · $720 off Pro per year (vs $99 / month). Same cart on Pro. Up to 5 seats. Your savings number, delivered — not something you log in to go find. Persistent savings dashboard &amp; history, multi-project / multi-key attribution, Slack &amp; webhook alerts.<br>
-          <strong>Pro</strong> — same cart, same price. Pro for the price of Team.<br>
-          <strong>Enterprise</strong> — custom. SSO, VPC, longer retention, dedicated support, custom reporting. Optional performance-based component once measured savings exist.
+          <strong>Free</strong> — $0 forever. Full pre-flight, local cost estimate, session summary. No account.<br>
+          <strong>Team</strong> — $390 / year or $39 / month. Weekly savings number, dashboard &amp; history, up to 5 seats, Slack alerts.<br>
+          <strong>Enterprise</strong> — custom. <a href="#" class="js-mail" data-subject="Slash Enterprise" style="color:#FF4400;text-decoration:none;font-weight:700;">Talk to us</a>.
         </div>
 
-        Core stays free. Visibility and control are what teams pay for. History lives in the <a href="https://mcpaas.live/slash/dashboard" style="color:#FF4400;text-decoration:none;font-weight:700;">Dashboard</a>.
+        Core stays free. Team is the report — not a cut of what we slash. History lives in the <a href="https://mcpaas.live/slash/dashboard" style="color:#FF4400;text-decoration:none;font-weight:700;">Dashboard</a>.
       </div>
     </div>
     <div class="faq-item">
       <div class="faq-q"><span class="num">4.</span> Can I cancel? Am I committed, tied in with a subscription?</div>
       <div class="faq-a">
-        Free: remove one line of code and you're out. Team is Stripe monthly or yearly — cancel anytime; the library keeps running. Pro for the price of Team until Pro checkout is live.
+        Free: remove one line of code and you're out. Team is Stripe monthly or yearly — cancel anytime; the library keeps running.
       </div>
     </div>
 
@@ -185,7 +184,7 @@
     <div class="faq-item">
       <div class="faq-q"><span class="num">7.</span> Is this per project or do I turn it on once?</div>
       <div class="faq-a">
-        Turn it on. Forget about it. Every call optimized. One switch. Fire and forget. The Gate runs sub-millisecond on every request — whether it's one prompt or thousands a day. Same optimization, same 90/10 split.
+        Turn it on. Forget about it. Every call optimized. One switch. Fire and forget. The Gate runs sub-millisecond on every request — whether it's one prompt or thousands a day.
       </div>
     </div>
 
@@ -221,6 +220,13 @@
       <svg style="display:inline-block;vertical-align:-0.1em;" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="12" height="12"><polygon points="60,0 20,55 48,55 38,100 80,42 52,42" fill="#FFAA00"/></svg>/<span style="color:#FF4400;">slash</span> is built by the <a href="https://faf.one" style="color:#888;text-decoration:none;">FAF</a> team — IANA-registered standard for AI Context
     </div>
   </div>
+
+  <script>
+    document.querySelectorAll('.js-mail').forEach(function (a) {
+      var sub = a.getAttribute('data-subject') || '';
+      a.href = 'mailto:' + 'team' + '@' + 'faf.one' + '?subject=' + encodeURIComponent(sub);
+    });
+  </script>
 
 </body>
 </html>

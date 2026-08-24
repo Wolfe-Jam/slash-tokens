@@ -9,13 +9,13 @@
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://slashtokens.com">
   <meta property="og:title" content="/slash — Token Optimization for Context Engineers">
-  <meta property="og:description" content="One import. Every LLM call optimized. 4.8 KB WASM. Sub-ms. 90%+ tokens salvaged.">
+  <meta property="og:description" content="Token Optimization for Context Engineers. 4.8 KB WASM. Sub-ms. The library is free. You keep the savings.">
   <meta property="og:image" content="https://slashtokens.com/og.jpg">
 
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:site" content="@wolfe_jam">
   <meta name="twitter:title" content="/slash — Token Optimization for Context Engineers">
-  <meta name="twitter:description" content="One import. Every LLM call optimized. 4.8 KB WASM. Sub-ms. 90%+ tokens salvaged.">
+  <meta name="twitter:description" content="Token Optimization for Context Engineers. 4.8 KB WASM. Sub-ms. The library is free. You keep the savings.">
   <meta name="twitter:image" content="https://slashtokens.com/og.jpg">
 
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><polygon points='60,0 20,55 48,55 38,100 80,42 52,42' fill='%23FFAA00'/></svg>">
@@ -250,10 +250,23 @@
     /* Pricing */
     .price-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 1fr 1fr;
       gap: 1rem;
-      margin: 2rem 0 1.5rem;
+      margin: 2rem auto 1.5rem;
+      max-width: 560px;
     }
+    .visit-btn {
+      display: inline-block;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #f5f5f5;
+      background: #111;
+      border: 1px solid #333;
+      border-radius: 8px;
+      padding: 0.45rem 1.1rem;
+    }
+    .visit-btn:hover { border-color: #FF4400; color: #FF4400; }
     .price-card {
       background: #111;
       border: 1px solid #222;
@@ -531,7 +544,7 @@
     .proof-repo a:hover { text-decoration: underline; }
     .proof-metrics {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr;
       gap: 0.6rem;
     }
     .proof-metric { text-align: center; }
@@ -836,10 +849,6 @@
             <div class="proof-val" style="color:#dc2626;">$6.2K</div>
             <div class="proof-lbl">monthly sunk cost</div>
           </div>
-          <div class="proof-metric">
-            <div class="proof-val" style="color:#4ade80;">$7.5K</div>
-            <div class="proof-lbl">annual recoverable</div>
-          </div>
         </div>
       </div>
 
@@ -857,10 +866,6 @@
           <div class="proof-metric">
             <div class="proof-val" style="color:#dc2626;">$0.8K</div>
             <div class="proof-lbl">monthly sunk cost</div>
-          </div>
-          <div class="proof-metric">
-            <div class="proof-val" style="color:#4ade80;">$1.0K</div>
-            <div class="proof-lbl">annual recoverable</div>
           </div>
         </div>
       </div>
@@ -880,17 +885,13 @@
             <div class="proof-val" style="color:#dc2626;">$42.1K</div>
             <div class="proof-lbl">monthly sunk cost</div>
           </div>
-          <div class="proof-metric">
-            <div class="proof-val" style="color:#4ade80;">$50.5K</div>
-            <div class="proof-lbl">annual recoverable</div>
-          </div>
         </div>
       </div>
     </div>
 
     <div class="punchline">
-      <p>Combined: <span class="green">$58.9K/yr</span> in sunk cost. All recoverable.</p>
-      <div class="sub">From 3 public repos, capped at 900 files/scan. Production is 10-100x. Run it yourself: <code style="font-family:'Roboto Mono',monospace;color:#FF4400;">bunx slash-tokens</code></div>
+      <p>Combined: <span class="green">$49.1K/mo</span> in sunk cost.</p>
+      <div class="sub">From 3 public repos, capped at 900 files/scan. Run it yourself: <code style="font-family:'Roboto Mono',monospace;color:#FF4400;">bunx slash-tokens</code></div>
     </div>
   </div>
 
@@ -902,64 +903,41 @@
 
     <div class="model-equation">
       <div class="line1">The library is free forever.</div>
-      <div class="line2">You pay for <span class="green">the number that lands in your inbox every week</span>.</div>
+      <div class="line2">Team is the weekly number. <span class="green">You keep the savings.</span></div>
     </div>
 
     <div class="price-grid">
       <div class="price-card">
         <div class="tier">Free</div>
         <div class="amount">$0 <span>forever</span></div>
-        <div class="cadence">&nbsp;</div>
+        <div class="cadence">No account. Unlimited local use.</div>
         <ul>
           <li>Full pre-flight (<code style="font-family:'Roboto Mono',monospace;color:#FF4400;font-size:0.78rem;">preflight</code>, <code style="font-family:'Roboto Mono',monospace;color:#FF4400;font-size:0.78rem;">preflightRoute</code>, auto intercept)</li>
           <li>Local cost estimate before every call</li>
           <li>Session summary on exit</li>
-          <li>Unlimited local use</li>
-          <li>No account required</li>
         </ul>
         <a class="price-btn" href="#try">bunx slash-tokens</a>
       </div>
       <div class="price-card go">
-        <div class="tier">Team = Pro</div>
+        <div class="tier">Team</div>
         <div class="amount">$390 <span>/ year</span></div>
-        <div class="cadence">Pro for the price of Team</div>
-        <div class="price-save">Save $60 / month · $720 off Pro per year</div>
+        <div class="cadence">or $39 / month</div>
         <ul>
           <li>Everything in Free, plus:</li>
-          <li>Your savings number, delivered — not something you log in to go find</li>
-          <li>Persistent savings dashboard &amp; history</li>
-          <li>Up to 5 seats</li>
-          <li>Multi-project / multi-key attribution</li>
-          <li>Slack &amp; webhook alerts on expensive calls</li>
-        </ul>
-        <a class="price-btn" href="https://buy.stripe.com/14AdRb8cdbfodDl1EAbV60t" target="_blank" rel="noopener">Get Annual</a>
-        <a class="price-alt" href="https://buy.stripe.com/3cI8wR2RTerAczh4QMbV60s" target="_blank" rel="noopener">Get monthly — $39</a>
-      </div>
-      <div class="price-card">
-        <div class="tier">Pro</div>
-        <div class="amount">$390 <span>/ year</span></div>
-        <div class="cadence">Pro for the price of Team · was $99 / month</div>
-        <div class="price-save">Save $60 / month · $720 off Pro per year</div>
-        <ul>
-          <li>Everything in Team, plus:</li>
-          <li>Unlimited seats</li>
-          <li>Optional hosted proxy (enforce routing decisions)</li>
-          <li>Finance-ready Token Spend &amp; Savings Receipt</li>
-          <li>Priority support</li>
+          <li>Your savings number, delivered each week</li>
+          <li>Dashboard &amp; history</li>
+          <li>Up to 5 seats · Slack alerts</li>
         </ul>
         <a class="price-btn" href="https://buy.stripe.com/14AdRb8cdbfodDl1EAbV60t" target="_blank" rel="noopener">Get Annual</a>
         <a class="price-alt" href="https://buy.stripe.com/3cI8wR2RTerAczh4QMbV60s" target="_blank" rel="noopener">Get monthly — $39</a>
       </div>
     </div>
     <p class="price-enterprise">
-      <strong style="color:#f5f5f5;">Enterprise</strong> — custom.<br>
-      SSO, VPC, longer retention, dedicated support, custom reporting.<br>
-      Optional performance-based component available once measured savings exist.
-      <a class="js-mail" data-subject="Slash Enterprise" href="#">Talk to us</a>.
+      <strong style="color:#f5f5f5;">Enterprise</strong> — custom. <a class="js-mail" data-subject="Slash Enterprise" href="#">Talk to us</a>.
     </p>
     <div class="price-close">
       <p>The more you build, the more you save.</p>
-      <div class="sub">Core stays free. Visibility and control are what teams pay for.</div>
+      <div class="sub">Core stays free. Team is the report — not a cut of what we slash.</div>
     </div>
 
     <!-- FLYWHEEL -->
@@ -1042,7 +1020,7 @@
     </div>
 
     <div class="prose" style="text-align: center;">
-      <p><span class="green">90%+ tokens salvaged.</span> Sunk cost diverted. Done.</p>
+      <p><span class="green">Sunk cost diverted.</span> Done.</p>
     </div>
   </div>
 
@@ -1072,13 +1050,11 @@
     </div>
 
     <div style="text-align:center;margin-top:0.75rem;font-size:0.75rem;color:#666;">
-      <a href="https://github.com/Wolfe-Jam/slash-tokens/releases" style="color:#888;text-decoration:none;border-bottom:1px dotted #444;">The Single-Source-of-Truth Edition</a> · <a href="https://github.com/Wolfe-Jam/slash-tokens/blob/main/npm/CHANGELOG.md" style="color:#888;text-decoration:none;border-bottom:1px dotted #444;">Changelog</a>
+      <a href="https://github.com/Wolfe-Jam/slash-tokens/blob/main/npm/CHANGELOG.md" style="color:#888;text-decoration:none;border-bottom:1px dotted #444;">Changelog</a>
     </div>
 
     <div style="display: flex; justify-content: center; margin-top: 1.5rem;">
-      <iframe src="https://ghbtns.com/github-btn.html?user=Wolfe-Jam&repo=slash-tokens&type=star&count=false"
-              frameborder="0" scrolling="0" width="60" height="20"
-              title="Star Wolfe-Jam/slash-tokens on GitHub"></iframe>
+      <a class="visit-btn" href="https://github.com/Wolfe-Jam/slash-tokens" target="_blank" rel="noopener">Visit</a>
     </div>
 
     <div class="links" style="margin-top: 2rem;">
