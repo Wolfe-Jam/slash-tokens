@@ -14,7 +14,7 @@
  */
 
 import { describe, it, expect, beforeAll, afterAll } from 'bun:test';
-import { slash, preflight, preflightRoute, listModels, MODELS, PROVIDER_MODELS, providerOf } from '../src/index';
+import { slash, preflight, preflightRoute, listModels, MODELS, PROVIDER_MODELS, providerOf, init } from '../src/index';
 import type { PreflightResult, ModelInfo } from '../src/index';
 import { getModel } from '../src/models';
 import { patchFetch, onIntercept } from '../src/intercept';
@@ -753,6 +753,35 @@ describe('TIER 1: BRAKE — preflightRoute same-provider invariant', () => {
     const haikuInfo = getModel('claude-haiku')!;
     const expectedCost = Math.round(((groundTruthTokens / 1_000_000) * haikuInfo.input) * 1_000_000) / 1_000_000;
     expect(route!.cost).toBeCloseTo(expectedCost, 6);
+  });
+
+  it('SAFETY: preflightRoute() respects init({route: false}) — matches patchFetch() never routing', () => {
+    // Regression guard: preflightRoute() used to ignore shouldRoute()
+    // entirely, so its own doc comment's "matches intercept.ts exactly"
+    // promise was false under this real, commonly-used config. The real
+    // enforcement path (patchFetch()/findCheapestRoute) was never
+    // affected — only this preview function was misleading.
+    init({ route: false });
+    try {
+      expect(preflightRoute('test prompt for routing check', 'claude-opus')).toBeNull();
+    } finally {
+      init({ route: true }); // restore default for subsequent tests
+    }
+  });
+
+  it('SAFETY: preflightRoute() respects init({models: [...]}) — excludes disallowed candidates', () => {
+    // Same gap, the other config knob: excluding claude-haiku (the real
+    // cheapest same-provider option for claude-opus) must make
+    // preflightRoute() either pick the next-cheapest allowed model or
+    // return null — never silently recommend the excluded one.
+    init({ models: ['claude-opus', 'claude-sonnet'] }); // claude-haiku excluded
+    try {
+      const route = preflightRoute('test prompt for routing check', 'claude-opus');
+      expect(route?.model).not.toBe('claude-haiku');
+      expect(route?.model).toBe('claude-sonnet'); // next-cheapest allowed option
+    } finally {
+      init({ models: Object.keys(MODELS) }); // restore effectively-allow-all
+    }
   });
 
   it('providerOf returns correct provider for every model in MODELS', () => {

@@ -1,6 +1,7 @@
 import { slash } from './slash.js';
 import { getModel, MODELS, type ModelInfo } from './models.js';
 import { PROVIDER_MODELS, providerOf } from './providers.js';
+import { shouldRoute, isModelAllowed } from './config.js';
 
 export interface Alternative {
   model: string;
@@ -97,11 +98,20 @@ export function preflight(content: string, model: string): PreflightResult {
  *   - Cheapest SAME-PROVIDER alternative by input price. If two alternatives
  *     tie on price (unlikely but possible), returns the first encountered in
  *     PROVIDER_MODELS order.
- *   - Must agree with intercept.ts findCheapestRoute for identical inputs.
- *     Cross-function semantic test: given the same (provider, tokens, model),
- *     both functions return the same model name.
+ *   - Must agree with intercept.ts findCheapestRoute for identical inputs,
+ *     INCLUDING respecting the same init() config gates: shouldRoute()
+ *     (init({route: false}) must make this always return null, matching
+ *     patchFetch() never routing) and isModelAllowed() (init({models: [...]})
+ *     must exclude any candidate not in that list, matching
+ *     findCheapestRoute's real filtering). Fixed 2026-08-23 — this
+ *     function used to ignore both, so a call site previewing "what will
+ *     Slash route to" via preflightRoute() would show a route recommendation
+ *     that real traffic through patchFetch() would never actually take
+ *     under the same config, silently breaking the "matches exactly" promise.
  */
 export function preflightRoute(content: string, model: string): Alternative | null {
+  if (!shouldRoute()) return null;
+
   const tokens = slash(content, model);
   const info = getModel(model);
   if (!info) return null;
@@ -117,6 +127,7 @@ export function preflightRoute(content: string, model: string): Alternative | nu
   let cheapest: Alternative | null = null;
   for (const m of providerModels) {
     if (m === model) continue;
+    if (!isModelAllowed(m)) continue;             // user excluded this model
     const altInfo = getModel(m);
     if (!altInfo) continue;
     if (tokens > altInfo.context) continue;       // doesn't fit
