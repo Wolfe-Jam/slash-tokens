@@ -1,12 +1,16 @@
 # Changelog
 
+## House $20 (worker, 2026-08-24)
+
+Not an npm bump. Worker + setup identity: one-person account is email → key, **$20 on the house**, 10% from that credit, free top-ups until further notice. **Free forever is bunx only** — no account. No $5 for devs. Team is still $39 / $390; `fee_usd` is 0.
+
 ## [1.6.1] — The Fixed Deal Edition
 
 *2026-08-24*
 
 Team/Pro is the live cart; 10% of savings shows on the weekly number as the comparison, not as what Team is charged.
 
-1.6.0 put `counterfactual_fee_usd` on npm without Doc Gate (the tarball README still headlined v1.4). This patch is the public identity for that ship. Trial still meters 10% on the $5 credit. Team `fee_usd` is 0. slashtokens.com copy is unchanged.
+1.6.0 put `counterfactual_fee_usd` on npm without Doc Gate (the tarball README still headlined v1.4). This patch is the public identity for that ship. At ship, trial metered 10% on a $5 credit (superseded the same day: house credit is $20). Team `fee_usd` is 0.
 
 **Not claimed:** a walked Team checkout (cart unbought). 10% is postponed until-further-notice, not dropped. CLI scanner “10% gate efficiency” is a different 10% (salvage rate).
 

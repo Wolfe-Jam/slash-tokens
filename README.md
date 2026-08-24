@@ -122,7 +122,7 @@ const result = await report({
 })
 ```
 
-Register at [mcpaas.live/slash/setup](https://mcpaas.live/slash/setup) to start tracking.
+Register at [mcpaas.live/slash/setup](https://mcpaas.live/slash/setup) for a one-person key — $20 on the house, emailed.
 
 ## Runtime support
 

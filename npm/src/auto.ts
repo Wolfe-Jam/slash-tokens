@@ -8,8 +8,8 @@ import { hasKey, isQuiet } from './config.js';
 // Silent by default. Routes to cheapest model within same provider.
 // Tracks cumulative savings. Nudges at thresholds.
 //
-// No key: routing still works (free forever), no dashboard tracking
-// With key (init or SLASH_KEY): savings reported to MCPaaS
+// No key: routing still works (same as bunx — free forever), no dashboard
+// With key (init or SLASH_KEY): one-person account; savings reported to MCPaaS
 
 // Session state
 let totalSalvaged = 0;

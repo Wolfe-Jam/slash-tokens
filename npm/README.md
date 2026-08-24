@@ -25,7 +25,7 @@ Know the cost before the call leaves your machine.
 
 Team/Pro is the live cart; 10% of savings shows on the weekly number as the comparison, not as what Team is charged.
 
-The library stays free. Trial still takes 10% of measured savings on the $5 meter. Team is $39/month or $390/year: the weekly number shows what 10% would have been next to the plan. Team is not charged that 10%.
+**Free forever is bunx** — no account. A one-person account is email → key, **$20 on the house**, 10% of measured savings from that credit. Free top-ups until further notice — not a subscription. Team is $39/month or $390/year: the weekly number shows what 10% would have been next to the plan. Team is not charged that 10%.
 
 ```bash
 npm install slash-tokens
@@ -65,7 +65,7 @@ One-click deploy with Vercel AI SDK + slash-tokens built in:
 
 ## Dashboard
 
-Track savings across all your apps. Free key at [mcpaas.live/slash/setup](https://mcpaas.live/slash/setup)
+Track savings across all your apps. One-person key (email, $20 on the house) at [mcpaas.live/slash/setup](https://mcpaas.live/slash/setup)
 
 Full docs, examples, and model pricing at **[GitHub](https://github.com/Wolfe-Jam/slash-tokens)**
 
