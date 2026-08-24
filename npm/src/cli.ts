@@ -2,7 +2,6 @@
 
 import { scan } from './scanner.js';
 import { printReport } from './report.js';
-import { report } from './transact.js';
 import { init } from './config.js';
 
 // Parse --key=xxx from args

@@ -26,6 +26,7 @@ export interface InterceptEvent {
 // (what to put back in the request body)
 const MODEL_API_NAMES: Record<string, string> = {
   'claude-opus': 'claude-opus-5',
+  'claude-opus-4.7': 'claude-opus-4-7',
   'claude-sonnet': 'claude-sonnet-5',
   'claude-haiku': 'claude-haiku-4-5-20251001',
   'gpt-5.4': 'gpt-5.4',
@@ -65,10 +66,19 @@ const AI_ENDPOINTS: Array<{ pattern: RegExp; provider: string; modelExtractor: (
   },
 ];
 
-// Normalize model names to our pricing table keys
-function normalizeModel(raw: string): string {
+// Normalize model names to our pricing table keys.
+// Kept in sync by hand with mcpaas-cf/src/slash-models.ts's normalizeModel
+// (no shared import between the two repos) — fixed 2026-08-23: this copy
+// was missing the opus-4.7 special case and several OpenAI legacy
+// fallbacks the other copy already had, which silently mapped those
+// intercepted calls to generic claude-opus / an unmapped raw string
+// (getModel() returning undefined → $0 reported cost, see slash.ts's
+// DEFAULT_UNKNOWN_MODEL_FACTOR comment for why "unrecognized" defaulting
+// to a falsely-safe-looking value is the dangerous case).
+export function normalizeModel(raw: string): string {
   const lower = raw.toLowerCase();
-  // Anthropic
+  // Anthropic — 4.7 before generic opus check, same order as slash-models.ts
+  if (lower.includes('opus') && (lower.includes('4-7') || lower.includes('4.7'))) return 'claude-opus-4.7';
   if (lower.includes('opus')) return 'claude-opus';
   if (lower.includes('sonnet')) return 'claude-sonnet';
   if (lower.includes('haiku')) return 'claude-haiku';
@@ -78,14 +88,18 @@ function normalizeModel(raw: string): string {
   // Google
   if (lower.includes('gemini') && lower.includes('pro')) return 'gemini-3.1-pro';
   if (lower.includes('gemini')) return 'gemini-2.5-flash';
-  // OpenAI
+  // OpenAI — current (5.4 family)
   if (lower.includes('5.4') && lower.includes('nano')) return 'gpt-5.4-nano';
   if (lower.includes('5.4') && lower.includes('mini')) return 'gpt-5.4-mini';
   if (lower.includes('5.4')) return 'gpt-5.4';
-  // Legacy fallbacks
+  // OpenAI — legacy model names → map to closest current equivalent
+  if (lower.includes('o1-mini') || lower.includes('o1_mini')) return 'gpt-5.4-mini';
+  if (lower.includes('o1')) return 'gpt-5.4';
   if (lower.includes('4o-mini') || lower.includes('4o_mini')) return 'gpt-5.4-mini';
   if (lower.includes('4o') || lower.includes('4.1')) return 'gpt-5.4';
-  if (lower.includes('grok-3')) return 'grok-4.20';
+  if (lower.includes('gpt-4-turbo') || lower.includes('gpt-4-1')) return 'gpt-5.4';
+  if (lower.includes('gpt-4')) return 'gpt-5.4';
+  if (lower.includes('gpt-3.5') || lower.includes('gpt-35')) return 'gpt-5.4-nano';
   return raw;
 }
 

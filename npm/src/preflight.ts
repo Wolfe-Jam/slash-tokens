@@ -1,5 +1,5 @@
 import { slash } from './slash.js';
-import { getModel, MODELS, type ModelInfo } from './models.js';
+import { getModel, MODELS, effectiveRate, type ModelInfo } from './models.js';
 import { PROVIDER_MODELS, providerOf } from './providers.js';
 import { shouldRoute, isModelAllowed } from './config.js';
 
@@ -23,10 +23,13 @@ export interface PreflightResult {
 /**
  * Compute cost of a prompt of `tokens` tokens on the given ModelInfo.
  * Uses input-token price only (output is not known at preflight time).
- * Rounded to 6 decimals.
+ * Rounded to 6 decimals. Goes through effectiveRate() so a long-context
+ * model (currently only Grok, over 200K tokens) isn't silently costed at
+ * its base rate — fixed 2026-08-23.
  */
 function computeCost(tokens: number, info: ModelInfo): number {
-  return Math.round(((tokens / 1_000_000) * info.input) * 1_000_000) / 1_000_000;
+  const rate = effectiveRate(tokens, info);
+  return Math.round(((tokens / 1_000_000) * rate.input) * 1_000_000) / 1_000_000;
 }
 
 function buildAlternative(model: string, originalCost: number, tokens: number, info: ModelInfo): Alternative {
