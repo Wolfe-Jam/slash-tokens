@@ -23,7 +23,7 @@ Know the cost before the call leaves your machine.
 
 ## v1.6.2 — The Fixed Deal Edition
 
-Solo $20 mailbox, 10% waived.
+Solo $20 mailbox, 10% waived. Team $39 for the data.
 
 **Free forever is bunx** — no account. A one-person account is email → key, **$20 on the house**. We show the savings. We don't charge. 10% is the model, waived. Team is **$39 for the data** (`$390`/year).
 

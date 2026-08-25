@@ -4,7 +4,7 @@
 
 *2026-08-25*
 
-Solo $20 mailbox, 10% waived.
+Solo $20 mailbox, 10% waived. Team $39 for the data.
 
 Worker already returns `fee_usd` 0. This patch is the tarball identity. House `$20` is the mailbox — we show savings, we don't skim. 10% is the comparison, waived. Team is `$39` for the data (`$390`/year). Free forever is `bunx` — no account. No `$5` house credit for Solo.
 
