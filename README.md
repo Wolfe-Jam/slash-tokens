@@ -15,7 +15,7 @@ Know the cost before the call leaves your machine.
 Models change. Windows grow. Slash adapts — you keep building.
 Cheaper tokens haven't shrunk the bill — usage has.
 
-Current: [slash-tokens@1.6.2](https://www.npmjs.com/package/slash-tokens) · [release notes](https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.6.2)
+Current: [slash-tokens@1.6.3](https://www.npmjs.com/package/slash-tokens) · [release notes](https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.6.3)
 
 ## Try it
 
@@ -91,7 +91,7 @@ Safe pre-check, not a perfect count. Pre-call, you only need go/no-go.
 
 ## Models
 
-11 with built-in pricing (as of 1.6.2). Don't see yours? [Open an issue.](https://github.com/Wolfe-Jam/slash-tokens/issues)
+11 with built-in pricing (as of 1.6.3). Don't see yours? [Open an issue.](https://github.com/Wolfe-Jam/slash-tokens/issues)
 
 | Model | $/M input | $/M output | Context |
 |---|---|---|---|

@@ -15,11 +15,18 @@ Know the cost before the call leaves your machine.
 Models change. Windows grow. Slash adapts — you keep building.
 Cheaper tokens haven't shrunk the bill — usage has.
 
-## v1.6.2 — The Fixed Deal Edition
+## v1.6.3 — The Fixed Deal Edition
 
 Solo $20 mailbox, 10% waived. Team $39 for the data.
 
 **Free forever is bunx** — no account. A one-person account is email → key, **$20 on the house**. We show the savings. We don't charge. 10% is the model, waived. Team is **$39 for the data** (`$390`/year).
+
+```bash
+bunx slash-tokens
+# or: npx --yes slash-tokens
+```
+
+Run it in a project that already calls an LLM. An empty folder prints that nothing was found — that's normal.
 
 ```bash
 npm install slash-tokens
@@ -28,26 +35,25 @@ npm install slash-tokens
 ```js
 import { preflight, preflightRoute } from 'slash-tokens'
 
-// Analysis — all cheaper alternatives across all providers
+// Analysis — cheaper alternatives across all providers. Not a route.
 const check = preflight(prompt, 'claude-opus-4.7')
-// tokens: 47,000 | cost: $0.71 | 11 cheaper options | save 99%
+check.tokens
+check.cost
+check.fits
+check.options
 
-// Routing decision — matches Slash proxy behavior (same-provider only)
+// Routing decision — same-provider only, matches the Slash proxy
 const route = preflightRoute(prompt, 'claude-opus-4.7')
-// → { model: 'claude-haiku', cost: 0.14, salvaged: 0.57, ... } or null
+// { model: 'claude-haiku', cost, salvaged, salvagePercent } or null
 ```
 
-Or one line — every API call optimized pre-call:
+Or one line — every LLM call checked pre-call:
 
 ```js
 import 'slash-tokens/auto'
 ```
 
-Every call routed to the cheapest model that can execute it efficiently. Session summary on exit:
-
-```
-[slash] Session: 47 calls | 23 routed | $0.89 salvaged — The more you build, the more you save
-```
+Intercepts `fetch()` to Anthropic, OpenAI, xAI, and Google. Estimates before the call leaves your machine. Same-provider cheaper swap if one fits.
 
 ## See it work
 

@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.6.3] — The Fixed Deal Edition
+
+*2026-08-25*
+
+Solo $20 mailbox, 10% waived. Team $39 for the data.
+
+Tarball first screen is the try path (`bunx` / `npx`). `preflight` is analysis (all providers); `preflightRoute` is the same-provider route. SPDX MIT; brand reservation lives in NOTICE. Empty-folder CLI is a normal no-sites result, not a hang.
+
+No price or fee change.
+
 ## [1.6.2] — The Fixed Deal Edition
 
 *2026-08-25*
