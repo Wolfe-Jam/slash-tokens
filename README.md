@@ -13,7 +13,7 @@ Token Optimization for Context Engineers.
 
 Know the cost before the call leaves your machine.
 
-> 🆕 **v1.6.2 — The Fixed Deal Edition.** Solo $20 mailbox, 10% waived. Teams $5 to join, test the data.
+> 🆕 **v1.6.2 — The Fixed Deal Edition.** Solo $20 mailbox, 10% waived. Team $39 for the data.
 >
 > **v1.5 — The Calibration Fix Edition.** Per-model calibration is now actually wired into every call path (it wasn't — found and fixed 2026-08-23). Unknown models get a safe default instead of zero correction. All four providers (Claude, Gemini, Grok, GPT) are now calibrated against real ground truth and cross-checked on the same 29-sample corpus (expanded same-day from an original 9). The expansion mattered: Claude's factor needed correcting twice in one day (1.85→2.05) once Spanish-language content exposed a real gap, and Gemini needed a smaller bump once a JSON sample did the same — Grok's held unchanged. Several internal model names were also quietly routing to retired API IDs across Claude, Gemini, and Grok — all fixed. A full-codebase review the same day also found `slash()`/`slashBytes()` silently truncated any input above ~1.06 MB before estimating — fixed by growing WASM memory on demand, so large near-context-limit calls are no longer silently under-counted.
 >

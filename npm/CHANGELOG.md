@@ -4,11 +4,9 @@
 
 *2026-08-25*
 
-Solo $20 mailbox, 10% waived. Teams $5 to join, test the data.
+Solo $20 mailbox, 10% waived.
 
-Worker already returns `fee_usd` 0. This patch is the tarball identity. House `$20` is the mailbox — we show savings, we don't skim. 10% is the comparison, waived. Team intro is `$5` to see the record, then `$39` for the data (`$390`/year). Free forever is `bunx` — no account. No `$5` house credit for Solo.
-
-**Not on slashtokens.com:** the `$5` intro. Site stays `$39` for the data.
+Worker already returns `fee_usd` 0. This patch is the tarball identity. House `$20` is the mailbox — we show savings, we don't skim. 10% is the comparison, waived. Team is `$39` for the data (`$390`/year). Free forever is `bunx` — no account. No `$5` house credit for Solo.
 
 Dropped the CLI scanner's invented second 10% ("gate efficiency"). One 10% = the savings cut, waived.
 
