@@ -25,11 +25,14 @@ describe('intercept.ts normalizeModel — current models', () => {
   it('claude-opus-4.7 → claude-opus-4.7', () => {
     expect(normalizeModel('claude-opus-4.7')).toBe('claude-opus-4.7');
   });
-  it('claude-sonnet-5 → claude-sonnet', () => {
-    expect(normalizeModel('claude-sonnet-5')).toBe('claude-sonnet');
+  it('claude-opus-5 → claude-opus-5', () => {
+    expect(normalizeModel('claude-opus-5')).toBe('claude-opus-5');
   });
-  it('claude-haiku-4-5-20251001 → claude-haiku', () => {
-    expect(normalizeModel('claude-haiku-4-5-20251001')).toBe('claude-haiku');
+  it('claude-sonnet-5 → claude-sonnet-5', () => {
+    expect(normalizeModel('claude-sonnet-5')).toBe('claude-sonnet-5');
+  });
+  it('claude-haiku-4-5-20251001 → claude-haiku-4.5', () => {
+    expect(normalizeModel('claude-haiku-4-5-20251001')).toBe('claude-haiku-4.5');
   });
 });
 
@@ -58,14 +61,23 @@ describe('intercept.ts normalizeModel — legacy OpenAI names', () => {
 });
 
 describe('intercept.ts normalizeModel — xAI/Google', () => {
-  it('grok-3 → grok-4.20', () => {
-    expect(normalizeModel('grok-3')).toBe('grok-4.20');
+  it('grok-4.6 stays grok-4.6', () => {
+    expect(normalizeModel('grok-4.6')).toBe('grok-4.6');
   });
-  it('grok-4-1-fast → grok-4-1-fast', () => {
+  it('grok-4.3 stays grok-4.3', () => {
+    expect(normalizeModel('grok-4.3')).toBe('grok-4.3');
+  });
+  it('grok-3 → grok-4.6 (current flagship)', () => {
+    expect(normalizeModel('grok-3')).toBe('grok-4.6');
+  });
+  it('grok-4-1-fast → grok-4-1-fast (alias key)', () => {
     expect(normalizeModel('grok-4-1-fast')).toBe('grok-4-1-fast');
   });
-  it('gemini-2.0-flash → gemini-2.5-flash', () => {
-    expect(normalizeModel('gemini-2.0-flash')).toBe('gemini-2.5-flash');
+  it('gemini-2.0-flash → gemini-3.5-flash-lite', () => {
+    expect(normalizeModel('gemini-2.0-flash')).toBe('gemini-3.5-flash-lite');
+  });
+  it('gemini-2.5-flash stays', () => {
+    expect(normalizeModel('gemini-2.5-flash')).toBe('gemini-2.5-flash');
   });
 });
 
@@ -79,11 +91,19 @@ describe('intercept.ts normalizeModel — parity with mcpaas-cf', () => {
     // full case list exactly.
     const cases: Array<[string, string]> = [
       ['claude-opus-4-20250514', 'claude-opus'],
+      ['claude-opus-5', 'claude-opus-5'],
       ['claude-sonnet-4-20250514', 'claude-sonnet'],
-      ['claude-haiku-4-5-20251001', 'claude-haiku'],
+      ['claude-sonnet-5', 'claude-sonnet-5'],
+      ['claude-haiku-4-5-20251001', 'claude-haiku-4.5'],
+      ['gpt-5.6-sol', 'gpt-5.6-sol'],
+      ['gpt-5.6-terra', 'gpt-5.6-terra'],
+      ['gpt-5.6-luna', 'gpt-5.6-luna'],
+      ['gpt-5.6', 'gpt-5.6-sol'],
       ['gpt-5.4', 'gpt-5.4'],
       ['gpt-5.4-mini', 'gpt-5.4-mini'],
       ['gpt-5.4-nano', 'gpt-5.4-nano'],
+      ['grok-4.6', 'grok-4.6'],
+      ['grok-4.3', 'grok-4.3'],
       ['grok-4.20', 'grok-4.20'],
       ['grok-4-1-fast', 'grok-4-1-fast'],
       ['gemini-3.1-pro', 'gemini-3.1-pro'],
@@ -95,7 +115,7 @@ describe('intercept.ts normalizeModel — parity with mcpaas-cf', () => {
       ['gpt-4o-mini', 'gpt-5.4-mini'],
       ['o1', 'gpt-5.4'],
       ['o1-mini', 'gpt-5.4-mini'],
-      ['grok-3', 'grok-4.20'],
+      ['grok-3', 'grok-4.6'],
       ['claude-3.5-sonnet', 'claude-sonnet'],
       ['claude-3-opus', 'claude-opus'],
       ['claude-3-haiku', 'claude-haiku'],

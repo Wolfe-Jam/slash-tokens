@@ -15,7 +15,7 @@ Know the cost before the call leaves your machine.
 Models change. Windows grow. Slash adapts — you keep building.
 Cheaper tokens haven't shrunk the bill — usage has.
 
-Current: [slash-tokens@1.6.3](https://www.npmjs.com/package/slash-tokens) · [release notes](https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.6.3)
+Current: [slash-tokens@1.6.4](https://www.npmjs.com/package/slash-tokens) (GitHub `main` — npm 1.6.3 until publish)
 
 ## Try it
 
@@ -49,8 +49,8 @@ import 'slash-tokens/auto'
 Intercepts `fetch()` to Anthropic, OpenAI, xAI, and Google endpoints. Estimates tokens before the call leaves your machine. Sub-millisecond. Non-blocking.
 
 ```
-[slash] Anthropic claude-sonnet | 47,000 tokens | $0.0940 | OK
-[slash] xAI grok-4.20 | 12,300 tokens | $0.0154 | OK
+[slash] Anthropic claude-sonnet-5 | 47,000 tokens | $0.0940 | OK
+[slash] xAI grok-4.6 | 12,300 tokens | $0.0246 | OK
 ```
 
 ## Pre-call check
@@ -62,13 +62,13 @@ import { preflight, preflightRoute } from 'slash-tokens'
 
 const prompt = 'Your prompt here...'
 
-const check = preflight(prompt, 'claude-opus-4.7')
+const check = preflight(prompt, 'claude-opus-5')
 check.tokens       // estimated tokens
 check.cost         // USD at the input rate
 check.fits         // under this model's context window?
 check.options      // cheaper models across providers — not a route
 
-const route = preflightRoute(prompt, 'claude-opus-4.7')
+const route = preflightRoute(prompt, 'claude-opus-5')
 // cheapest same-provider alternative, or null
 // e.g. { model: 'claude-haiku', cost, salvaged, salvagePercent }
 ```
@@ -91,27 +91,26 @@ Safe pre-check, not a perfect count. Pre-call, you only need go/no-go.
 
 ## Models
 
-11 with built-in pricing (as of 1.6.3). Don't see yours? [Open an issue.](https://github.com/Wolfe-Jam/slash-tokens/issues)
+Live ladder as of 2026-08-25. Generic aliases (`claude-opus`, `gpt-5.4`, `grok-4.20`, …) still resolve. Don't see yours? [Open an issue.](https://github.com/Wolfe-Jam/slash-tokens/issues)
 
 | Model | $/M input | $/M output | Context |
 |---|---|---|---|
-| claude-opus-4.7 | 5.00 | 25.00 | 1M |
-| claude-opus | 5.00 | 25.00 | 1M |
-| claude-sonnet | 2.00 | 10.00 | 1M |
-| claude-haiku | 1.00 | 5.00 | 200K |
-| grok-4.20 | 1.25 | 2.50 | 1M |
-| grok-4-1-fast | 1.25 | 2.50 | 1M |
+| claude-opus-5 | 5.00 | 25.00 | 1M |
+| claude-sonnet-5 | 2.00 | 10.00 | 1M |
+| claude-haiku-4.5 | 1.00 | 5.00 | 200K |
+| grok-4.6 | 2.00 | 6.00 | 500K |
+| grok-4.3 | 1.25 | 2.50 | 1M |
 | gemini-3.1-pro | 2.00 | 12.00 | 1M |
-| gemini-2.5-flash | 0.30 | 2.50 | 1M |
-| gpt-5.4 | 2.50 | 15.00 | 1M |
-| gpt-5.4-mini | 0.75 | 4.50 | 128K |
-| gpt-5.4-nano | 0.20 | 1.25 | 128K |
+| gemini-3.5-flash-lite | 0.30 | 2.50 | 1M |
+| gpt-5.6-sol | 4.00 | 20.00 | 1.05M |
+| gpt-5.6-terra | 2.00 | 12.00 | 1.05M |
+| gpt-5.6-luna | 0.20 | 1.20 | 1.05M |
 
 ```js
 import { listModels, MODELS } from 'slash-tokens'
 
-listModels()           // ['claude-opus', 'claude-sonnet', ...]
-MODELS['claude-opus']  // { input: 5, output: 25, context: 1000000 }
+listModels()
+MODELS['grok-4.6']  // { input: 2, output: 6, context: 500000, ... }
 ```
 
 ## Savings reporting

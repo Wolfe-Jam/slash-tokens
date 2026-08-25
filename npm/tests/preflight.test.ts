@@ -719,6 +719,14 @@ describe('TIER 1: BRAKE — preflightRoute same-provider invariant', () => {
     expect(preflightRoute('hello', 'claude-haiku')).toBeNull();
     // Nano is the cheapest OpenAI
     expect(preflightRoute('hello', 'gpt-5.4-nano')).toBeNull();
+    expect(preflightRoute('hello', 'gpt-5.6-luna')).toBeNull();
+    expect(preflightRoute('hello', 'grok-4.3')).toBeNull();
+  });
+
+  it('preflightRoute(grok-4.6) is grok-4.3 — same-provider cheaper flagship', () => {
+    const route = preflightRoute('test prompt for routing check', 'grok-4.6');
+    expect(route).not.toBeNull();
+    expect(route!.model).toBe('grok-4.3');
   });
 
   it('preflightRoute result is always cheaper than input model', () => {

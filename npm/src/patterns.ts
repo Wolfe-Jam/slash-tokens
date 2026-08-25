@@ -40,10 +40,10 @@ export const AI_PATTERNS: Pattern[] = [
 // know the exact model), but a real per-provider one instead of a single
 // guess applied to everyone.
 export const SDK_REPRESENTATIVE_MODEL: Record<string, string> = {
-  'Anthropic': 'claude-sonnet',
-  'OpenAI': 'gpt-5.4',
+  'Anthropic': 'claude-sonnet-5',
+  'OpenAI': 'gpt-5.6-sol',
   'Gemini': 'gemini-3.1-pro',
-  'Grok': 'grok-4.20',
+  'Grok': 'grok-4.6',
 };
 
 // Fallback for SDKs that don't map to one specific provider (Vercel AI,
@@ -51,7 +51,7 @@ export const SDK_REPRESENTATIVE_MODEL: Record<string, string> = {
 // fetch-to-AI-endpoint and Cohere/Mistral have no pricing data in MODELS
 // at all). claude-sonnet is used as a documented, honest middle-of-the-
 // road placeholder — not a claim about which model is actually running.
-export const UNKNOWN_SDK_REPRESENTATIVE_MODEL = 'claude-sonnet';
+export const UNKNOWN_SDK_REPRESENTATIVE_MODEL = 'claude-sonnet-5';
 
 export const SKIP_DIRS = new Set([
   'node_modules', '.git', 'dist', 'build', '.next', '.nuxt', '.svelte-kit',

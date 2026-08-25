@@ -116,9 +116,15 @@ describe('TIER 1: BRAKE — Core Estimation', () => {
       // just needlessly inflated) until the corpus expansion caught it.
       const raw = slash(text);
       expect(slash(text, 'gemini-3.1-pro')).toBeGreaterThan(raw);
+      expect(slash(text, 'gemini-3.5-flash-lite')).toBeGreaterThan(raw);
       expect(slash(text, 'gemini-2.5-flash')).toBeGreaterThan(raw);
+      expect(slash(text, 'grok-4.6')).toBeGreaterThan(raw);
+      expect(slash(text, 'grok-4.3')).toBeGreaterThan(raw);
       expect(slash(text, 'grok-4.20')).toBeGreaterThan(raw);
       expect(slash(text, 'grok-4-1-fast')).toBeGreaterThan(raw);
+      expect(slash(text, 'gpt-5.6-sol')).toBeGreaterThan(raw);
+      expect(slash(text, 'gpt-5.6-terra')).toBeGreaterThan(raw);
+      expect(slash(text, 'gpt-5.6-luna')).toBeGreaterThan(raw);
       expect(slash(text, 'gpt-5.4')).toBeGreaterThan(raw);
       expect(slash(text, 'gpt-5.4-mini')).toBeGreaterThan(raw);
       expect(slash(text, 'gpt-5.4-nano')).toBeGreaterThan(raw);

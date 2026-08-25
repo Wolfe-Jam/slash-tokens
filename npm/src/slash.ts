@@ -67,7 +67,10 @@ const WASM_INPUT_OFFSET = 4096;
  *             DEFAULT_UNKNOWN_MODEL_FACTOR (1.85), a ~60% larger correction
  *             than it needed. Still safe either way (1.85 > required
  *             minimum), just needlessly inflated for real GPT users.
- * grok-4.20 / grok-4-1-fast: 1.15 — re-verified 2026-08-23 against the
+ * grok-4.6 / grok-4.3 (and aliases grok-4.20 / grok-4-1-fast): 1.15 —
+ *             4.6/4.3 IDs added 2026-08-25; factor CARRIED from the
+ *             2026-08-23 corpus, not re-measured on the new wire IDs.
+ * grok-4.20 / grok-4-1-fast (original): 1.15 — re-verified 2026-08-23 against the
  *             29-sample corpus (20 new samples: more languages, Spanish/
  *             Japanese prose, more JSON shapes) and UNCHANGED — same
  *             worst case (technical-docs prose, ratio 0.928) as the
@@ -93,14 +96,23 @@ const WASM_INPUT_OFFSET = 4096;
  * Slash must NEVER under-report. Over-reporting is safe (go/no-go only).
  */
 const CALIBRATION: Record<string, number> = {
+  'claude-opus-5':    2.05,
   'claude-opus':      2.05,
   'claude-opus-4.7':  2.05,
+  'claude-sonnet-5':  2.05,
   'claude-sonnet':    2.05,
+  'claude-haiku-4.5': 1.45,
   'claude-haiku':     1.45,
   'gemini-3.1-pro':   1.45,
+  'gemini-3.5-flash-lite': 1.45,
   'gemini-2.5-flash': 1.45,
+  'grok-4.6':         1.15,
+  'grok-4.3':         1.15,
   'grok-4.20':        1.15,
   'grok-4-1-fast':    1.15,
+  'gpt-5.6-sol':      1.15,
+  'gpt-5.6-terra':    1.15,
+  'gpt-5.6-luna':     1.15,
   'gpt-5.4':          1.15,
   'gpt-5.4-mini':     1.15,
   'gpt-5.4-nano':     1.15,

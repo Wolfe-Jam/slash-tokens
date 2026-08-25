@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.6.4] — The Fixed Deal Edition
+
+*2026-08-25*
+
+Live model ladder. Grok **4.6** / **4.3**, GPT-5.6 **Sol / Terra / Luna**, Claude **Opus 5 / Sonnet 5 / Haiku 4.5**, Gemini **3.5 Flash-Lite**. Old keys stay as aliases. Calibration factors carried from the 2026-08-23 corpus — not re-measured on the new IDs.
+
+No Team/Solo price change.
+
 ## [1.6.3] — The Fixed Deal Edition
 
 *2026-08-25*

@@ -50,7 +50,7 @@ describe('scanner — per-provider calibration', () => {
       const { sites } = scan(dir);
       const anthropicSite = sites.find(s => s.sdk === 'Anthropic');
       expect(anthropicSite).toBeDefined();
-      expect(anthropicSite!.estimatedModel).toBe('claude-sonnet');
+      expect(anthropicSite!.estimatedModel).toBe('claude-sonnet-5');
 
       // The site's tokensPerCall must reflect calibration for its context
       // window, not the raw WASM estimate.

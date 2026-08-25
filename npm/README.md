@@ -15,7 +15,7 @@ Know the cost before the call leaves your machine.
 Models change. Windows grow. Slash adapts — you keep building.
 Cheaper tokens haven't shrunk the bill — usage has.
 
-## v1.6.3 — The Fixed Deal Edition
+## v1.6.4 — The Fixed Deal Edition
 
 Solo $20 mailbox, 10% waived. Team $39 for the data.
 
@@ -36,14 +36,14 @@ npm install slash-tokens
 import { preflight, preflightRoute } from 'slash-tokens'
 
 // Analysis — cheaper alternatives across all providers. Not a route.
-const check = preflight(prompt, 'claude-opus-4.7')
+const check = preflight(prompt, 'claude-opus-5')
 check.tokens
 check.cost
 check.fits
 check.options
 
 // Routing decision — same-provider only, matches the Slash proxy
-const route = preflightRoute(prompt, 'claude-opus-4.7')
+const route = preflightRoute(prompt, 'claude-opus-5')
 // { model: 'claude-haiku', cost, salvaged, salvagePercent } or null
 ```
 

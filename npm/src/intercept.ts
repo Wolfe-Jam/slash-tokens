@@ -25,16 +25,25 @@ export interface InterceptEvent {
 // Reverse lookup: model name → provider model names in the API
 // (what to put back in the request body)
 const MODEL_API_NAMES: Record<string, string> = {
+  'claude-opus-5': 'claude-opus-5',
   'claude-opus': 'claude-opus-5',
   'claude-opus-4.7': 'claude-opus-4-7',
+  'claude-sonnet-5': 'claude-sonnet-5',
   'claude-sonnet': 'claude-sonnet-5',
+  'claude-haiku-4.5': 'claude-haiku-4-5-20251001',
   'claude-haiku': 'claude-haiku-4-5-20251001',
+  'gpt-5.6-sol': 'gpt-5.6-sol',
+  'gpt-5.6-terra': 'gpt-5.6-terra',
+  'gpt-5.6-luna': 'gpt-5.6-luna',
   'gpt-5.4': 'gpt-5.4',
   'gpt-5.4-mini': 'gpt-5.4-mini',
   'gpt-5.4-nano': 'gpt-5.4-nano',
+  'grok-4.6': 'grok-4.6',
+  'grok-4.3': 'grok-4.3',
   'grok-4.20': 'grok-4.20-0309-non-reasoning',
   'grok-4-1-fast': 'grok-4.3',
   'gemini-3.1-pro': 'gemini-pro-latest',
+  'gemini-3.5-flash-lite': 'gemini-3.5-flash-lite',
   'gemini-2.5-flash': 'gemini-flash-latest',
 };
 
@@ -48,7 +57,7 @@ const AI_ENDPOINTS: Array<{ pattern: RegExp; provider: string; modelExtractor: (
   {
     pattern: /api\.openai\.com/,
     provider: 'OpenAI',
-    modelExtractor: (body) => body?.model || 'gpt-5.4',
+    modelExtractor: (body) => body?.model || 'gpt-5.6-sol',
   },
   {
     pattern: /generativelanguage\.googleapis\.com/,
@@ -56,13 +65,13 @@ const AI_ENDPOINTS: Array<{ pattern: RegExp; provider: string; modelExtractor: (
     modelExtractor: (_body, url) => {
       // Model is in the URL path: /v1beta/models/gemini-2.0-flash:generateContent
       const match = url?.match(/\/models\/([^/:]+)/);
-      return match ? match[1] : 'gemini-2.5-flash';
+      return match ? match[1] : 'gemini-3.5-flash-lite';
     },
   },
   {
     pattern: /api\.x\.ai/,
     provider: 'xAI',
-    modelExtractor: (body) => body?.model || 'grok-4.20',
+    modelExtractor: (body) => body?.model || 'grok-4.6',
   },
 ];
 
@@ -77,22 +86,32 @@ const AI_ENDPOINTS: Array<{ pattern: RegExp; provider: string; modelExtractor: (
 // to a falsely-safe-looking value is the dangerous case).
 export function normalizeModel(raw: string): string {
   const lower = raw.toLowerCase();
-  // Anthropic — 4.7 before generic opus check, same order as slash-models.ts
+  // Anthropic — specific versions before generic family
   if (lower.includes('opus') && (lower.includes('4-7') || lower.includes('4.7'))) return 'claude-opus-4.7';
+  if (lower.includes('opus-5')) return 'claude-opus-5';
   if (lower.includes('opus')) return 'claude-opus';
+  if (lower.includes('sonnet-5')) return 'claude-sonnet-5';
   if (lower.includes('sonnet')) return 'claude-sonnet';
+  if (lower.includes('haiku') && (lower.includes('4.5') || lower.includes('4-5'))) return 'claude-haiku-4.5';
   if (lower.includes('haiku')) return 'claude-haiku';
-  // xAI
+  // xAI — 4.6 / 4.3 / 4.20 before generic grok
+  if (lower.includes('grok') && (lower.includes('4.6') || lower.includes('4-6'))) return 'grok-4.6';
+  if (lower.includes('grok') && (lower.includes('4.3') || lower.includes('4-3'))) return 'grok-4.3';
+  if (lower.includes('grok') && (lower.includes('4.20') || lower.includes('4-20'))) return 'grok-4.20';
   if (lower.includes('grok') && lower.includes('fast')) return 'grok-4-1-fast';
-  if (lower.includes('grok')) return 'grok-4.20';
+  if (lower.includes('grok')) return 'grok-4.6';
   // Google
   if (lower.includes('gemini') && lower.includes('pro')) return 'gemini-3.1-pro';
-  if (lower.includes('gemini')) return 'gemini-2.5-flash';
-  // OpenAI — current (5.4 family)
+  if (lower.includes('gemini') && lower.includes('3.5') && lower.includes('lite')) return 'gemini-3.5-flash-lite';
+  if (lower.includes('gemini') && lower.includes('2.5')) return 'gemini-2.5-flash';
+  if (lower.includes('gemini')) return 'gemini-3.5-flash-lite';
+  // OpenAI — 5.6 then 5.4 then legacy
+  if (lower.includes('5.6') && lower.includes('luna')) return 'gpt-5.6-luna';
+  if (lower.includes('5.6') && lower.includes('terra')) return 'gpt-5.6-terra';
+  if (lower.includes('5.6')) return 'gpt-5.6-sol';
   if (lower.includes('5.4') && lower.includes('nano')) return 'gpt-5.4-nano';
   if (lower.includes('5.4') && lower.includes('mini')) return 'gpt-5.4-mini';
   if (lower.includes('5.4')) return 'gpt-5.4';
-  // OpenAI — legacy model names → map to closest current equivalent
   if (lower.includes('o1-mini') || lower.includes('o1_mini')) return 'gpt-5.4-mini';
   if (lower.includes('o1')) return 'gpt-5.4';
   if (lower.includes('4o-mini') || lower.includes('4o_mini')) return 'gpt-5.4-mini';
