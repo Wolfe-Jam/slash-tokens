@@ -13,6 +13,9 @@ For anyone building with LLMs. 4.8 KB WASM. Sub-millisecond. Zero dependencies.
 
 Know the cost before the call leaves your machine.
 
+Models change. Windows grow. Slash adapts — you keep building.
+Cheaper tokens haven't shrunk the bill — usage has.
+
 > 🆕 **v1.6.2 — The Fixed Deal Edition.** Solo $20 mailbox, 10% waived. Team $39 for the data.
 >
 > **v1.5 — The Calibration Fix Edition.** Per-model calibration is wired into every call path. All four providers checked against the same 29-sample corpus.
