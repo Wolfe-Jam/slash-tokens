@@ -55,13 +55,11 @@ Every call routed to the cheapest model that can execute it efficiently. Session
 [slash] Session: 47 calls | 23 routed | $0.89 salvaged — The more you build, the more you save
 ```
 
-## Next.js Starter
+## See it work
 
-One-click deploy with Vercel AI SDK + slash-tokens built in:
+A live chat with every call through the gate: [slash-tokens.vercel.app](https://slash-tokens.vercel.app)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/Wolfe-Jam/slash-nextjs&project-name=slash-nextjs&env=ANTHROPIC_API_KEY)
-
-→ [slash-nextjs on GitHub](https://github.com/Wolfe-Jam/slash-nextjs)
+Then `bunx slash-tokens`, [get a key](https://mcpaas.live/slash/setup) ($20 on the house), or [Team — $39 for the data](https://slashtokens.com).
 
 ## Dashboard
 
