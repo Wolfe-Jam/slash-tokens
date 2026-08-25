@@ -18,10 +18,10 @@ Token Optimization for Context Engineers. 4.8 KB WASM. Sub-millisecond. Zero dep
 - **What:** Token Optimization for Context Engineers. Pre-call checks in 4.8 KB WASM. Sub-millisecond. Zero dependencies.
 - **Why:** You don't know what a call costs until the invoice arrives. Slash tells you before the call leaves your machine.
 - **Where:** npm (slash-tokens), slashtokens.com, mcpaas.live/slash
-- **When:** v1.6.4, August 2026
+- **When:** v1.6.5, August 2026
 - **How:** npm install slash-tokens / bunx slash-tokens
 
 ---
 
-*STATUS: BI-SYNC ACTIVE — 2026-08-25T13:13:23.421Z*
+*STATUS: BI-SYNC ACTIVE — 2026-08-25T13:24:55.433Z*
 <!-- faf:end -->

@@ -1,10 +1,20 @@
 # Changelog
 
+## [1.6.5] — The Fixed Deal Edition
+
+*2026-08-25*
+
+Solo $20 mailbox, 10% waived. Team $39 for the data.
+
+Rebuilt tarball. 1.6.4 packed a stale gitignored `dist/` (`bun test` runs `src/`). This tarball contains the live ladder: Grok **4.6** / **4.3**, GPT-5.6 **Sol / Terra / Luna**, Claude **Opus 5 / Sonnet 5 / Haiku 4.5**, Gemini **3.5 Flash-Lite**.
+
+No Team/Solo price change.
+
 ## [1.6.4] — The Fixed Deal Edition
 
 *2026-08-25*
 
-Live model ladder. Grok **4.6** / **4.3**, GPT-5.6 **Sol / Terra / Luna**, Claude **Opus 5 / Sonnet 5 / Haiku 4.5**, Gemini **3.5 Flash-Lite**. Old keys stay as aliases. Calibration factors carried from the 2026-08-23 corpus — not re-measured on the new IDs.
+Live model ladder in source. **Tarball packed stale `dist/`** — `bun test` never rebuilds it. Use **1.6.5**.
 
 No Team/Solo price change.
 

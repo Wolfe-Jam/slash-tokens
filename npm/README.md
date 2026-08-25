@@ -15,7 +15,7 @@ Know the cost before the call leaves your machine.
 Models change. Windows grow. Slash adapts — you keep building.
 Cheaper tokens haven't shrunk the bill — usage has.
 
-## v1.6.4 — The Fixed Deal Edition
+## v1.6.5 — The Fixed Deal Edition
 
 Solo $20 mailbox, 10% waived. Team $39 for the data.
 
