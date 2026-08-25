@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.6.6] — The Fixed Deal Edition
+
+*2026-08-25*
+
+Solo $20 mailbox, 10% waived. Team $39 for the data.
+
+CLI `--version` / `--help` print and exit. Empty `bunx` tells you to run it in an app.
+
+No Team/Solo price change.
+
 ## [1.6.5] — The Fixed Deal Edition
 
 *2026-08-25*

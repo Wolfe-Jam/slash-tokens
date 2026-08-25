@@ -15,7 +15,7 @@ Know the cost before the call leaves your machine.
 Models change. Windows grow. Slash adapts — you keep building.
 Cheaper tokens haven't shrunk the bill — usage has.
 
-## v1.6.5 — The Fixed Deal Edition
+## v1.6.6 — The Fixed Deal Edition
 
 Solo $20 mailbox, 10% waived. Team $39 for the data.
 
@@ -26,7 +26,7 @@ bunx slash-tokens
 # or: npx --yes slash-tokens
 ```
 
-Run it in a project that already calls an LLM. An empty folder prints that nothing was found — that's normal.
+Run it in a project that already calls an LLM. An empty folder prints that nothing was found, then tells you to run it in an app — that's normal. `--version` / `--help` print and exit (they do not scan). Pin proof: `slash-tokens --version` or `npm view slash-tokens version`.
 
 ```bash
 npm install slash-tokens
