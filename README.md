@@ -1,11 +1,10 @@
 # /slash-tokens
 
 [![npm version](https://img.shields.io/npm/v/slash-tokens?style=flat&color=cb3837)](https://www.npmjs.com/package/slash-tokens)
-[![FAF Trophy 100%](https://img.shields.io/badge/FAF-%F0%9F%8F%86%20100%25-000000?labelColor=FF6B35)](https://faf.one)
 [![CI/CD](https://github.com/Wolfe-Jam/slash-tokens/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/Wolfe-Jam/slash-tokens/actions/workflows/test.yml)
 [![npm downloads](https://img.shields.io/npm/dm/slash-tokens?style=flat&color=brightgreen)](https://www.npmjs.com/package/slash-tokens)
 [![WASM size](https://img.shields.io/badge/WASM-4.8_KB-blue?style=flat)](https://bundlephobia.com/package/slash-tokens)
-[![license](https://img.shields.io/npm/l/slash-tokens?style=flat)](./npm/LICENSE)
+[![license](https://img.shields.io/github/license/Wolfe-Jam/slash-tokens?style=flat)](./LICENSE)
 [![⭐ Star on GitHub](https://img.shields.io/badge/%E2%AD%90_Star-black?logo=github&logoColor=white)](https://github.com/Wolfe-Jam/slash-tokens)
 
 Token Optimization for Context Engineers.
@@ -16,21 +15,18 @@ Know the cost before the call leaves your machine.
 Models change. Windows grow. Slash adapts — you keep building.
 Cheaper tokens haven't shrunk the bill — usage has.
 
-> 🆕 **v1.6.2 — The Fixed Deal Edition.** Solo $20 mailbox, 10% waived. Team $39 for the data.
->
-> **v1.5 — The Calibration Fix Edition.** Per-model calibration is now actually wired into every call path (it wasn't — found and fixed 2026-08-23). Unknown models get a safe default instead of zero correction. All four providers (Claude, Gemini, Grok, GPT) are now calibrated against real ground truth and cross-checked on the same 29-sample corpus (expanded same-day from an original 9). The expansion mattered: Claude's factor needed correcting twice in one day (1.85→2.05) once Spanish-language content exposed a real gap, and Gemini needed a smaller bump once a JSON sample did the same — Grok's held unchanged. Several internal model names were also quietly routing to retired API IDs across Claude, Gemini, and Grok — all fixed. A full-codebase review the same day also found `slash()`/`slashBytes()` silently truncated any input above ~1.06 MB before estimating — fixed by growing WASM memory on demand, so large near-context-limit calls are no longer silently under-counted.
->
-> **v1.4 — The Single-Source-of-Truth Edition.** New `preflightRoute()` matches the Slash proxy exactly — same-provider only, zero routing drift. `PROVIDER_MODELS` is now the single source of truth across the SDK.
->
-> **v1.3 — The Opus 4.7 Edition.** Same-day support for Claude Opus 4.7 with measured token calibration (1.16–1.51x). Plus Gemini proxy fix and benchmark harness for any upstream.
+Current: [slash-tokens@1.6.2](https://www.npmjs.com/package/slash-tokens) · [release notes](https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.6.2)
 
 ## Try it
 
 ```bash
 bunx slash-tokens
+# or: npx --yes slash-tokens
 ```
 
-See it work in a chat: [slash-nextjs-wofejams-projects.vercel.app](https://slash-nextjs-wofejams-projects.vercel.app)
+Run it in a project that already calls an LLM. An empty folder prints that nothing was found — that's normal.
+
+See it work in a chat: [live demo](https://slash-nextjs-wofejams-projects.vercel.app)
 
 ## Install
 
@@ -59,18 +55,25 @@ Intercepts `fetch()` to Anthropic, OpenAI, xAI, and Google endpoints. Estimates 
 
 ## Pre-call check
 
+`preflight` is analysis (every cheaper model, all providers). `preflightRoute` is the routing decision — same provider only. They answer different questions.
+
 ```js
-import { preflight } from 'slash-tokens'
+import { preflight, preflightRoute } from 'slash-tokens'
 
-const check = preflight('Your prompt here...', 'claude-opus-4.7')
+const prompt = 'Your prompt here...'
 
-check.tokens       // 47000
-check.cost         // 0.235 (USD)
-check.fits         // true
-check.options[0]   // { model: 'gpt-5.4-nano', cost: 0.0094, savings: 0.2256, savingsPercent: 96 }
+const check = preflight(prompt, 'claude-opus-4.7')
+check.tokens       // estimated tokens
+check.cost         // USD at the input rate
+check.fits         // under this model's context window?
+check.options      // cheaper models across providers — not a route
+
+const route = preflightRoute(prompt, 'claude-opus-4.7')
+// cheapest same-provider alternative, or null
+// e.g. { model: 'claude-haiku', cost, salvaged, salvagePercent }
 ```
 
-Fully typed. Returns tokens, cost, context fit, and cheaper alternatives sorted by price.
+Fully typed. Do not use `check.options[0]` as the route — that list is cross-provider on purpose.
 
 ## Token estimation
 
@@ -79,16 +82,16 @@ The engine underneath. 4.8 KB Zig-compiled WASM, calibrated against real provide
 ```js
 import { slash, slashBytes } from 'slash-tokens'
 
-slash('Hello world')           // 2
-slash(longDocument)            // 47283
+slash('Hello world')            // 2
+slash(longDocument)             // 47283
 slashBytes(new Uint8Array(buf)) // skip TextEncoder
 ```
 
-Overestimates by design. The margin prevents overflow. Pre-call, you only need go/no-go.
+Safe pre-check, not a perfect count. Pre-call, you only need go/no-go.
 
 ## Models
 
-Works with all models. 11 with built-in pricing (as of April 2026). Don't see yours? [Open an issue.](https://github.com/Wolfe-Jam/slash-tokens/issues)
+11 with built-in pricing (as of 1.6.2). Don't see yours? [Open an issue.](https://github.com/Wolfe-Jam/slash-tokens/issues)
 
 | Model | $/M input | $/M output | Context |
 |---|---|---|---|
@@ -113,6 +116,8 @@ MODELS['claude-opus']  // { input: 5, output: 25, context: 1000000 }
 
 ## Savings reporting
 
+Optional. `bunx` is the try path — no account.
+
 ```js
 import { init, report } from 'slash-tokens'
 
@@ -127,7 +132,7 @@ const result = await report({
 })
 ```
 
-Register at [mcpaas.live/slash/setup](https://mcpaas.live/slash/setup) for a one-person key — $20 on the house, emailed.
+Hosted dashboard is ordinary SaaS: $39/mo or $390/yr for the data, not a cut of savings. One-person key: [mcpaas.live/slash/setup](https://mcpaas.live/slash/setup)
 
 ## Runtime support
 
@@ -135,22 +140,20 @@ Node.js, Bun, Deno, Cloudflare Workers, Vercel Edge, Browser.
 
 ## Testing
 
-323 tests:
-- 172 Zig (65 adversarial: CJK, emoji, binary, base64, thresholds)
-- 103 TypeScript (SDK, preflight, billing, auto mode)
-- 50 API (transaction lifecycle, auth, injection, key format attacks)
+TypeScript SDK tests via `cd npm && bun test`. Zig coverage includes adversarial cases (CJK, emoji, binary, base64, thresholds).
 
 ## Links
 
 - [slashtokens.com](https://slashtokens.com)
 - [npm](https://www.npmjs.com/package/slash-tokens)
 - [Dashboard](https://mcpaas.live/slash/dashboard)
+- [Changelog](./npm/CHANGELOG.md)
 
 ## License
 
 **Code: MIT.** Fork it, ship it, change it, show it, share it, sell it.
 
-**Brand: reserved.** The slash-tokens name, ⚡ mark, and red/gold colors stay with the project. If you're building on top of the SDK, ship under your own name and colors — don't represent your app as Slash.
+**Brand: reserved.** The slash-tokens name, ⚡ mark, and red/gold colors stay with the project. If you're building on top of the SDK, ship under your own name and colors — don't represent your app as Slash. See [NOTICE](./NOTICE).
 
 ---
 

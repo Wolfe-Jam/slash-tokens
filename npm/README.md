@@ -1,7 +1,6 @@
 # /slash-tokens
 
 [![CI/CD](https://github.com/Wolfe-Jam/slash-tokens/actions/workflows/test.yml/badge.svg?branch=main)](https://github.com/Wolfe-Jam/slash-tokens/actions/workflows/test.yml)
-[![FAF Trophy 100%](https://img.shields.io/badge/FAF-%F0%9F%8F%86%20100%25-000000?labelColor=FF6B35)](https://faf.one)
 [![npm version](https://img.shields.io/npm/v/slash-tokens?style=flat&color=cb3837)](https://www.npmjs.com/package/slash-tokens)
 [![npm downloads](https://img.shields.io/npm/dm/slash-tokens?style=flat&color=brightgreen)](https://www.npmjs.com/package/slash-tokens)
 [![WASM size](https://img.shields.io/badge/WASM-4.8_KB-blue?style=flat)](https://bundlephobia.com/package/slash-tokens)
@@ -15,14 +14,6 @@ Know the cost before the call leaves your machine.
 
 Models change. Windows grow. Slash adapts — you keep building.
 Cheaper tokens haven't shrunk the bill — usage has.
-
-> 🆕 **v1.6.2 — The Fixed Deal Edition.** Solo $20 mailbox, 10% waived. Team $39 for the data.
->
-> **v1.5 — The Calibration Fix Edition.** Per-model calibration is wired into every call path. All four providers checked against the same 29-sample corpus.
->
-> **v1.4 — The Single-Source-of-Truth Edition.** New `preflightRoute()` matches the Slash proxy exactly — same-provider only, zero routing drift. `PROVIDER_MODELS` is now the single source of truth across the SDK.
->
-> **v1.3 — The Opus 4.7 Edition.** Same-day support for Claude Opus 4.7 with measured token calibration (1.16–1.51x). Plus Gemini proxy fix and benchmark harness for any upstream.
 
 ## v1.6.2 — The Fixed Deal Edition
 
@@ -60,7 +51,7 @@ Every call routed to the cheapest model that can execute it efficiently. Session
 
 ## See it work
 
-A live chat with every call through the gate: [slash-nextjs-wofejams-projects.vercel.app](https://slash-nextjs-wofejams-projects.vercel.app)
+A live chat with every call through the gate: [live demo](https://slash-nextjs-wofejams-projects.vercel.app)
 
 Then `bunx slash-tokens`, [get a key](https://mcpaas.live/slash/setup) ($20 on the house), or [Team — $39 for the data](https://slashtokens.com).
 
@@ -74,7 +65,7 @@ Full docs, examples, and model pricing at **[GitHub](https://github.com/Wolfe-Ja
 
 **Code: MIT.** Fork it, ship it, change it, show it, share it, sell it.
 
-**Brand: reserved.** The slash-tokens name, ⚡ mark, and red/gold colors stay with the project. If you're building on top of the SDK, ship under your own name and colors — don't represent your app as Slash.
+**Brand: reserved.** The slash-tokens name, ⚡ mark, and red/gold colors stay with the project. If you're building on top of the SDK, ship under your own name and colors — don't represent your app as Slash. See [NOTICE](./NOTICE).
 
 ---
 
