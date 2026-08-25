@@ -9,7 +9,7 @@
 [![⭐ Star on GitHub](https://img.shields.io/badge/%E2%AD%90_Star-black?logo=github&logoColor=white)](https://github.com/Wolfe-Jam/slash-tokens)
 
 Token Optimization for Context Engineers.
-4.8 KB WASM. Sub-millisecond. Zero dependencies.
+For anyone building with LLMs. 4.8 KB WASM. Sub-millisecond. Zero dependencies.
 
 Know the cost before the call leaves your machine.
 
