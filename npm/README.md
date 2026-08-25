@@ -57,7 +57,7 @@ Every call routed to the cheapest model that can execute it efficiently. Session
 
 ## See it work
 
-A live chat with every call through the gate: [slash-tokens.vercel.app](https://slash-tokens.vercel.app)
+A live chat with every call through the gate: [slash-nextjs-wofejams-projects.vercel.app](https://slash-nextjs-wofejams-projects.vercel.app)
 
 Then `bunx slash-tokens`, [get a key](https://mcpaas.live/slash/setup) ($20 on the house), or [Team — $39 for the data](https://slashtokens.com).
 

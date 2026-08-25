@@ -27,7 +27,7 @@ Know the cost before the call leaves your machine.
 bunx slash-tokens
 ```
 
-See it work in a chat: [slash-tokens.vercel.app](https://slash-tokens.vercel.app)
+See it work in a chat: [slash-nextjs-wofejams-projects.vercel.app](https://slash-nextjs-wofejams-projects.vercel.app)
 
 ## Install
 
