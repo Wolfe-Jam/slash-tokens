@@ -13,7 +13,7 @@ For anyone building with LLMs. 4.8 KB WASM. Sub-millisecond. Zero dependencies.
 
 Know the cost before the call leaves your machine.
 
-> 🆕 **v1.6.1 — The Fixed Deal Edition.** Team/Pro is the live cart; 10% of savings shows on the weekly number as the comparison, not as what Team is charged.
+> 🆕 **v1.6.2 — The Fixed Deal Edition.** Solo $20 mailbox, 10% waived. Teams $5 to join, test the data.
 >
 > **v1.5 — The Calibration Fix Edition.** Per-model calibration is wired into every call path. All four providers checked against the same 29-sample corpus.
 >
@@ -21,11 +21,11 @@ Know the cost before the call leaves your machine.
 >
 > **v1.3 — The Opus 4.7 Edition.** Same-day support for Claude Opus 4.7 with measured token calibration (1.16–1.51x). Plus Gemini proxy fix and benchmark harness for any upstream.
 
-## v1.6.1 — The Fixed Deal Edition
+## v1.6.2 — The Fixed Deal Edition
 
-Team/Pro is the live cart; 10% of savings shows on the weekly number as the comparison, not as what Team is charged.
+Solo $20 mailbox, 10% waived. Teams $5 to join, test the data.
 
-**Free forever is bunx** — no account. A one-person account is email → key, **$20 on the house**, 10% of measured savings from that credit. Free top-ups until further notice — not a subscription. Team is $39/month or $390/year: the weekly number shows what 10% would have been next to the plan. Team is not charged that 10%.
+**Free forever is bunx** — no account. A one-person account is email → key, **$20 on the house**. We show the savings. We don't charge. 10% is the model, waived. Team is `$5` to join and test the data, then `$39`/month or `$390`/year for the data.
 
 ```bash
 npm install slash-tokens

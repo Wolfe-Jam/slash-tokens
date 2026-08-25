@@ -1,8 +1,16 @@
 # Changelog
 
-## House $20 (worker, 2026-08-24)
+## [1.6.2] — The Fixed Deal Edition
 
-Not an npm bump. Worker + setup identity: one-person account is email → key, **$20 on the house**, 10% from that credit, free top-ups until further notice. **Free forever is bunx only** — no account. No $5 for devs. Team is still $39 / $390; `fee_usd` is 0.
+*2026-08-25*
+
+Solo $20 mailbox, 10% waived. Teams $5 to join, test the data.
+
+Worker already returns `fee_usd` 0. This patch is the tarball identity. House `$20` is the mailbox — we show savings, we don't skim. 10% is the comparison, waived. Team intro is `$5` to see the record, then `$39` for the data (`$390`/year). Free forever is `bunx` — no account. No `$5` house credit for Solo.
+
+**Not on slashtokens.com:** the `$5` intro. Site stays `$39` for the data.
+
+Dropped the CLI scanner's invented second 10% ("gate efficiency"). One 10% = the savings cut, waived.
 
 ## [1.6.1] — The Fixed Deal Edition
 

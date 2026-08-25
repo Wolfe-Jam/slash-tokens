@@ -89,15 +89,6 @@ export function printReport(sites: CallSite[], filesScanned: number, timeMs: num
   }
   console.log('');
 
-  // Slash — sunk cost recovery (conservative 10% gate efficiency)
-  const recoveryPct = 10;
-  const monthlyRecovered = monthlyCost * recoveryPct / 100;
-  console.log(`${GOLD}  ⚡ TOKENS SALVAGED ${GRAY}(${recoveryPct}% gate efficiency)${R}`);
-  console.log(`${DIM}  ${'─'.repeat(60)}${R}`);
-  console.log(`${WHITE}  Monthly salvaged: ${GOLD}${B}$${monthlyRecovered.toFixed(2)}/mo${R}`);
-  console.log(`${WHITE}  Annual salvaged:  ${GOLD}${B}$${(monthlyRecovered * 12).toFixed(2)}/yr${R}`);
-  console.log('');
-
   console.log(`${GRAY}  4.8 KB WASM · sub-ms · zero deps${R}`);
   console.log(`${GRAY}  → ${ORANGE}slashtokens.com${R}`);
   console.log('');
