@@ -30,6 +30,7 @@ export function printReport(sites: CallSite[], filesScanned: number, timeMs: num
   if (sites.length === 0) {
     console.log(`${WHITE}  No AI API call sites detected.${R}`);
     console.log(`${GRAY}  Supported: OpenAI, Anthropic, Vercel AI, LangChain, Gemini, Bedrock, Grok${R}`);
+    console.log(`${GRAY}  Run this in a project that already calls an LLM.${R}`);
     console.log('');
     return;
   }

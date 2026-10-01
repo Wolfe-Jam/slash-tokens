@@ -15,7 +15,7 @@ Know the cost before the call leaves your machine.
 Models change. Windows grow. Slash adapts — you keep building.
 Cheaper tokens haven't shrunk the bill — usage has.
 
-Current: [slash-tokens@1.6.5](https://www.npmjs.com/package/slash-tokens) · [release notes](https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.6.5)
+Current: [slash-tokens@1.6.6](https://www.npmjs.com/package/slash-tokens) · [release notes](https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.6.6)
 
 ## Try it
 
@@ -24,7 +24,7 @@ bunx slash-tokens
 # or: npx --yes slash-tokens
 ```
 
-Run it in a project that already calls an LLM. An empty folder prints that nothing was found — that's normal.
+Run it in a project that already calls an LLM. An empty folder prints that nothing was found, then tells you to run it in an app — that's normal. `--version` / `--help` print and exit (they do not scan).
 
 See it work in a chat: [live demo](https://slash-nextjs-wofejams-projects.vercel.app)
 
