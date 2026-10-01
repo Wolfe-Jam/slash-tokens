@@ -27,7 +27,8 @@
   "sideEffects": false,
   "scripts": {
     "build": "npx tsc && bun build src/cli.ts --outfile=dist/cli.js --target=node",
-    "test": "bun test"
+    "test": "bun test",
+    "check:engines": "node scripts/check-engines.mjs"
   },
   "author": "wolfejam",
   "license": "MIT",
@@ -54,5 +55,8 @@
     "@types/node": "^25.5.0",
     "js-tiktoken": "^1.0.21",
     "typescript": "^6.0.2"
+  },
+  "engines": {
+    "node": ">=22.0.0"
   }
 }

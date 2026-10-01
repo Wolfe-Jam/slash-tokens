@@ -36,13 +36,16 @@ jobs:
       - name: Run unit tests (preflight + sdk)
         run: bun test tests/preflight.test.ts tests/sdk.test.ts
 
+      - name: Engine floor gate
+        run: node scripts/check-engines.mjs  # engines.node == the lowest Node in node-compat
+
   node-compat:
     name: Node ${{ matrix.node }} install sanity
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
-        node: [20, 22]
+        node: [22, 24]
     defaults:
       run:
         working-directory: npm
