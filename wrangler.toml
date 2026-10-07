@@ -1,0 +1,6 @@
+# Cloudflare Pages project for slashtokens.com.
+# Pages' Git builds read this: publish site/, not the repo root. Without it,
+# every merge to main since 2026-10-01 deployed the whole repo, so "/" 404'd
+# and the home page only survived in the edge cache.
+name = "slashtokens"
+pages_build_output_dir = "site"
