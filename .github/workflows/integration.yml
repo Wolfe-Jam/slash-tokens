@@ -61,4 +61,6 @@ jobs:
 
       - name: Run integration tests
         if: ${{ steps.health.outputs.status == 'up' }}
+        env:
+          SLASH_LIVE: '1'
         run: bun test tests/z-integration.test.ts

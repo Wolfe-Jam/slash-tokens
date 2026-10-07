@@ -23,6 +23,10 @@ import { describe, it, expect, beforeAll } from 'bun:test';
 import { slash, init, report } from '../src/index';
 
 const BASE_URL = 'https://mcpaas.live';
+// Live suite: registers a key and calls the production API (writes, emails).
+// Runs only on purpose — SLASH_LIVE=1 (the weekly integration.yml sets it) —
+// never from a bare `npm test` / `bun test`.
+const LIVE = process.env.SLASH_LIVE === '1';
 // Registration triggers real welcome/flight-alert emails via Resend. This
 // subdomain has its own MX + SPF records (Cloudflare Email Routing) with a
 // catch-all set to Drop — mail here is silently accepted and discarded, not
@@ -55,7 +59,7 @@ beforeAll(() => { slash('warmup'); });
 // "Get on the grid before you can race"
 // ============================================================================
 
-describe('TIER 0: GRID — Registration', () => {
+describe.skipIf(!LIVE)('TIER 0: GRID — Registration', () => {
 
   it('registers a fresh trial key', async () => {
     const res = await fetch(`${BASE_URL}/api/slash/register`, {
@@ -78,7 +82,7 @@ describe('TIER 0: GRID — Registration', () => {
 // "The SDK sends what the API expects"
 // ============================================================================
 
-describe('TIER 1: BRAKE — SDK ↔ API Contract', () => {
+describe.skipIf(!LIVE)('TIER 1: BRAKE — SDK ↔ API Contract', () => {
 
   it('report() returns valid transaction response', async () => {
     init({ key: SLASH_KEY });
@@ -162,7 +166,7 @@ describe('TIER 1: BRAKE — SDK ↔ API Contract', () => {
 // "The API returns what the dashboard expects"
 // ============================================================================
 
-describe('TIER 2: ENGINE — API Response Shapes', () => {
+describe.skipIf(!LIVE)('TIER 2: ENGINE — API Response Shapes', () => {
 
   it('/api/slash/usage returns complete shape', async () => {
     const data = await getUsage();
@@ -217,7 +221,7 @@ describe('TIER 2: ENGINE — API Response Shapes', () => {
 // "The bug that started this test suite (2026-04-15)"
 // ============================================================================
 
-describe('TIER 3: AERO — Pass-Through Logging', () => {
+describe.skipIf(!LIVE)('TIER 3: AERO — Pass-Through Logging', () => {
 
   it('$0 savings report accepted (not rejected)', async () => {
     init({ key: SLASH_KEY });
@@ -276,7 +280,7 @@ describe('TIER 3: AERO — Pass-Through Logging', () => {
 // "What the API returns matches what the dashboard shows"
 // ============================================================================
 
-describe('TIER 4: PIT STOP — Dashboard Data Consistency', () => {
+describe.skipIf(!LIVE)('TIER 4: PIT STOP — Dashboard Data Consistency', () => {
 
   it('balance after transact matches usage endpoint', async () => {
     init({ key: SLASH_KEY });
@@ -322,7 +326,7 @@ describe('TIER 4: PIT STOP — Dashboard Data Consistency', () => {
 // "The env-var route that Claude Code uses"
 // ============================================================================
 
-describe('TIER 5: PROXY — Gateway Path', () => {
+describe.skipIf(!LIVE)('TIER 5: PROXY — Gateway Path', () => {
 
   it('proxy forwards Anthropic calls and logs to live feed', async () => {
     const beforeFeed = await fetch(`${BASE_URL}/slash/v1/live`, { headers: authHeaders() });

@@ -717,10 +717,26 @@ describe('TIER 1: BRAKE — preflightRoute same-provider invariant', () => {
   it('preflightRoute returns null when model has no cheaper same-provider option', () => {
     // Haiku is the cheapest Anthropic model — no cheaper same-provider option exists
     expect(preflightRoute('hello', 'claude-haiku')).toBeNull();
-    // Nano is the cheapest OpenAI
-    expect(preflightRoute('hello', 'gpt-5.4-nano')).toBeNull();
-    expect(preflightRoute('hello', 'gpt-5.6-luna')).toBeNull();
+    // GPT-6 Luna ($0.10) is the cheapest OpenAI model since 2026-10 (1.6.6)
+    expect(preflightRoute('hello', 'gpt-6-luna')).toBeNull();
     expect(preflightRoute('hello', 'grok-4.3')).toBeNull();
+    // Gemini 3.1 Flash-Lite ($0.25) is the cheapest Google model
+    expect(preflightRoute('hello', 'gemini-3.1-flash-lite')).toBeNull();
+  });
+
+  it('1.6.6 ladder: older cheap models route to the newer, cheaper ones', () => {
+    expect(preflightRoute('hello', 'gpt-5.6-luna')!.model).toBe('gpt-6-luna');
+    expect(preflightRoute('hello', 'gpt-5.4-nano')!.model).toBe('gpt-6-luna');
+    expect(preflightRoute('hello', 'gemini-3.5-flash-lite')!.model).toBe('gemini-3.1-flash-lite');
+    // tiny prompt: costs round to a tie, the list price decides
+    expect(preflightRoute('hello', 'gpt-5.6-sol')!.model).toBe('gpt-6-luna');
+    expect(preflightRoute('x'.repeat(40_000), 'gpt-5.6-sol')!.model).toBe('gpt-6-luna');
+  });
+
+  it('grok-build-0.1 is priced but never a routing target', () => {
+    expect(providerOf('grok-build-0.1')).toBe('xAI');
+    expect(preflightRoute('hello', 'grok-4.3')).toBeNull();          // $1 build model exists, still null
+    expect(preflightRoute('hello', 'grok-4.7')!.model).not.toBe('grok-build-0.1');
   });
 
   it('preflightRoute(grok-4.6) is grok-4.3 — same-provider cheaper flagship', () => {
@@ -814,5 +830,40 @@ describe('TIER 1: BRAKE — preflightRoute same-provider invariant', () => {
     for (const opt of pre.options) {
       expect(opt.salvaged).toBeGreaterThan(0);
     }
+  });
+});
+
+describe('1.6.6 — real API IDs and current models', () => {
+  it('canonicalModel maps real API IDs strictly', async () => {
+    const { canonicalModel } = await import('../src/models');
+    expect(canonicalModel('claude-opus-4-7')).toBe('claude-opus-4.7');
+    expect(canonicalModel('claude-opus-5-5')).toBe('claude-opus-5.5');
+    expect(canonicalModel('Claude-Sonnet-4-5-20250929')).toBe('claude-sonnet-4.5');
+    expect(canonicalModel('grok-4-1-fast')).toBe('grok-4-1-fast');   // a real key with hyphens stays
+    expect(canonicalModel('grok-4-7')).toBe('grok-4.7');
+    // no family guessing: an unknown version stays unknown
+    expect(MODELS[canonicalModel('claude-opus-9-9')]).toBeUndefined();
+  });
+
+  it('preflight works for every model on the 2026-10-07 provider pages', () => {
+    for (const m of ['claude-opus-5-5', 'claude-opus-5.5', 'claude-sonnet-5.5', 'claude-opus-4-7', 'claude-fable-5.1',
+                     'grok-4.7', 'grok-4.5', 'grok-build-0.1', 'gpt-6-astra', 'gpt-6.1-sol', 'gpt-6-luna',
+                     'gemini-3.8-flash', 'gemini-3.5-flash', 'gemini-3.1-flash-lite', 'gemini-3.1-pro-preview']) {
+      const r = preflight('hello world', m);
+      expect(r.tokens).toBeGreaterThan(0);
+      expect(r.cost).toBeGreaterThan(0);
+    }
+  });
+
+  it('prices match the provider pages', async () => {
+    const { getModel } = await import('../src/models');
+    expect([getModel('claude-opus-5.5')!.input, getModel('claude-opus-5.5')!.output]).toEqual([4, 20]);
+    expect([getModel('gpt-6-luna')!.input, getModel('gpt-6-luna')!.output]).toEqual([0.1, 0.5]);
+    expect([getModel('grok-4.7')!.input, getModel('grok-4.7')!.output]).toEqual([2, 6]);
+    expect([getModel('gemini-3.8-flash')!.input, getModel('gemini-3.8-flash')!.output]).toEqual([0.75, 3.75]);
+  });
+
+  it('an unknown model still fails clearly (no silent family price)', () => {
+    expect(() => preflight('hello', 'claude-opus-9-9')).toThrow(/Unknown model/);
   });
 });
