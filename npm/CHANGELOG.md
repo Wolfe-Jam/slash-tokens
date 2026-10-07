@@ -11,10 +11,13 @@ Solo $20 mailbox, 10% waived. Team $39 for the data.
 ### Fixed
 - **`slash-tokens --version` and `--help` print and exit.** In 1.6.5 every flag fell through to a full scan of the current folder, so `--version` run from `~` scanned the home folder. An empty `bunx` run now tells you to run it in an app.
 - **`preflight()` no longer throws on current models or real API IDs.** IDs are canonicalised strictly (`claude-opus-4-7` → `claude-opus-4.7`, date stamps dropped). There is no family guessing: an unknown version still fails with "Unknown model", so a new model never silently gets an older model's price.
+- **`npm publish` always builds first** (`prepublishOnly`), so a stale `dist/` can't ship again (1.6.4).
+- **`report()` sends numbers only.** A test pins its payload to `tokens_estimated`, `tokens_saved`, `model`, `action`, `cost_saved_usd`; prompt content never leaves the machine.
 - **`npm test` runs offline.** The live integration suite (`tests/z-integration.test.ts`, which registers keys on mcpaas.live) runs only with `SLASH_LIVE=1`; the weekly `integration.yml` sets it.
 
 ### Changed
 - **Model table, prices as of 2026-10-07** (checked against the Anthropic, OpenAI, xAI and Google pricing pages). Added Claude Opus 5.5 ($4/$20), Sonnet 5.5 ($2/$10), Opus 4.8 / 4.6 / 4.5, Sonnet 4.6 / 4.5, Fable 5 / 5.1 and Mythos 5 / 5.1 ($10/$50); Grok 4.7 and 4.5 ($2/$6, doubling above 200K), grok-build-0.1 ($1/$2); GPT-6 Astra ($10/$50), GPT-6.1 Sol and GPT-6 Sol ($2/$10), GPT-6 Luna ($0.10/$0.50); Gemini 3.8 / 3.7 / 3.6 Flash ($0.75/$3.75 launch price through 2026-12-31), 3.5 Flash ($1.50/$9), 3.1 Flash-Lite ($0.25/$1.50), 3.1 Pro Preview.
+- **`slash-tokens/auto` routing is unchanged within 1.6.x.** `/auto` rewrites live requests only to the models it routed to in 1.6.5 (`AUTO_ROUTE_TARGETS`), using the same identification, so a patch upgrade never changes where production calls go. New models are now recognised and priced correctly in `/auto` events (`identifyModel`: `claude-opus-5-5` at $4/$20, `gpt-6-astra` at $10/$50); /auto starts routing to them in 1.7.0.
 - **Routing (`preflightRoute`) follows the new ladder.** Cheapest same-provider is now GPT-6 Luna for OpenAI and Gemini 3.1 Flash-Lite for Google (Anthropic and xAI unchanged). grok-build-0.1 is priced but never a routing target (`NOT_ROUTE_TARGETS`): it's a coding-agent model. When two alternatives' costs round to the same value (tiny prompts), the lower list price wins.
 - **Calibration:** new Claude, Grok and Gemini models use their family's measured factor. GPT-6 is a new generation with an unbenchmarked tokenizer, so it takes the conservative default until a bench run adds it (slash never under-reports).
 

@@ -26,6 +26,7 @@
   ],
   "sideEffects": false,
   "scripts": {
+    "prepublishOnly": "npm run build",
     "build": "npx tsc && bun build src/cli.ts --outfile=dist/cli.js --target=node",
     "test": "bun test",
     "check:engines": "node scripts/check-engines.mjs"

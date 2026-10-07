@@ -1,7 +1,7 @@
 import { slash } from './slash.js';
-import { getModel, MODELS } from './models.js';
+import { getModel, MODELS, canonicalModel } from './models.js';
 import { shouldRoute, isModelAllowed } from './config.js';
-import { PROVIDER_MODELS } from './providers.js';
+import { PROVIDER_MODELS, AUTO_ROUTE_TARGETS, NOT_ROUTE_TARGETS } from './providers.js';
 
 // TEST-NOTE: intercept.ts and preflight.ts MUST share PROVIDER_MODELS.
 // Duplicating it locally here (as pre-v1.4.0 did) caused cross-function
@@ -84,6 +84,17 @@ const AI_ENDPOINTS: Array<{ pattern: RegExp; provider: string; modelExtractor: (
 // (getModel() returning undefined → $0 reported cost, see slash.ts's
 // DEFAULT_UNKNOWN_MODEL_FACTOR comment for why "unrecognized" defaulting
 // to a falsely-safe-looking value is the dangerous case).
+/**
+ * The model a request actually names, for PRICING: the exact table entry when
+ * the strict canonical ID matches (claude-opus-5-5 → claude-opus-5.5,
+ * gpt-6-luna), else the legacy family mapping. Routing keeps using
+ * normalizeModel() so /auto decisions are unchanged within 1.6.x.
+ */
+export function identifyModel(raw: string): string {
+  const c = canonicalModel(raw);
+  return MODELS[c] ? c : normalizeModel(raw);
+}
+
 export function normalizeModel(raw: string): string {
   const lower = raw.toLowerCase();
   // Anthropic — specific versions before generic family
@@ -141,7 +152,7 @@ function extractContent(body: any): string {
 }
 
 // Find cheapest model from same provider that fits
-function findCheapestRoute(provider: string, tokens: number, currentModel: string): string | null {
+export function findCheapestRoute(provider: string, tokens: number, currentModel: string): string | null {
   const providerModels = PROVIDER_MODELS[provider];
   if (!providerModels) return null;
 
@@ -149,6 +160,8 @@ function findCheapestRoute(provider: string, tokens: number, currentModel: strin
 
   for (const model of providerModels) {
     if (model === currentModel) continue;
+    if (!AUTO_ROUTE_TARGETS.has(model)) continue; // 1.6.x: /auto rewrites only to its 1.6.5 targets
+    if (NOT_ROUTE_TARGETS.has(model)) continue;    // specialised models are never targets
     if (!isModelAllowed(model)) continue; // user excluded this model
     const info = getModel(model);
     if (!info) continue;
@@ -187,14 +200,15 @@ export function patchFetch(): void {
           const body = JSON.parse(bodyStr);
           const content = extractContent(body);
           const rawModel = match.modelExtractor(body, url);
-          const originalModel = normalizeModel(rawModel);
+          const routingModel = normalizeModel(rawModel);   // decides routes (unchanged in 1.6.x)
+          const originalModel = identifyModel(rawModel);   // prices the request it really names
           const tokens = slash(content, originalModel);
           const originalInfo = getModel(originalModel);
           const originalCost = originalInfo ? Math.round(((tokens / 1_000_000) * originalInfo.input) * 1_000_000) / 1_000_000 : 0;
           const fits = originalInfo ? tokens <= originalInfo.context : true;
 
           // Find cheapest route within same provider (if routing enabled)
-          const routeModel = shouldRoute() ? findCheapestRoute(match.provider, tokens, originalModel) : null;
+          const routeModel = shouldRoute() ? findCheapestRoute(match.provider, tokens, routingModel) : null;
           const routedInfo = routeModel ? getModel(routeModel) : null;
           const routedCost = routedInfo ? Math.round(((tokens / 1_000_000) * routedInfo.input) * 1_000_000) / 1_000_000 : originalCost;
           const salvaged = routeModel ? Math.round((originalCost - routedCost) * 1_000_000) / 1_000_000 : 0;

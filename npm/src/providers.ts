@@ -38,6 +38,21 @@ export const PROVIDER_MODELS: Record<string, string[]> = {
  */
 export const NOT_ROUTE_TARGETS: ReadonlySet<string> = new Set(['grok-build-0.1']);
 
+/**
+ * Models `slash-tokens/auto` may rewrite a live request TO. Frozen at the
+ * 1.6.5 set so a patch release never changes where production calls go:
+ * models added in 1.6.6 (GPT-6, Gemini 3.1 Flash-Lite / 3.6–3.8 Flash, Grok
+ * 4.7 / 4.5, Claude 5.5 / Fable …) are priced and shown by preflight() /
+ * preflightRoute(), but /auto only starts routing to them in 1.7.0.
+ */
+export const AUTO_ROUTE_TARGETS: ReadonlySet<string> = new Set([
+  'claude-opus-5', 'claude-opus', 'claude-opus-4.7', 'claude-sonnet-5', 'claude-sonnet',
+  'claude-haiku', 'claude-haiku-4.5',
+  'gpt-5.6-sol', 'gpt-5.6-terra', 'gpt-5.4', 'gpt-5.4-mini', 'gpt-5.4-nano', 'gpt-5.6-luna',
+  'grok-4.6', 'grok-4.3', 'grok-4.20', 'grok-4-1-fast',
+  'gemini-3.1-pro', 'gemini-3.5-flash-lite', 'gemini-2.5-flash',
+]);
+
 export function providerOf(model: string): string | null {
   const id = canonicalModel(model);
   for (const [provider, models] of Object.entries(PROVIDER_MODELS)) {
