@@ -1,4 +1,5 @@
 import { getInstance, writeToMemory, ensureCapacity } from './wasm.js';
+import { canonicalModel } from './models.js';
 
 const WASM_INPUT_OFFSET = 4096;
 
@@ -96,7 +97,18 @@ const WASM_INPUT_OFFSET = 4096;
  * Slash must NEVER under-report. Over-reporting is safe (go/no-go only).
  */
 const CALIBRATION: Record<string, number> = {
+  'claude-fable-5.1': 2.05,
+  'claude-fable-5':   2.05,
+  'claude-mythos-5.1': 2.05,
+  'claude-mythos-5':  2.05,
+  'claude-opus-5.5':  2.05,
   'claude-opus-5':    2.05,
+  'claude-opus-4.8':  2.05,
+  'claude-opus-4.6':  2.05,
+  'claude-opus-4.5':  2.05,
+  'claude-sonnet-5.5': 2.05,
+  'claude-sonnet-4.6': 2.05,
+  'claude-sonnet-4.5': 2.05,
   'claude-opus':      2.05,
   'claude-opus-4.7':  2.05,
   'claude-sonnet-5':  2.05,
@@ -104,9 +116,18 @@ const CALIBRATION: Record<string, number> = {
   'claude-haiku-4.5': 1.45,
   'claude-haiku':     1.45,
   'gemini-3.1-pro':   1.45,
+  'gemini-3.1-pro-preview': 1.45,
+  'gemini-3.8-flash': 1.45,
+  'gemini-3.7-flash': 1.45,
+  'gemini-3.6-flash': 1.45,
+  'gemini-3.5-flash': 1.45,
+  'gemini-3.1-flash-lite': 1.45,
   'gemini-3.5-flash-lite': 1.45,
   'gemini-2.5-flash': 1.45,
+  'grok-4.7':         1.15,
   'grok-4.6':         1.15,
+  'grok-4.5':         1.15,
+  'grok-build-0.1':   1.15,
   'grok-4.3':         1.15,
   'grok-4.20':        1.15,
   'grok-4-1-fast':    1.15,
@@ -143,7 +164,10 @@ export function slash(content: string, model?: string): number {
   const instance = getInstance();
   const raw = (instance.exports.estimate_tokens as Function)(WASM_INPUT_OFFSET, len);
   if (!model) return raw;
-  const factor = CALIBRATION[model] ?? DEFAULT_UNKNOWN_MODEL_FACTOR;
+  // GPT-6 (gpt-6-astra / 6.1-sol / 6-sol / 6-luna) is deliberately NOT in
+  // CALIBRATION: a new generation with an unbenchmarked tokenizer takes the
+  // conservative default (never under-report) until a bench run adds it.
+  const factor = CALIBRATION[canonicalModel(model)] ?? DEFAULT_UNKNOWN_MODEL_FACTOR;
   return factor === 1.0 ? raw : Math.ceil(raw * factor);
 }
 

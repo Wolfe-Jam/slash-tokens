@@ -2,11 +2,21 @@
 
 ## [1.6.6] — The Fixed Deal Edition
 
-*2026-08-25*
+*2026-10-07*
+
+`--version` / `--help` answer, and today's models price correctly.
 
 Solo $20 mailbox, 10% waived. Team $39 for the data.
 
-CLI `--version` / `--help` print and exit. Empty `bunx` tells you to run it in an app.
+### Fixed
+- **`slash-tokens --version` and `--help` print and exit.** In 1.6.5 every flag fell through to a full scan of the current folder, so `--version` run from `~` scanned the home folder. An empty `bunx` run now tells you to run it in an app.
+- **`preflight()` no longer throws on current models or real API IDs.** IDs are canonicalised strictly (`claude-opus-4-7` → `claude-opus-4.7`, date stamps dropped). There is no family guessing: an unknown version still fails with "Unknown model", so a new model never silently gets an older model's price.
+- **`npm test` runs offline.** The live integration suite (`tests/z-integration.test.ts`, which registers keys on mcpaas.live) runs only with `SLASH_LIVE=1`; the weekly `integration.yml` sets it.
+
+### Changed
+- **Model table, prices as of 2026-10-07** (checked against the Anthropic, OpenAI, xAI and Google pricing pages). Added Claude Opus 5.5 ($4/$20), Sonnet 5.5 ($2/$10), Opus 4.8 / 4.6 / 4.5, Sonnet 4.6 / 4.5, Fable 5 / 5.1 and Mythos 5 / 5.1 ($10/$50); Grok 4.7 and 4.5 ($2/$6, doubling above 200K), grok-build-0.1 ($1/$2); GPT-6 Astra ($10/$50), GPT-6.1 Sol and GPT-6 Sol ($2/$10), GPT-6 Luna ($0.10/$0.50); Gemini 3.8 / 3.7 / 3.6 Flash ($0.75/$3.75 launch price through 2026-12-31), 3.5 Flash ($1.50/$9), 3.1 Flash-Lite ($0.25/$1.50), 3.1 Pro Preview.
+- **Routing (`preflightRoute`) follows the new ladder.** Cheapest same-provider is now GPT-6 Luna for OpenAI and Gemini 3.1 Flash-Lite for Google (Anthropic and xAI unchanged). grok-build-0.1 is priced but never a routing target (`NOT_ROUTE_TARGETS`): it's a coding-agent model. When two alternatives' costs round to the same value (tiny prompts), the lower list price wins.
+- **Calibration:** new Claude, Grok and Gemini models use their family's measured factor. GPT-6 is a new generation with an unbenchmarked tokenizer, so it takes the conservative default until a bench run adds it (slash never under-reports).
 
 No Team/Solo price change.
 

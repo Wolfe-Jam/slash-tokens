@@ -17,7 +17,11 @@ Cheaper tokens haven't shrunk the bill — usage has.
 
 ## v1.6.6 — The Fixed Deal Edition
 
+`--version` / `--help` answer, and today's models price correctly.
+
 Solo $20 mailbox, 10% waived. Team $39 for the data.
+
+New in 1.6.6: Claude Opus 5.5 / Sonnet 5.5 / Fable 5.1, Grok 4.7, GPT-6 (Astra, Sol, Luna), Gemini 3.6–3.8 Flash and 3.1 Flash-Lite, priced as of 2026-10-07. Real API IDs (`claude-opus-4-7`) work in `preflight()`. `preflightRoute()` now finds GPT-6 Luna and Gemini 3.1 Flash-Lite as the cheapest same-provider options.
 
 **Free forever is bunx** — no account. A one-person account is email → key, **$20 on the house**. We show the savings. We don't charge. 10% is the model, waived. Team is **$39 for the data** (`$390`/year).
 

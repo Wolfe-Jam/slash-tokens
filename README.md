@@ -91,20 +91,26 @@ Safe pre-check, not a perfect count. Pre-call, you only need go/no-go.
 
 ## Models
 
-Live ladder as of 2026-08-25. Generic aliases (`claude-opus`, `gpt-5.4`, `grok-4.20`, …) still resolve. Don't see yours? [Open an issue.](https://github.com/Wolfe-Jam/slash-tokens/issues)
+Prices as of 2026-10-07, checked against each provider's pricing page. Real API IDs work as written (`claude-opus-4-7`, `claude-sonnet-4-5-20250929`). Generic aliases (`claude-opus`, `gpt-5.4`, `grok-4.20`, …) still resolve. `listModels()` has the full list. Don't see yours? [Open an issue.](https://github.com/Wolfe-Jam/slash-tokens/issues)
 
 | Model | $/M input | $/M output | Context |
 |---|---|---|---|
+| claude-fable-5.1 | 10.00 | 50.00 | 1M |
+| claude-opus-5.5 | 4.00 | 20.00 | 1M |
 | claude-opus-5 | 5.00 | 25.00 | 1M |
-| claude-sonnet-5 | 2.00 | 10.00 | 1M |
+| claude-sonnet-5.5 | 2.00 | 10.00 | 1M |
 | claude-haiku-4.5 | 1.00 | 5.00 | 200K |
-| grok-4.6 | 2.00 | 6.00 | 500K |
+| grok-4.7 | 2.00 | 6.00 | 500K |
 | grok-4.3 | 1.25 | 2.50 | 1M |
 | gemini-3.1-pro | 2.00 | 12.00 | 1M |
-| gemini-3.5-flash-lite | 0.30 | 2.50 | 1M |
+| gemini-3.8-flash | 0.75 | 3.75 | 1M |
+| gemini-3.1-flash-lite | 0.25 | 1.50 | 1M |
+| gpt-6-astra | 10.00 | 50.00 | 1.05M |
+| gpt-6.1-sol | 2.00 | 10.00 | 1.05M |
+| gpt-6-luna | 0.10 | 0.50 | 1.05M |
 | gpt-5.6-sol | 4.00 | 20.00 | 1.05M |
-| gpt-5.6-terra | 2.00 | 12.00 | 1.05M |
-| gpt-5.6-luna | 0.20 | 1.20 | 1.05M |
+
+Gemini 3.6–3.8 Flash are at their launch price; Google lists $1.50 / $7.50 from 2027-01-01.
 
 ```js
 import { listModels, MODELS } from 'slash-tokens'

@@ -1,6 +1,6 @@
 import { slash } from './slash.js';
-import { getModel, MODELS, effectiveRate, type ModelInfo } from './models.js';
-import { PROVIDER_MODELS, providerOf } from './providers.js';
+import { getModel, MODELS, effectiveRate, type ModelInfo, canonicalModel } from './models.js';
+import { PROVIDER_MODELS, providerOf, NOT_ROUTE_TARGETS } from './providers.js';
 import { shouldRoute, isModelAllowed } from './config.js';
 
 export interface Alternative {
@@ -128,8 +128,10 @@ export function preflightRoute(content: string, model: string): Alternative | nu
   const originalCost = computeCost(tokens, info);
 
   let cheapest: Alternative | null = null;
+  const self = canonicalModel(model);
   for (const m of providerModels) {
-    if (m === model) continue;
+    if (m === self) continue;
+    if (NOT_ROUTE_TARGETS.has(m)) continue;        // specialised: never a target
     if (!isModelAllowed(m)) continue;             // user excluded this model
     const altInfo = getModel(m);
     if (!altInfo) continue;
@@ -137,7 +139,10 @@ export function preflightRoute(content: string, model: string): Alternative | nu
     if (altInfo.input >= info.input) continue;    // not cheaper
 
     const alt = buildAlternative(m, originalCost, tokens, altInfo);
-    if (!cheapest || alt.cost < cheapest.cost) {
+    // Tiny prompts round costs to the same value; break ties on the list price
+    // so the genuinely cheaper model wins (gpt-5.6-sol → gpt-6-luna, not 5.4-nano).
+    if (!cheapest || alt.cost < cheapest.cost ||
+        (alt.cost === cheapest.cost && altInfo.input < (getModel(cheapest.model)?.input ?? Infinity))) {
       cheapest = alt;
     }
   }
