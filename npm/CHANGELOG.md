@@ -1,6 +1,12 @@
 # Changelog
 
-## [Unreleased] — 1.7.0 in progress
+## [1.7.0] — The Hired Agent Edition
+
+*2026-10-08*
+
+Quote the job, book the right model, prove it with a receipt.
+
+Solo $20 mailbox, 10% waived. Team $39 for the data.
 
 ### Added
 - **`quote(task)`** prices a job before it runs: input tokens (calibrated, never under-reports), an output band (`minOutputTokens`–`maxOutputTokens`, default 0–4,096 and the quote says when it assumed the ceiling), a low–high USD cost, whether input plus max output fits the context window, and the date the price was checked. Accepts a string or chat messages; real API IDs are accepted.
@@ -9,14 +15,16 @@
 - **`hire({ budget, baseline, floor, feeRate, waived }).run(job)`**: the agent you hire. Each job is quoted, booked on the cheapest model the policy allows (or blocked), run through your own `call(model, input)`, and reconciled into a receipt. The budget covers all jobs: each one may spend only what earlier jobs left. Blocked jobs never call the model. `agent.spent`, `agent.remaining`, `agent.receipts`.
 - **`slash-tokens quote --model M [--file F | --text T | stdin] [--max-output N] [--min-output N] [--budget USD] [--floor 1-4] [--json]`** prints the quote and the decision (`--json` for pipelines). Exit 0 for go, downgrade and block (read `action`); 1 for bad input.
 - **The catalog** (`CATALOG`): one source for every model's prices, context, provider, capability tier (1 small · 2 mid · 3 flagship · 4 frontier — the vendor's own line position, compared within one provider only) and `asOf` date. `MODELS` is now derived from it, with the same keys, order and fields.
-- **NVIDIA Nemotron on Nebius Token Factory:** Nemotron 3 Ultra ($1.00/$3.00), 3 Super ($0.30/$0.90), 3 Nano and 3.5 Lightning ($0.06/$0.24), in a `Nebius` provider group. Nebius API IDs such as `nvidia/Nemotron-3_5-Lightning` resolve to catalog keys. Token counts use the Nemotron factor below.
+- **NVIDIA Nemotron on Nebius Token Factory:** Nemotron 3 Ultra ($1.00/$3.00, 1,048,576 context), 3 Super ($0.30/$0.90, 262,144), 3 Nano ($0.06/$0.24, 262,144) and 3.5 Lightning ($0.06/$0.24, 1,048,576), in a `Nebius` provider group. Prices and context windows are what the Token Factory API reports (`/v1/models?verbose=true`, 2026-10-08). Its four API IDs (`nvidia/Nemotron-3-Ultra-550b-a55b`, `nvidia/nemotron-3-super-120b-a12b`, `nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B`, `nvidia/Nemotron-3_5-Lightning`) resolve to catalog keys. Token counts use the Nemotron factor below.
 
 - **Nemotron calibration: 1.30**, measured against the real Nemotron tokenizer (Hugging Face, run locally; the four models share it). The worst case on the 29-sample corpus (a large JSON API response) needs ≥ 1.208; 1.30 leaves 7.6% headroom. Nemotron previously took the unknown-model default (2.05), 70% above what even the worst sample needs. `npm run bench:nemotron` reproduces it; `bench/REPORT-nemotron.md`.
 - **Accuracy gate in CI** (`tests/accuracy-gate.test.ts`): every calibrated estimate must be at least the provider's real count on all 29 corpus samples, for the Claude, Gemini, Grok and Nemotron families (recorded bench results) and GPT-5.x (o200k_base, computed in the test). A change that breaks "never under-report" now fails CI.
 - **Price-freshness alarm** (`npm run check:freshness`, weekly `freshness.yml`): fails when any catalog price is more than 30 days old, or an announced price change (`priceUntil`, e.g. Gemini 3.6–3.8 Flash on 2026-12-31) is within 14 days. Runs even when mcpaas.live is down.
 
 ### Changed
-- `preflight()` options (the cross-provider analysis) now include the Nemotron models, so the cheapest option can be a Nemotron model. `preflightRoute()` and `slash-tokens/auto` are unchanged: same-provider only, and /auto still routes only to its 1.6.5 targets.
+- `preflight()` options (the cross-provider analysis) now include the Nemotron models, so the cheapest option can be a Nemotron model. `preflightRoute()` is unchanged: same-provider only.
+- **`slash-tokens/auto` stays frozen at its 1.6.5 routing targets.** 1.6.6 said /auto would start routing to the newer models in 1.7.0; we've decided against changing where live production calls go inside a feature release. The newer models are priced and recognised in /auto events, and `preflightRoute()` and `decide()` use them. Moving /auto's targets will be its own release, announced first.
+- Root README: the `report()` example now uses the real `action` values (`'prevented' | 'routed' | 'pass'`).
 
 ## [1.6.7] — The Fixed Deal Edition
 

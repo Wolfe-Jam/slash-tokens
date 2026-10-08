@@ -61,10 +61,18 @@ describe('TIER 1: BRAKE — one catalog', () => {
     expect(CATALOG['nemotron-3.5-lightning']).toMatchObject({ provider: 'Nebius', tier: 1, input: 0.06, output: 0.24 });
   });
 
-  it('Nebius API IDs resolve to catalog keys', () => {
+  it('the Nebius API IDs (as Token Factory lists them, 2026-10-08) resolve to catalog keys', () => {
     expect(canonicalModel('nvidia/Nemotron-3_5-Lightning')).toBe('nemotron-3.5-lightning');
     expect(canonicalModel('nvidia/nemotron-3-super-120b-a12b')).toBe('nemotron-3-super');
     expect(canonicalModel('nvidia/Nemotron-3-Ultra-550b-a55b')).toBe('nemotron-3-ultra');
+    expect(canonicalModel('nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B')).toBe('nemotron-3-nano');
+  });
+
+  it('Nemotron context windows are the API values', () => {
+    expect(CATALOG['nemotron-3-ultra'].context).toBe(1_048_576);
+    expect(CATALOG['nemotron-3.5-lightning'].context).toBe(1_048_576);
+    expect(CATALOG['nemotron-3-super'].context).toBe(262_144);
+    expect(CATALOG['nemotron-3-nano'].context).toBe(262_144);
   });
 });
 
@@ -78,7 +86,7 @@ describe('TIER 2: ENGINE — quote()', () => {
     expect(q.outputTokens).toEqual({ min: 500, max: 2000 });
     expect(q.cost.low).toBeCloseTo((n * 1.00 + 500 * 3.00) / 1e6, 6);
     expect(q.cost.high).toBeCloseTo((n * 1.00 + 2000 * 3.00) / 1e6, 6);
-    expect(q).toMatchObject({ model: 'nemotron-3-ultra', provider: 'Nebius', tier: 3, outputAssumed: false, fits: true, asOf: '2026-10-07' });
+    expect(q).toMatchObject({ model: 'nemotron-3-ultra', provider: 'Nebius', tier: 3, outputAssumed: false, fits: true, asOf: '2026-10-08' });
   });
 
   it('says when it assumed the output ceiling', () => {
