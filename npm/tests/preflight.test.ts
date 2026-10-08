@@ -746,13 +746,25 @@ describe('TIER 1: BRAKE — preflightRoute same-provider invariant', () => {
   });
 
   it('preflightRoute result is always cheaper than input model', () => {
+    // Cheaper means a lower list price. On a tiny prompt both costs can round
+    // to the same 6-decimal value (gpt-5.4-nano → gpt-6-luna, 6 tokens: $0.000001
+    // each), so the rounded cost is checked as "never higher", and strictly
+    // lower on a prompt big enough to show it. Until 2026-10-07 this test passed
+    // in the full suite only because an earlier 3 MB input had corrupted the
+    // WASM tables and inflated every count after it.
     for (const [, models] of Object.entries(PROVIDER_MODELS)) {
       for (const model of models) {
-        const route = preflightRoute('test prompt for routing check', model);
-        if (route) {
-          const origCost = preflight('test prompt for routing check', model).cost;
-          expect(route.cost).toBeLessThan(origCost);
-          expect(route.salvaged).toBeGreaterThan(0);
+        for (const prompt of ['test prompt for routing check', 'test prompt for routing check '.repeat(2000)]) {
+          const route = preflightRoute(prompt, model);
+          if (!route) continue;
+          expect(getModel(route.model)!.input).toBeLessThan(getModel(model)!.input);
+          const origCost = preflight(prompt, model).cost;
+          expect(route.cost).toBeLessThanOrEqual(origCost);
+          expect(route.salvaged).toBeGreaterThanOrEqual(0);
+          if (prompt.length > 1000) {
+            expect(route.cost).toBeLessThan(origCost);
+            expect(route.salvaged).toBeGreaterThan(0);
+          }
         }
       }
     }
