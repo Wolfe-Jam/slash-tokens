@@ -17,11 +17,11 @@ Cheaper tokens haven't shrunk the bill — usage has.
 
 ## v1.6.7 — The Fixed Deal Edition
 
-A prompt over 1 MB no longer skews every later count in the same process.
+One very large request (about 1 MB of text) no longer skews every count after it.
 
 Solo $20 mailbox, 10% waived. Team $39 for the data.
 
-New in 1.6.7: a prompt over ~1 MB used to overwrite the token counter's lookup tables, so every later count in that process came out wrong; prompts now go above them. Counts for normal prompts are unchanged.
+New in 1.6.7: a single request over ~1 MB of text used to overwrite the token counter's lookup tables, so every later count in that process came out wrong; prompts now go above them. Counts for normal prompts are unchanged.
 
 New in 1.6.6: Claude Opus 5.5 / Sonnet 5.5 / Fable 5.1, Grok 4.7, GPT-6 (Astra, Sol, Luna), Gemini 3.6–3.8 Flash and 3.1 Flash-Lite, priced as of 2026-10-07. Real API IDs (`claude-opus-4-7`) work in `preflight()`. `preflightRoute()` now finds GPT-6 Luna and Gemini 3.1 Flash-Lite as the cheapest same-provider options.
 

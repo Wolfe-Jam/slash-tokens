@@ -4,12 +4,12 @@
 
 *2026-10-08*
 
-A prompt over 1 MB no longer skews every later count in the same process.
+One very large request (about 1 MB of text) no longer skews every count after it.
 
 Solo $20 mailbox, 10% waived. Team $39 for the data.
 
 ### Fixed
-- **A prompt over ~1.04 MB no longer skews every later estimate in the same process.** Input was written into WASM memory from byte 4096, so a big one ran over the module's stack and lookup tables (at 1 MiB), and later estimates came out wrong — a 14-token prompt read as 28. Input now starts above them (byte 1,114,112). Estimates for inputs under the threshold are unchanged (checked against 1.6.6 on the 29-sample corpus and five models). Older versions are affected too (any version that writes input at byte 4096, including 1.6.6).
+- **A single request over ~1.04 MB of text no longer skews every later estimate in the same process.** Input was written into WASM memory from byte 4096, so a big one ran over the module's stack and lookup tables (at 1 MiB), and later estimates came out wrong — a 14-token prompt read as 28. Input now starts above them (byte 1,114,112). Estimates for inputs under the threshold are unchanged (checked against 1.6.6 on the 29-sample corpus and five models). Older versions are affected too (any version that writes input at byte 4096, including 1.6.6).
 - **The test suite now passes file by file.** `preflight.test.ts` failed when run alone: on a tiny prompt the routed model's cost rounds to the same 6-decimal value as the original's. It passed in the full suite only because the bug above had already inflated the counts. The test now checks a lower list price, and strictly lower cost on a prompt big enough to show it.
 
 No Team/Solo price change. No routing or pricing change.

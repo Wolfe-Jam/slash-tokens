@@ -30,7 +30,7 @@ human_context:
   what: 4.8 KB Zig-compiled WASM SDK — estimates tokens, costs, and routes LLM calls pre-send. preflight() for cross-provider analysis, preflightRoute() for the same-provider routing decision the Slash proxy makes
   why: Most apps waste 40-80% of tokens calling frontier models for tasks that fit smaller ones. Slash decides pre-call, not after the invoice. Don't go to the corner shop in a Ferrari.
   where: npm (slash-tokens), slashtokens.com, GitHub (Wolfe-Jam/slash-tokens), mcpaas.live/slash
-  when: "v1.6.7, The Fixed Deal Edition (2026-10-08): a prompt over 1 MB no longer skews every later count in the same process. Part of FAF Slash, the token meter for FAF."
+  when: "v1.6.7, The Fixed Deal Edition (2026-10-08): one very large request (about 1 MB of text) no longer skews every count after it. Part of FAF Slash, the token meter for FAF."
   how: npm install slash-tokens or bunx slash-tokens. One import (slash-tokens/auto) intercepts every fetch to Anthropic/OpenAI/xAI/Google endpoints pre-call.
 monorepo:
   packages_count: slotignored
