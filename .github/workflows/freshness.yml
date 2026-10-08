@@ -1,0 +1,25 @@
+name: Price freshness
+
+# The catalog's prices must be recent, and an announced price change must be
+# handled before it lands. Fails when a price is over 30 days old or a known
+# change is within 14 days (scripts/check-freshness.ts). Independent of
+# mcpaas.live, so it runs even when the integration job skips.
+
+on:
+  schedule:
+    - cron: '0 9 * * 1'  # Mondays 09:00 UTC
+  workflow_dispatch:
+
+jobs:
+  freshness:
+    name: Catalog prices are fresh
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: npm
+    steps:
+      - uses: actions/checkout@v4
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+      - run: bun scripts/check-freshness.ts

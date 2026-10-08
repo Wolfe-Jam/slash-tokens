@@ -1,0 +1,242 @@
+{
+  "timestamp": "2026-10-08T12:11:37.281Z",
+  "tokenizer": {
+    "repo": "nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16",
+    "revision": "2dc98e2afe4face0e4ce40972a915c45368bd34a",
+    "tokenizers": "0.22.1"
+  },
+  "results": [
+    {
+      "corpus": "ts-function",
+      "type": "code",
+      "actual": 105,
+      "estimated": 150,
+      "ratio": 1.429,
+      "delta": 42.9
+    },
+    {
+      "corpus": "python-class",
+      "type": "code",
+      "actual": 268,
+      "estimated": 255,
+      "ratio": 0.951,
+      "delta": -4.9
+    },
+    {
+      "corpus": "rust-struct",
+      "type": "code",
+      "actual": 235,
+      "estimated": 243,
+      "ratio": 1.034,
+      "delta": 3.4
+    },
+    {
+      "corpus": "technical-docs",
+      "type": "prose",
+      "actual": 218,
+      "estimated": 192,
+      "ratio": 0.881,
+      "delta": -11.9
+    },
+    {
+      "corpus": "conversational",
+      "type": "prose",
+      "actual": 164,
+      "estimated": 149,
+      "ratio": 0.909,
+      "delta": -9.1
+    },
+    {
+      "corpus": "api-response",
+      "type": "json",
+      "actual": 1879,
+      "estimated": 1556,
+      "ratio": 0.828,
+      "delta": -17.2
+    },
+    {
+      "corpus": "config-yaml-as-json",
+      "type": "json",
+      "actual": 199,
+      "estimated": 214,
+      "ratio": 1.075,
+      "delta": 7.5
+    },
+    {
+      "corpus": "readme-excerpt",
+      "type": "markdown",
+      "actual": 200,
+      "estimated": 170,
+      "ratio": 0.85,
+      "delta": -15
+    },
+    {
+      "corpus": "mixed-code-prose",
+      "type": "mixed",
+      "actual": 210,
+      "estimated": 235,
+      "ratio": 1.119,
+      "delta": 11.9
+    },
+    {
+      "corpus": "go-http-handler",
+      "type": "code",
+      "actual": 203,
+      "estimated": 289,
+      "ratio": 1.424,
+      "delta": 42.4
+    },
+    {
+      "corpus": "java-spring-service",
+      "type": "code",
+      "actual": 176,
+      "estimated": 266,
+      "ratio": 1.511,
+      "delta": 51.1
+    },
+    {
+      "corpus": "sql-schema-queries",
+      "type": "code",
+      "actual": 211,
+      "estimated": 222,
+      "ratio": 1.052,
+      "delta": 5.2
+    },
+    {
+      "corpus": "bash-deploy-script",
+      "type": "code",
+      "actual": 208,
+      "estimated": 215,
+      "ratio": 1.034,
+      "delta": 3.4
+    },
+    {
+      "corpus": "react-component",
+      "type": "code",
+      "actual": 261,
+      "estimated": 284,
+      "ratio": 1.088,
+      "delta": 8.8
+    },
+    {
+      "corpus": "news-style",
+      "type": "prose",
+      "actual": 178,
+      "estimated": 178,
+      "ratio": 1,
+      "delta": 0
+    },
+    {
+      "corpus": "legal-clause",
+      "type": "prose",
+      "actual": 170,
+      "estimated": 163,
+      "ratio": 0.959,
+      "delta": -4.1
+    },
+    {
+      "corpus": "academic-abstract",
+      "type": "prose",
+      "actual": 197,
+      "estimated": 208,
+      "ratio": 1.056,
+      "delta": 5.6
+    },
+    {
+      "corpus": "marketing-landing-copy",
+      "type": "prose",
+      "actual": 149,
+      "estimated": 139,
+      "ratio": 0.933,
+      "delta": -6.7
+    },
+    {
+      "corpus": "prose-spanish",
+      "type": "prose",
+      "actual": 160,
+      "estimated": 166,
+      "ratio": 1.038,
+      "delta": 3.8
+    },
+    {
+      "corpus": "prose-japanese",
+      "type": "prose",
+      "actual": 206,
+      "estimated": 309,
+      "ratio": 1.5,
+      "delta": 50
+    },
+    {
+      "corpus": "emoji-social-post",
+      "type": "prose",
+      "actual": 161,
+      "estimated": 181,
+      "ratio": 1.124,
+      "delta": 12.4
+    },
+    {
+      "corpus": "graphql-response",
+      "type": "json",
+      "actual": 963,
+      "estimated": 867,
+      "ratio": 0.9,
+      "delta": -10
+    },
+    {
+      "corpus": "ecommerce-order",
+      "type": "json",
+      "actual": 385,
+      "estimated": 349,
+      "ratio": 0.906,
+      "delta": -9.4
+    },
+    {
+      "corpus": "error-response",
+      "type": "json",
+      "actual": 207,
+      "estimated": 195,
+      "ratio": 0.942,
+      "delta": -5.8
+    },
+    {
+      "corpus": "changelog",
+      "type": "markdown",
+      "actual": 200,
+      "estimated": 204,
+      "ratio": 1.02,
+      "delta": 2
+    },
+    {
+      "corpus": "tutorial-howto",
+      "type": "markdown",
+      "actual": 185,
+      "estimated": 220,
+      "ratio": 1.189,
+      "delta": 18.9
+    },
+    {
+      "corpus": "chat-transcript",
+      "type": "mixed",
+      "actual": 216,
+      "estimated": 268,
+      "ratio": 1.241,
+      "delta": 24.1
+    },
+    {
+      "corpus": "stack-trace-debug",
+      "type": "mixed",
+      "actual": 266,
+      "estimated": 328,
+      "ratio": 1.233,
+      "delta": 23.3
+    },
+    {
+      "corpus": "financial-report-table",
+      "type": "mixed",
+      "actual": 284,
+      "estimated": 299,
+      "ratio": 1.053,
+      "delta": 5.3
+    }
+  ]
+}
