@@ -1,14 +1,15 @@
 /**
- * 1.6.6 — /auto safety (option B) + report() privacy.
- * /auto keeps its 1.6.5 routing: same identification, same targets. New
- * models are priced correctly but never rewritten to until 1.7.0.
+ * /auto safety + report() privacy (since 1.6.6).
+ * /auto keeps its 1.6.5 routing: same identification, same targets. Newer
+ * models are priced correctly but never rewritten to (kept frozen in 1.7.0;
+ * moving the targets is its own, announced release).
  */
 import { describe, it, expect, afterEach } from 'bun:test';
 import { findCheapestRoute, identifyModel, normalizeModel } from '../src/intercept';
 import { report } from '../src/transact';
 import { getModel } from '../src/models';
 
-describe('/auto routing is frozen at 1.6.5 within 1.6.x', () => {
+describe('/auto routing is frozen at the 1.6.5 targets', () => {
   it('routes to the same models as 1.6.5', () => {
     expect(findCheapestRoute('Anthropic', 1000, 'claude-opus-5')).toBe('claude-haiku');
     expect(findCheapestRoute('OpenAI', 1000, 'gpt-5.6-sol')).toBe('gpt-5.4-nano');

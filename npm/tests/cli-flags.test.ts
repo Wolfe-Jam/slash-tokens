@@ -1,5 +1,5 @@
 /**
- * 1.6.6 — flags print-and-exit; empty scan names where to run.
+ * Flags print-and-exit (since 1.6.6); empty scan names where to run.
  * Spawn src AND dist when dist exists so a stale tarball cannot hide.
  */
 import { describe, it, expect, afterAll } from 'bun:test';

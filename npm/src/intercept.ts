@@ -160,7 +160,7 @@ export function findCheapestRoute(provider: string, tokens: number, currentModel
 
   for (const model of providerModels) {
     if (model === currentModel) continue;
-    if (!AUTO_ROUTE_TARGETS.has(model)) continue; // 1.6.x: /auto rewrites only to its 1.6.5 targets
+    if (!AUTO_ROUTE_TARGETS.has(model)) continue; // /auto rewrites only to its frozen 1.6.5 targets
     if (NOT_ROUTE_TARGETS.has(model)) continue;    // specialised models are never targets
     if (!isModelAllowed(model)) continue; // user excluded this model
     const info = getModel(model);

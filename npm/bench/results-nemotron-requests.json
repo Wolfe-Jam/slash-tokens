@@ -1,0 +1,122 @@
+{
+  "date": "2026-10-08",
+  "source": "POST https://api.tokenfactory.nebius.com/v1/chat/completions, max_tokens 1; prompt_tokens as billed",
+  "models": {
+    "nvidia/Nemotron-3_5-Lightning": [
+      {
+        "case": "user-short",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Reply with the single word: ok"
+          }
+        ],
+        "prompt_tokens": 23
+      },
+      {
+        "case": "user-long",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Token optimization is the practice of measuring and reducing the cost of API calls to large language models. Most applications have no visibility into what a call costs until the invoice arrives. The gap between request and receipt creates a category of waste we call \"sunk cost\" — money spent on calls that could have been prevented, routed to cheaper models, or reduced in scope.\n\nThe Slash approach is to evaluate every call before it leaves your machine. A 4.8 KB WASM module estimates the token count in sub-millisecond time, compares against the model's pricing, and determines whether to send, route, or prevent. The estimator overestimates by design — the margin prevents context overflow. Pre-call, you only need go/no-go accuracy, not exact counts.\n\nThis frictionless model means no subscription, no upfront cost. Slash collects 10% of agreed savings from Token-Optimization. For every $10 salvaged, Slash keeps $1. The user never pays — Slash earns. Same formula from a solo developer to SpaceX."
+          }
+        ],
+        "prompt_tokens": 234
+      },
+      {
+        "case": "system+user",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are terse."
+          },
+          {
+            "role": "user",
+            "content": "Reply with the single word: ok"
+          }
+        ],
+        "prompt_tokens": 27
+      },
+      {
+        "case": "4-turn",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are terse."
+          },
+          {
+            "role": "user",
+            "content": "Hi"
+          },
+          {
+            "role": "assistant",
+            "content": "Hello."
+          },
+          {
+            "role": "user",
+            "content": "Reply with the single word: ok"
+          }
+        ],
+        "prompt_tokens": 43
+      }
+    ],
+    "nvidia/NVIDIA-Nemotron-3-Nano-30B-A3B": [
+      {
+        "case": "user-short",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Reply with the single word: ok"
+          }
+        ],
+        "prompt_tokens": 23
+      },
+      {
+        "case": "user-long",
+        "messages": [
+          {
+            "role": "user",
+            "content": "Token optimization is the practice of measuring and reducing the cost of API calls to large language models. Most applications have no visibility into what a call costs until the invoice arrives. The gap between request and receipt creates a category of waste we call \"sunk cost\" — money spent on calls that could have been prevented, routed to cheaper models, or reduced in scope.\n\nThe Slash approach is to evaluate every call before it leaves your machine. A 4.8 KB WASM module estimates the token count in sub-millisecond time, compares against the model's pricing, and determines whether to send, route, or prevent. The estimator overestimates by design — the margin prevents context overflow. Pre-call, you only need go/no-go accuracy, not exact counts.\n\nThis frictionless model means no subscription, no upfront cost. Slash collects 10% of agreed savings from Token-Optimization. For every $10 salvaged, Slash keeps $1. The user never pays — Slash earns. Same formula from a solo developer to SpaceX."
+          }
+        ],
+        "prompt_tokens": 234
+      },
+      {
+        "case": "system+user",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are terse."
+          },
+          {
+            "role": "user",
+            "content": "Reply with the single word: ok"
+          }
+        ],
+        "prompt_tokens": 27
+      },
+      {
+        "case": "4-turn",
+        "messages": [
+          {
+            "role": "system",
+            "content": "You are terse."
+          },
+          {
+            "role": "user",
+            "content": "Hi"
+          },
+          {
+            "role": "assistant",
+            "content": "Hello."
+          },
+          {
+            "role": "user",
+            "content": "Reply with the single word: ok"
+          }
+        ],
+        "prompt_tokens": 43
+      }
+    ]
+  }
+}

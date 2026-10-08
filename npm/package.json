@@ -1,7 +1,7 @@
 {
   "name": "slash-tokens",
   "version": "1.7.0",
-  "description": "Token Optimization for Context Engineers. 4.8 KB WASM. Sub-millisecond. Zero dependencies.",
+  "description": "Know what an LLM call will cost before you make it, and prove what you saved after. Quote, decide, receipt. 4.8 KB WASM, zero dependencies.",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -47,7 +47,12 @@
     "anthropic",
     "claude",
     "grok",
-    "gemini"
+    "gemini",
+    "nemotron",
+    "nvidia",
+    "nebius",
+    "agent",
+    "cost"
   ],
   "repository": {
     "type": "git",
