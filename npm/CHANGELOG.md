@@ -1,5 +1,16 @@
 # Changelog
 
+## [Unreleased] — 1.7.0 in progress
+
+### Added
+- **`quote(task)`** prices a job before it runs: input tokens (calibrated, never under-reports), an output band (`minOutputTokens`–`maxOutputTokens`, default 0–4,096 and the quote says when it assumed the ceiling), a low–high USD cost, whether input plus max output fits the context window, and the date the price was checked. Accepts a string or chat messages; real API IDs are accepted.
+- **`decide(task, { budget, floor })`** returns `go`, `downgrade` or `block`. Candidates are the requested model and its same-provider siblings at or above the quality floor; the cheapest one that fits and stays within budget (on the high end) wins. The default floor is the requested model's own tier, so nothing is swapped for a smaller line unless you allow it. A substitute always costs less than the requested model; it respects `init({ route: false })` and `init({ models })` like `preflightRoute()`.
+- **The catalog** (`CATALOG`): one source for every model's prices, context, provider, capability tier (1 small · 2 mid · 3 flagship · 4 frontier — the vendor's own line position, compared within one provider only) and `asOf` date. `MODELS` is now derived from it, with the same keys, order and fields.
+- **NVIDIA Nemotron on Nebius Token Factory:** Nemotron 3 Ultra ($1.00/$3.00), 3 Super ($0.30/$0.90), 3 Nano and 3.5 Lightning ($0.06/$0.24), in a `Nebius` provider group. Nebius API IDs such as `nvidia/Nemotron-3_5-Lightning` resolve to catalog keys. Token counts use the conservative default factor until a Nemotron bench run adds one.
+
+### Changed
+- `preflight()` options (the cross-provider analysis) now include the Nemotron models, so the cheapest option can be a Nemotron model. `preflightRoute()` and `slash-tokens/auto` are unchanged: same-provider only, and /auto still routes only to its 1.6.5 targets.
+
 ## [1.6.6] — The Fixed Deal Edition
 
 *2026-10-07*

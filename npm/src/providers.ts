@@ -3,7 +3,8 @@ import { canonicalModel } from './models.js';
  * Provider groups — single source of truth.
  *
  * Slash routing is always SAME-PROVIDER. Opus 5 → Haiku 4.5, Sol → Luna,
- * Grok 4.6 → 4.3, Gemini 3.1 Pro → 3.5 Flash-Lite. Never cross-provider.
+ * Grok 4.6 → 4.3, Gemini 3.1 Pro → 3.5 Flash-Lite, Nemotron Ultra → Lightning.
+ * Never cross-provider.
  *
  * Order inside a group matters when two models share a price: the first
  * strictly-cheaper hit wins (findCheapestRoute / preflightRoute).
@@ -30,6 +31,9 @@ export const PROVIDER_MODELS: Record<string, string[]> = {
     'gemini-3.5-flash', 'gemini-3.8-flash', 'gemini-3.7-flash', 'gemini-3.6-flash',
     'gemini-3.5-flash-lite', 'gemini-2.5-flash', 'gemini-3.1-flash-lite',
   ],
+  // NVIDIA Nemotron on Nebius Token Factory. Lightning and Nano share a price;
+  // Lightning is listed first (larger context), so it wins the tie.
+  Nebius: ['nemotron-3-ultra', 'nemotron-3-super', 'nemotron-3.5-lightning', 'nemotron-3-nano'],
 };
 
 /**
