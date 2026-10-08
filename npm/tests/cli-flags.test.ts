@@ -135,7 +135,7 @@ for (const bin of bins) {
       dirs.push(cwd);
       const { stdout } = await run(bin.cmd, ['--version'], cwd);
       expect(stdout.trim()).toBe(pkg.version);
-      expect(pkg.version).toBe('1.6.6');
+      expect(pkg.version).toBe('1.6.7');
     });
 
     it('-v is not version (still a scan)', async () => {

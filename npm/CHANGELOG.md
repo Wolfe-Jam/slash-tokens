@@ -11,12 +11,22 @@
 - **The catalog** (`CATALOG`): one source for every model's prices, context, provider, capability tier (1 small · 2 mid · 3 flagship · 4 frontier — the vendor's own line position, compared within one provider only) and `asOf` date. `MODELS` is now derived from it, with the same keys, order and fields.
 - **NVIDIA Nemotron on Nebius Token Factory:** Nemotron 3 Ultra ($1.00/$3.00), 3 Super ($0.30/$0.90), 3 Nano and 3.5 Lightning ($0.06/$0.24), in a `Nebius` provider group. Nebius API IDs such as `nvidia/Nemotron-3_5-Lightning` resolve to catalog keys. Token counts use the conservative default factor until a Nemotron bench run adds one.
 
-### Fixed
-- **A prompt over ~1.04 MB no longer skews every later estimate in the same process.** Input was written into WASM memory from byte 4096, so a big one ran over the module's stack and lookup tables (at 1 MiB), and later estimates came out wrong — a 14-token prompt read as 28. Input now starts above them (byte 1,114,112). Estimates for inputs under the threshold are unchanged (checked against 1.6.6 on the 29-sample corpus and five models). Older versions are affected too (any version that writes input at byte 4096, including 1.6.6).
-- **The test suite now passes file by file.** `preflight.test.ts` failed when run alone: on a tiny prompt the routed model's cost rounds to the same 6-decimal value as the original's. It passed in the full suite only because the bug above had already inflated the counts. The test now checks a lower list price, and strictly lower cost on a prompt big enough to show it.
-
 ### Changed
 - `preflight()` options (the cross-provider analysis) now include the Nemotron models, so the cheapest option can be a Nemotron model. `preflightRoute()` and `slash-tokens/auto` are unchanged: same-provider only, and /auto still routes only to its 1.6.5 targets.
+
+## [1.6.7] — The Fixed Deal Edition
+
+*2026-10-08*
+
+One very large request (about 1 MB of text) no longer skews every count after it.
+
+Solo $20 mailbox, 10% waived. Team $39 for the data.
+
+### Fixed
+- **A single request over ~1.04 MB of text no longer skews every later estimate in the same process.** Input was written into WASM memory from byte 4096, so a big one ran over the module's stack and lookup tables (at 1 MiB), and later estimates came out wrong — a 14-token prompt read as 28. Input now starts above them (byte 1,114,112). Estimates for inputs under the threshold are unchanged (checked against 1.6.6 on the 29-sample corpus and five models). Older versions are affected too (any version that writes input at byte 4096, including 1.6.6).
+- **The test suite now passes file by file.** `preflight.test.ts` failed when run alone: on a tiny prompt the routed model's cost rounds to the same 6-decimal value as the original's. It passed in the full suite only because the bug above had already inflated the counts. The test now checks a lower list price, and strictly lower cost on a prompt big enough to show it.
+
+No Team/Solo price change. No routing or pricing change.
 
 ## [1.6.6] — The Fixed Deal Edition
 
