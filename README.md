@@ -15,7 +15,7 @@ Know the cost before the call leaves your machine.
 Models change. Windows grow. Slash adapts — you keep building.
 Cheaper tokens haven't shrunk the bill — usage has.
 
-Current: [slash-tokens@1.6.7](https://www.npmjs.com/package/slash-tokens) · [release notes](https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.6.7)
+Current: [slash-tokens@1.7.0](https://www.npmjs.com/package/slash-tokens) · [release notes](https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.7.0) · The Hired Agent Edition: quote the job, book the right model, prove it with a receipt.
 
 ## Try it
 
@@ -75,6 +75,48 @@ const route = preflightRoute(prompt, 'claude-opus-5')
 
 Fully typed. Do not use `check.options[0]` as the route — that list is cross-provider on purpose.
 
+## Quote → Decide → Prove
+
+Price a job before it runs, choose the model under a budget and a quality floor, and check the bill afterwards.
+
+```js
+import { quote, decide, reconcile } from 'slash-tokens'
+
+const task = { input: prompt, model: 'claude-opus-5', maxOutputTokens: 2000 }
+
+quote(task)
+// { inputTokens, outputTokens: { min, max }, cost: { low, high }, fits, tier, asOf }
+
+const d = decide(task, { budget: 0.05, floor: 2 })
+// d.action: 'go' | 'downgrade' | 'block'   d.chosen: the model to run   d.saved
+
+// after the call, with the provider's own usage object:
+const receipt = reconcile(d.chosen, response.usage, { baseline: 'claude-opus-5' })
+// receipt.actual.cost · receipt.withinQuote · receipt.underReported · receipt.saved · receipt.fee
+```
+
+- **Tiers** are each vendor's own line: 1 small · 2 mid · 3 flagship · 4 frontier. A floor compares models within one provider only. The default floor is the requested model's own tier.
+- **`decide()` never raises the bill**: a substitute always costs less than the model you asked for, and it stays with the same provider.
+- **`reconcile()`** reads OpenAI-style usage (OpenAI, xAI, Nebius, any OpenAI-compatible API) and Anthropic-style usage. `underReported` flags the one thing Slash must never do.
+
+## Hire the agent
+
+`hire()` runs the whole loop for each job: quote → decide → your call → receipt. One budget covers every job; a blocked job never calls the model.
+
+```js
+import { hire } from 'slash-tokens'
+
+const agent = hire({ budget: 0.50, floor: 2, baseline: 'nemotron-3-ultra' })
+const { decision, output, receipt } = await agent.run({ input, model: 'nemotron-3-ultra', maxOutputTokens: 2000, call })
+agent.spent · agent.remaining · agent.receipts
+```
+
+The agent's fee is 10% of measured savings against your baseline. It's on every receipt, waived, and never charged on a loss.
+
+```bash
+slash-tokens quote --model nemotron-3-ultra --file prompt.txt --max-output 2000 --budget 0.01 --floor 2 --json
+```
+
 ## Token estimation
 
 The engine underneath. 4.8 KB Zig-compiled WASM, calibrated against real provider tokenizers — not a flat chars/4 guess.
@@ -109,8 +151,12 @@ Prices as of 2026-10-07, checked against each provider's pricing page. Real API 
 | gpt-6.1-sol | 2.00 | 10.00 | 1.05M |
 | gpt-6-luna | 0.10 | 0.50 | 1.05M |
 | gpt-5.6-sol | 4.00 | 20.00 | 1.05M |
+| nemotron-3-ultra | 1.00 | 3.00 | 1M |
+| nemotron-3-super | 0.30 | 0.90 | 262K |
+| nemotron-3-nano | 0.06 | 0.24 | 262K |
+| nemotron-3.5-lightning | 0.06 | 0.24 | 1M |
 
-Gemini 3.6–3.8 Flash are at their launch price; Google lists $1.50 / $7.50 from 2027-01-01.
+Gemini 3.6–3.8 Flash are at their launch price; Google lists $1.50 / $7.50 from 2027-01-01. Nemotron is NVIDIA's, served and billed by Nebius Token Factory; prices and context windows as its API reports them (2026-10-08), and Nebius IDs such as `nvidia/Nemotron-3_5-Lightning` work as written. `CATALOG` adds each model's provider, tier and `asOf` date; a weekly check fails when a price is over 30 days old.
 
 ```js
 import { listModels, MODELS } from 'slash-tokens'
@@ -132,7 +178,7 @@ const result = await report({
   tokens_estimated: 47000,
   tokens_saved: 47000,
   model: 'claude-opus',
-  action: 'skipped',        // 'skipped' | 'reduced' | 'routed'
+  action: 'prevented',      // 'prevented' | 'routed' | 'pass'
   cost_saved_usd: 0.235
 })
 ```
@@ -145,7 +191,7 @@ Node.js, Bun, Deno, Cloudflare Workers, Vercel Edge, Browser.
 
 ## Testing
 
-TypeScript SDK tests via `cd npm && bun test`. Zig coverage includes adversarial cases (CJK, emoji, binary, base64, thresholds).
+TypeScript SDK tests via `cd npm && bun test`; every test file also passes on its own. An accuracy gate fails CI if any calibrated estimate falls below the real count on the 29-sample corpus (Claude, Gemini, Grok, GPT, Nemotron). Zig coverage includes adversarial cases (CJK, emoji, binary, base64, thresholds).
 
 ## Links
 

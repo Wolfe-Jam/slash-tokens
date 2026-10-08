@@ -79,24 +79,24 @@ const GPT_LUNA = { input: 0.20, output: 1.20, context: 1_050_000 };
 const GPT_54 = { input: 2.50, output: 15.00, context: 1_000_000 };
 const GPT_54_MINI = { input: 0.75, output: 4.50, context: 128_000 };
 const GPT_54_NANO = { input: 0.20, output: 1.25, context: 128_000 };
-// NVIDIA Nemotron on Nebius Token Factory (nebius.com/token-factory/prices).
-// Context windows are the published "1,024K / 262K / 256K" rounded down to
-// thousands, so a fit check never claims room the model doesn't have.
-const NEMOTRON_ULTRA = { input: 1.00, output: 3.00, context: 1_024_000 };
-const NEMOTRON_SUPER = { input: 0.30, output: 0.90, context: 256_000 };
-const NEMOTRON_NANO = { input: 0.06, output: 0.24, context: 262_000 };
-const NEMOTRON_LIGHTNING = { input: 0.06, output: 0.24, context: 1_024_000 };
+// NVIDIA Nemotron on Nebius Token Factory. Prices and context windows are
+// exactly what the API reports (GET /v1/models?verbose=true, 2026-10-08).
+const NEMOTRON_ULTRA = { input: 1.00, output: 3.00, context: 1_048_576 };
+const NEMOTRON_SUPER = { input: 0.30, output: 0.90, context: 262_144 };
+const NEMOTRON_NANO = { input: 0.06, output: 0.24, context: 262_144 };
+const NEMOTRON_LIGHTNING = { input: 0.06, output: 0.24, context: 1_048_576 };
 
 // Prices as of 2026-10-07 — first-party pages:
 //   platform.claude.com/docs/en/about-claude/pricing
 //   developers.openai.com/api/docs/models
 //   docs.x.ai/developers/models
 //   ai.google.dev/gemini-api/docs/pricing
-//   nebius.com/token-factory/prices (Nemotron)
 const ASOF = '2026-10-07';
+// Nemotron: read from the Token Factory API (see above).
+const ASOF_NEBIUS = '2026-10-08';
 
 function e(provider: string, tier: Tier, price: Price): CatalogEntry {
-  return { provider, tier, asOf: ASOF, ...price };
+  return { provider, tier, asOf: provider === 'Nebius' ? ASOF_NEBIUS : ASOF, ...price };
 }
 
 // Order is kept from the 1.6.6 MODELS table (new entries appended), so
@@ -159,10 +159,12 @@ export const CATALOG: Record<string, CatalogEntry> = {
 
 /**
  * Real API IDs that don't follow the table's naming → table keys.
- * Lowercased; canonicalModel() lowercases before looking here.
+ * Lowercased; canonicalModel() lowercases before looking here. The Nebius IDs
+ * are the ones Token Factory lists (GET /v1/models, 2026-10-08).
  */
 export const API_ALIASES: Record<string, string> = {
   'nvidia/nemotron-3-ultra-550b-a55b': 'nemotron-3-ultra',
   'nvidia/nemotron-3-super-120b-a12b': 'nemotron-3-super',
   'nvidia/nemotron-3_5-lightning': 'nemotron-3.5-lightning',
+  'nvidia/nvidia-nemotron-3-nano-30b-a3b': 'nemotron-3-nano',
 };

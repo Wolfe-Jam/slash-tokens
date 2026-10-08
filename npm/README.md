@@ -15,15 +15,21 @@ Know the cost before the call leaves your machine.
 Models change. Windows grow. Slash adapts — you keep building.
 Cheaper tokens haven't shrunk the bill — usage has.
 
-## v1.6.7 — The Fixed Deal Edition
+## v1.7.0 — The Hired Agent Edition
 
-One very large request (about 1 MB of text) no longer skews every count after it.
+Quote the job, book the right model, prove it with a receipt.
 
 Solo $20 mailbox, 10% waived. Team $39 for the data.
 
-New in 1.6.7: a single request over ~1 MB of text used to overwrite the token counter's lookup tables, so every later count in that process came out wrong; prompts now go above them. Counts for normal prompts are unchanged.
+New in 1.7.0:
+- **`quote()`** prices a job before it runs: input tokens, an output band, and a low–high cost.
+- **`decide()`** says go, downgrade or block, under your budget and a quality floor. It stays with the same provider and never picks a model that costs more.
+- **`reconcile()`** writes the receipt: what was quoted, what the provider billed, and what was saved against the model you asked for.
+- **`hire().run()`** is the agent you hire. It does all three for each job, keeps every job inside one budget, and shows its cut: 10% of measured savings, waived.
+- **NVIDIA Nemotron on Nebius Token Factory**, counted against the real Nemotron tokenizer.
+- **`slash-tokens quote`** on the command line, with `--json` for pipelines.
 
-New in 1.6.6: Claude Opus 5.5 / Sonnet 5.5 / Fable 5.1, Grok 4.7, GPT-6 (Astra, Sol, Luna), Gemini 3.6–3.8 Flash and 3.1 Flash-Lite, priced as of 2026-10-07. Real API IDs (`claude-opus-4-7`) work in `preflight()`. `preflightRoute()` now finds GPT-6 Luna and Gemini 3.1 Flash-Lite as the cheapest same-provider options.
+Earlier: 1.6.7 fixed one very large request (about 1 MB of text) skewing every count after it. 1.6.6 priced Claude 5.5, GPT-6, Grok 4.7 and Gemini 3.8.
 
 **Free forever is bunx** — no account. A one-person account is email → key, **$20 on the house**. We show the savings. We don't charge. 10% is the model, waived. Team is **$39 for the data** (`$390`/year).
 
@@ -51,6 +57,31 @@ check.options
 // Routing decision — same-provider only, matches the Slash proxy
 const route = preflightRoute(prompt, 'claude-opus-5')
 // { model: 'claude-haiku', cost, salvaged, salvagePercent } or null
+```
+
+Hire the agent — quote, book, run, receipt:
+
+```js
+import { hire } from 'slash-tokens'
+
+const agent = hire({ budget: 0.50, floor: 2 })  // $0.50 for the session; nothing below a mid-tier model
+
+const { decision, output, receipt } = await agent.run({
+  input: prompt,
+  model: 'nemotron-3-ultra',
+  maxOutputTokens: 2000,
+  call: async (model, input) => myClient(model, input),  // your provider client → { output, usage }
+})
+
+decision.action  // 'go' | 'downgrade' | 'block'  (here: downgrade → nemotron-3-super)
+receipt.saved    // USD saved against the model you asked for
+receipt.fee      // { rate: 0.1, amount, waived: true, charged: 0 }
+```
+
+From the terminal:
+
+```bash
+echo "Refactor the scorer and add a test." | npx slash-tokens quote --model nemotron-3-ultra --floor 1 --max-output 2000
 ```
 
 Or one line — every LLM call checked pre-call:

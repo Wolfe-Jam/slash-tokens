@@ -44,10 +44,11 @@ export const NOT_ROUTE_TARGETS: ReadonlySet<string> = new Set(['grok-build-0.1']
 
 /**
  * Models `slash-tokens/auto` may rewrite a live request TO. Frozen at the
- * 1.6.5 set so a patch release never changes where production calls go:
- * models added in 1.6.6 (GPT-6, Gemini 3.1 Flash-Lite / 3.6–3.8 Flash, Grok
- * 4.7 / 4.5, Claude 5.5 / Fable …) are priced and shown by preflight() /
- * preflightRoute(), but /auto only starts routing to them in 1.7.0.
+ * 1.6.5 set so a release never changes where production calls go by itself:
+ * models added since (GPT-6, Gemini 3.1 Flash-Lite / 3.6–3.8 Flash, Grok
+ * 4.7 / 4.5, Claude 5.5 / Fable, Nemotron …) are priced and shown by
+ * preflight() / preflightRoute() / decide(). Kept frozen in 1.7.0 (decided
+ * 2026-10-08); moving it is its own, announced release.
  */
 export const AUTO_ROUTE_TARGETS: ReadonlySet<string> = new Set([
   'claude-opus-5', 'claude-opus', 'claude-opus-4.7', 'claude-sonnet-5', 'claude-sonnet',

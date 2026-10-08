@@ -12,9 +12,13 @@ describe('freshness alarm', () => {
   });
 
   it(`flags prices checked more than ${MAX_AGE_DAYS} days ago`, () => {
+    const all = Object.keys(CATALOG).length;
+    const nebius = Object.values(CATALOG).filter(e => e.provider === 'Nebius').length;
+    // 2026-11-07: the 2026-10-07 prices are 31 days old; Nebius (2026-10-08) is 30, still fine.
     const problems = freshnessProblems(CATALOG, '2026-11-07');
-    expect(problems.length).toBe(Object.keys(CATALOG).length);
+    expect(problems.length).toBe(all - nebius);
     expect(problems[0]).toContain('31 days ago');
+    expect(freshnessProblems(CATALOG, '2026-11-08').length).toBe(all);
   });
 
   it(`flags an announced price change ${WARN_DAYS} days out (Gemini 3.6–3.8 Flash, 2026-12-31)`, () => {
