@@ -163,12 +163,14 @@
     <div class="faq-item">
       <div class="faq-q"><span class="num">5.</span> How does Slash prevent a call?</div>
       <div class="faq-a">
-        The Gate checks every call before it leaves your machine:
+        Through the hosted Slash proxy (with a key), the Gate checks every call before it reaches the provider:
         <ul class="steps">
           <li><span class="label"></span> <strong>Duplicates</strong> — same content sent twice within 60 seconds? Stopped.</li>
           <li><span class="label"></span> <strong>Empty/trivial</strong> — nothing useful to send? Stopped.</li>
           <li><span class="label"></span> <strong>Context overflow</strong> — tokens exceed the model's window? It would fail anyway. Stopped.</li>
+          <li><span class="label"></span> <strong>Rapid fire</strong> — a burst of calls in 10 seconds? Throttled.</li>
         </ul>
+        The npm library (<code style="font-size:0.85em;">slash-tokens/auto</code>) checks and routes each call on your machine, but never blocks one.
         PREVENT isn't about blocking legitimate work. It catches the accidental stuff — the redundant calls, the "oops I hit send twice," the requests that were never going to work anyway.
       </div>
     </div>
@@ -206,7 +208,7 @@
     <div class="faq-item">
       <div class="faq-q"><span class="num">10.</span> Which providers and models are supported?</div>
       <div class="faq-a">
-        All four frontier providers: <strong>Anthropic</strong> (Opus, Sonnet, Haiku), <strong>OpenAI</strong> (GPT-5.4, Mini, Nano), <strong>xAI</strong> (Grok-4.20, Fast), <strong>Google</strong> (Gemini Pro, Flash). Works with any model — 11 with built-in pricing. Don't see yours? <a href="https://github.com/Wolfe-Jam/slash-tokens/issues" style="color:#FF4400;text-decoration:none;">Open an issue.</a>
+        <strong>Anthropic</strong> (Fable, Opus, Sonnet, Haiku), <strong>OpenAI</strong> (GPT-6 Astra, Sol, Luna; GPT-5.6; GPT-5.4), <strong>xAI</strong> (Grok 4.7, 4.6, 4.3), <strong>Google</strong> (Gemini 3.1 Pro, 3.x Flash, Flash-Lite), and <strong>NVIDIA Nemotron</strong> on Nebius Token Factory (Ultra, Super, Nano, Lightning). 48 models with built-in pricing; <code style="font-size:0.85em;">slash-tokens/auto</code> intercepts the first four providers. Don't see yours? <a href="https://github.com/Wolfe-Jam/slash-tokens/issues" style="color:#FF4400;text-decoration:none;">Open an issue.</a>
       </div>
     </div>
   </div>
