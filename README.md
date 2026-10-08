@@ -7,15 +7,10 @@
 [![license](https://img.shields.io/github/license/Wolfe-Jam/slash-tokens?style=flat)](./LICENSE)
 [![⭐ Star on GitHub](https://img.shields.io/badge/%E2%AD%90_Star-black?logo=github&logoColor=white)](https://github.com/Wolfe-Jam/slash-tokens)
 
-Token Optimization for Context Engineers.
-For anyone building with LLMs. 4.8 KB WASM. Sub-millisecond. Zero dependencies.
+**Know what an LLM call will cost before you make it, and prove what you saved after.**
+4.8 KB WASM · sub-millisecond · zero dependencies · Claude, GPT, Grok, Gemini, Nemotron.
 
-Know the cost before the call leaves your machine.
-
-Models change. Windows grow. Slash adapts — you keep building.
-Cheaper tokens haven't shrunk the bill — usage has.
-
-Current: [slash-tokens@1.7.0](https://www.npmjs.com/package/slash-tokens) · [release notes](https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.7.0) · The Hired Agent Edition: quote the job, book the right model, prove it with a receipt.
+**v1.7.0 — The Hired Agent Edition:** quote the job, book the right model, prove it with a receipt. [npm](https://www.npmjs.com/package/slash-tokens) · [release notes](https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.7.0)
 
 ## Try it
 

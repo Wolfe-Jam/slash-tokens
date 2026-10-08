@@ -6,7 +6,7 @@
 
 Quote the job, book the right model, prove it with a receipt.
 
-Solo $20 mailbox, 10% waived. Team $39 for the data.
+New: `quote()`, `decide()`, `reconcile()`, `hire().run()`, `slash-tokens quote`, and NVIDIA Nemotron on Nebius. `/auto` routing is unchanged. No price change.
 
 ### Added
 - **`quote(task)`** prices a job before it runs: input tokens (calibrated, never under-reports), an output band (`minOutputTokens`–`maxOutputTokens`, default 0–4,096 and the quote says when it assumed the ceiling), a low–high USD cost, whether input plus max output fits the context window, and the date the price was checked. Accepts a string or chat messages; real API IDs are accepted.
