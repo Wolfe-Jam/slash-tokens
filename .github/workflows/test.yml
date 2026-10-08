@@ -7,7 +7,7 @@ on:
       - 'npm/**'
       - '.github/workflows/test.yml'
   pull_request:
-    branches: [main]
+    branches: [main, 'release/**']
     paths:
       - 'npm/**'
       - '.github/workflows/test.yml'
