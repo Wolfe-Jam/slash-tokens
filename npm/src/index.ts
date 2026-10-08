@@ -5,6 +5,14 @@ export { slash, slashBytes } from './slash.js';
 export { preflight, preflightRoute } from './preflight.js';
 export type { PreflightResult, Alternative } from './preflight.js';
 
+// Quote → Decide (1.7.0): price a job, then choose under a budget + quality floor
+export { quote, decide, DEFAULT_MAX_OUTPUT_TOKENS } from './quote.js';
+export type { Task, Message, Quote, Policy, Decision, Action } from './quote.js';
+
+// The catalog: prices, provider, capability tier, date checked
+export { CATALOG, TIER_NAMES } from './catalog.js';
+export type { CatalogEntry, Tier } from './catalog.js';
+
 // Provider groups (shared between preflight + intercept — single source of truth)
 export { PROVIDER_MODELS, providerOf } from './providers.js';
 
