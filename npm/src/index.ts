@@ -9,6 +9,14 @@ export type { PreflightResult, Alternative } from './preflight.js';
 export { quote, decide, DEFAULT_MAX_OUTPUT_TOKENS } from './quote.js';
 export type { Task, Message, Quote, Policy, Decision, Action } from './quote.js';
 
+// Prove (1.7.0): estimate vs actual, saved vs baseline, the agent's fee
+export { reconcile, normalizeUsage } from './receipt.js';
+export type { Usage, Receipt, ReconcileOptions } from './receipt.js';
+
+// The agent you hire: quote → decide → book → run → reconcile → receipt
+export { hire } from './agent.js';
+export type { HireOptions, Job, CallModel, RunResult, Agent } from './agent.js';
+
 // The catalog: prices, provider, capability tier, date checked
 export { CATALOG, TIER_NAMES } from './catalog.js';
 export type { CatalogEntry, Tier } from './catalog.js';
