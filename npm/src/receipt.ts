@@ -10,7 +10,9 @@ export interface Usage {
   // OpenAI-style: prompt_tokens includes cached tokens
   prompt_tokens?: number;
   completion_tokens?: number;
-  prompt_tokens_details?: { cached_tokens?: number };
+  prompt_tokens_details?: { cached_tokens?: number } | null;
+  // Nebius Token Factory (and DeepSeek-style APIs) report cache hits here
+  prompt_cache_hit_tokens?: number;
   completion_tokens_details?: { reasoning_tokens?: number };
   // Anthropic-style: input_tokens excludes cache reads and writes
   input_tokens?: number;
@@ -66,7 +68,7 @@ export function normalizeUsage(u: Usage): { input: number; output: number; cache
   return {
     input: u.prompt_tokens ?? 0,
     output: u.completion_tokens ?? 0,
-    cached: u.prompt_tokens_details?.cached_tokens ?? 0,
+    cached: u.prompt_tokens_details?.cached_tokens ?? u.prompt_cache_hit_tokens ?? 0,
     reasoning: u.completion_tokens_details?.reasoning_tokens ?? 0,
   };
 }

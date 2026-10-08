@@ -61,22 +61,49 @@ export interface Decision {
 
 export const DEFAULT_MAX_OUTPUT_TOKENS = 4096;
 
-/** Role framing per chat message — a little over what providers add, so it never under-counts. */
-const MESSAGE_OVERHEAD_TOKENS = 4;
+/**
+ * Request framing: tokens a provider bills on top of the message content
+ * (chat template, role markers, system preamble). `request` is a one-message
+ * request; `perMessage` is each message after the first. Content is counted
+ * with the calibration factor; framing is added on top, so a quote doesn't
+ * come in under the bill.
+ *
+ *   Nebius     measured 2026-10-08 (real calls, Nemotron 3.5 Lightning and
+ *              3 Nano): 16 for one message, +13 for two more turns
+ *              (bench/results-nemotron-requests.json). 7 per extra message.
+ *   xAI        a fixed system preamble of 185–193 tokens per request
+ *              (baselines in bench/results-grok.json); 193 used.
+ *   OpenAI     3 per message + 3 to prime the reply (OpenAI's tiktoken
+ *              cookbook); 4 per message, the first one inside `request`.
+ *   Anthropic  the calibration ground truth (count_tokens) already includes
+ *              one message's framing; 4 per extra message.
+ *   Google     countTokens on content; 4 per message, not yet measured.
+ */
+export const FRAMING: Record<string, { request: number; perMessage: number }> = {
+  Nebius:    { request: 16,  perMessage: 7 },
+  xAI:       { request: 193, perMessage: 4 },
+  OpenAI:    { request: 7,   perMessage: 4 },
+  Anthropic: { request: 0,   perMessage: 4 },
+  Google:    { request: 4,   perMessage: 4 },
+};
+const DEFAULT_FRAMING = { request: 16, perMessage: 7 };
 
 const round6 = (n: number) => Math.round(n * 1_000_000) / 1_000_000;
 
-function inputTokens(input: string | Message[], model: string): number {
-  if (typeof input === 'string') return slash(input, model);
-  let total = 0;
-  for (const m of input) total += slash(m.content, model) + MESSAGE_OVERHEAD_TOKENS;
+/** Content (calibrated) plus the provider's framing. A string is sent as one message. */
+function inputTokens(input: string | Message[], model: string, provider: string): number {
+  const f = FRAMING[provider] ?? DEFAULT_FRAMING;
+  const messages = typeof input === 'string' ? [{ role: 'user', content: input }] : input;
+  let total = f.request + f.perMessage * Math.max(messages.length - 1, 0);
+  for (const m of messages) total += slash(m.content, model);
   return total;
 }
 
 /**
  * Price a job before it runs: input tokens, an output band, and a low–high
- * cost. Input is counted with the model's calibration factor (never
- * under-reports); the long-context rate applies when the prompt crosses it.
+ * cost. Input is the content counted with the model's calibration factor
+ * plus the provider's request framing (see FRAMING), so it doesn't come in
+ * under the bill; the long-context rate applies when the prompt crosses it.
  */
 export function quote(task: Task): Quote {
   const model = canonicalModel(task.model);
@@ -87,7 +114,7 @@ export function quote(task: Task): Quote {
 
   const outMax = task.maxOutputTokens ?? DEFAULT_MAX_OUTPUT_TOKENS;
   const outMin = Math.min(task.minOutputTokens ?? 0, outMax);
-  const tokens = inputTokens(task.input, model);
+  const tokens = inputTokens(task.input, model, entry.provider);
   const rate = effectiveRate(tokens, entry);
   const inputCost = (tokens / 1_000_000) * rate.input;
 

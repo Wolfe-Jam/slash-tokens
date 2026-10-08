@@ -14,6 +14,7 @@ import {
   DEFAULT_MAX_OUTPUT_TOKENS,
 } from '../src/index';
 import { canonicalModel } from '../src/models';
+import { FRAMING } from '../src/quote';
 import { NOT_ROUTE_TARGETS } from '../src/providers';
 
 beforeAll(() => {
@@ -81,7 +82,7 @@ describe('TIER 2: ENGINE — quote()', () => {
 
   it('counts input with the model calibration and prices the output band', () => {
     const q = quote({ input: prompt, model: 'nemotron-3-ultra', maxOutputTokens: 2000, minOutputTokens: 500 });
-    const n = slash(prompt, 'nemotron-3-ultra');
+    const n = slash(prompt, 'nemotron-3-ultra') + FRAMING.Nebius.request;  // content + chat template
     expect(q.inputTokens).toBe(n);
     expect(q.outputTokens).toEqual({ min: 500, max: 2000 });
     expect(q.cost.low).toBeCloseTo((n * 1.00 + 500 * 3.00) / 1e6, 6);

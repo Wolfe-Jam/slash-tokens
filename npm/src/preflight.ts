@@ -47,14 +47,13 @@ function buildAlternative(model: string, originalCost: number, tokens: number, i
  * Analysis tool — returns ALL cheaper models across ALL providers.
  *
  * Use this to SHOW developers what their alternatives are, regardless of
- * whether Slash would actually route there. If you want "what will the
- * Slash proxy ACTUALLY route to right now?", use `preflightRoute()`.
+ * whether Slash would actually route there. For the cheapest same-provider
+ * model that fits, use `preflightRoute()`.
  *
  * TEST-NOTE (critical):
  *   - `options` is intentionally cross-provider — this is an analysis tool.
  *   - `options[0]` is NOT the routing decision. Using it as such is a bug.
- *   - See `preflightRoute()` for the actual routing decision that matches
- *     the mcpaas-cf proxy's findCheapestRoute semantics.
+ *   - See `preflightRoute()` for the same-provider routing decision.
  *   - A test should assert that preflight().options may contain cross-provider
  *     entries (e.g. given model='claude-opus', options[0]?.model CAN be 'grok-...').
  */
@@ -83,14 +82,16 @@ export function preflight(content: string, model: string): PreflightResult {
 }
 
 /**
- * Routing decision — matches mcpaas-cf proxy's `findCheapestRoute` exactly.
+ * Routing decision — the cheapest same-provider model that fits.
  *
  * Returns the single cheapest SAME-PROVIDER alternative that fits the prompt,
  * or null if no cheaper same-provider option exists (or model unknown,
  * or model's provider unknown).
  *
- * This is what you want to display as "what would Slash route to" — it
- * matches the proxy's actual behavior.
+ * It considers every priced model. `slash-tokens/auto` and the mcpaas-cf proxy
+ * rewrite live calls only to their frozen 1.6.5 targets (AUTO_ROUTE_TARGETS),
+ * so for newer models this can name a cheaper model than /auto would use
+ * (e.g. gpt-5.6-sol → gpt-6-luna here, gpt-5.4-nano in /auto).
  *
  * TEST-NOTE (critical, must never regress):
  *   - Same-provider only. `preflightRoute('hello', 'claude-opus')` must NEVER
@@ -101,8 +102,7 @@ export function preflight(content: string, model: string): PreflightResult {
  *   - Cheapest SAME-PROVIDER alternative by input price. If two alternatives
  *     tie on price (unlikely but possible), returns the first encountered in
  *     PROVIDER_MODELS order.
- *   - Must agree with intercept.ts findCheapestRoute for identical inputs,
- *     INCLUDING respecting the same init() config gates: shouldRoute()
+ *   - Respects the same init() config gates as intercept.ts findCheapestRoute: shouldRoute()
  *     (init({route: false}) must make this always return null, matching
  *     patchFetch() never routing) and isModelAllowed() (init({models: [...]})
  *     must exclude any candidate not in that list, matching

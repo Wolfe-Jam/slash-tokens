@@ -692,7 +692,7 @@ describe('TIER 5: BILLING — Auto Report & Metering', () => {
 // TIER 1 (BRAKE) — preflightRoute same-provider routing (v1.4.0)
 // These tests codify the invariant that the v1.3.0 bug violated:
 // preflight().options is cross-provider analysis; preflightRoute() is
-// same-provider routing decision that matches the proxy.
+// the same-provider routing decision.
 // See TEST-NOTES.md for the full test matrix.
 // ============================================================================
 
