@@ -28,6 +28,8 @@ export interface CatalogEntry {
   tier: Tier;
   /** Date the price was checked against the provider's own pricing page. */
   asOf: string;
+  /** Last day this price holds, when the provider has announced a change. */
+  priceUntil?: string;
   input: number;    // $/M input tokens (base/short-context rate)
   output: number;   // $/M output tokens (base/short-context rate)
   context: number;  // max context window
@@ -38,7 +40,7 @@ export interface CatalogEntry {
   longContextOutput?: number;
 }
 
-type Price = Pick<CatalogEntry, 'input' | 'output' | 'context' | 'longContextThreshold' | 'longContextInput' | 'longContextOutput'>;
+type Price = Pick<CatalogEntry, 'input' | 'output' | 'context' | 'longContextThreshold' | 'longContextInput' | 'longContextOutput' | 'priceUntil'>;
 
 const OPUS = { input: 5.00, output: 25.00, context: 1_000_000 };
 const OPUS_55 = { input: 4.00, output: 20.00, context: 1_000_000 };
@@ -60,8 +62,8 @@ const GEMINI_PRO = {
 };
 const GEMINI_FLASH = { input: 0.30, output: 2.50, context: 1_000_000 };
 // Gemini 3.6–3.8 Flash: launch price through 2026-12-31; Google lists $1.50/$7.50
-// from 2027-01-01. Update this entry before then.
-const GEMINI_FLASH_3X = { input: 0.75, output: 3.75, context: 1_000_000 };
+// from 2027-01-01. priceUntil makes the freshness check fail before then.
+const GEMINI_FLASH_3X = { input: 0.75, output: 3.75, context: 1_000_000, priceUntil: '2026-12-31' };
 const GEMINI_35_FLASH = { input: 1.50, output: 9.00, context: 1_000_000 };
 const GEMINI_31_FLASH_LITE = { input: 0.25, output: 1.50, context: 1_000_000 };
 const GROK_BUILD = {

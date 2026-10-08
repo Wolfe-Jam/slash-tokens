@@ -86,6 +86,15 @@ import { canonicalModel } from './models.js';
  *             remapped to grok-4.20-0309-non-reasoning / grok-4.3 in
  *             intercept.ts MODEL_API_NAMES the same day this was found.
  *
+ * nemotron-3-ultra / -super / -nano / 3.5-lightning: 1.30 — measured
+ *             2026-10-08 against the real Nemotron tokenizer (Hugging Face,
+ *             nvidia/NVIDIA-Nemotron-3-Super-120B-A12B-BF16@2dc98e2, run
+ *             locally; bench/calibrate-nemotron.ts). The four models share one
+ *             BPE tokenizer (identical vocab, merges and pre-tokenizer; the
+ *             corpus counts are identical on all four files). Min ratio 0.828
+ *             (api-response JSON) on the 29-sample corpus needs >= 1.208;
+ *             1.30 leaves 7.6% headroom, in the band used everywhere else.
+ *
  * All four providers (Claude, Gemini, Grok, GPT) are now verified against
  * the same 29-sample corpus (expanded 2026-08-23 from the original 9,
  * which was mostly slash-tokens' own code/docs — not representative
@@ -135,6 +144,10 @@ const CALIBRATION: Record<string, number> = {
   'gpt-5.4':          1.15,
   'gpt-5.4-mini':     1.15,
   'gpt-5.4-nano':     1.15,
+  'nemotron-3-ultra':       1.30,
+  'nemotron-3-super':       1.30,
+  'nemotron-3-nano':        1.30,
+  'nemotron-3.5-lightning': 1.30,
 };
 
 /**

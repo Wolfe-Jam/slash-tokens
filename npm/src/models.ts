@@ -15,7 +15,7 @@ export interface ModelInfo {
 // order, same fields as before 1.7.0. Old keys stay as aliases so existing
 // call sites don't throw.
 export const MODELS: Record<string, ModelInfo> = Object.fromEntries(
-  Object.entries(CATALOG).map(([name, { provider: _p, tier: _t, asOf: _a, ...price }]) => [name, price]),
+  Object.entries(CATALOG).map(([name, { provider: _p, tier: _t, asOf: _a, priceUntil: _u, ...price }]) => [name, price]),
 );
 
 /**
