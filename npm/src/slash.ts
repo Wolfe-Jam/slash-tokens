@@ -1,7 +1,5 @@
-import { getInstance, writeToMemory, ensureCapacity } from './wasm.js';
+import { getInstance, writeToMemory, ensureCapacity, WASM_INPUT_OFFSET } from './wasm.js';
 import { canonicalModel } from './models.js';
-
-const WASM_INPUT_OFFSET = 4096;
 
 /**
  * Per-model calibration factors.
