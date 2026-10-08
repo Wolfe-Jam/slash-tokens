@@ -35,7 +35,7 @@ receipt.saved    // dollars saved against the model you asked for
 - **Prove:** `reconcile()` checks the quote against what the provider billed.
 - **Hire:** `hire()` does all three for every job, inside one budget. Its cut, 10% of measured savings, is on every receipt, waived.
 
-Counts are calibrated against each provider's real tokenizer, and a CI gate fails if any comes in under the real count.
+Counts are calibrated against each provider's real tokenizer, quotes add what each provider bills on top of your text, and CI fails if either comes in under the real number.
 
 ## Install
 
