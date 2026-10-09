@@ -82,6 +82,62 @@ describe('scanner — per-provider calibration', () => {
     }
   });
 
+  it('one request is one call site, not one per import / constructor / call line', () => {
+    const dir = withTempDir({
+      'anthropic.ts': `import Anthropic from '@anthropic-ai/sdk';
+const client = new Anthropic();
+export const ask = (q: string) =>
+  client.messages.create({ model: 'claude-sonnet-5', max_tokens: 100, messages: [{ role: 'user', content: q }] });
+`,
+      'vercel.ts': `import { generateText } from 'ai';
+export const run = () => generateText({ model, prompt: 'hi' });
+`,
+      'openai.py': `from openai import OpenAI
+client = OpenAI()
+resp = client.chat.completions.create(model="gpt-5.6-sol", messages=[{"role": "user", "content": "hi"}])
+`,
+    });
+    try {
+      const { sites } = scan(dir);
+      const at = (file: string) => sites.filter(s => s.file.endsWith(file)).map(s => `${s.sdk}:${s.line}`);
+      expect(at('anthropic.ts')).toEqual(['Anthropic:4']);
+      expect(at('vercel.ts')).toEqual(['Vercel AI:2']);
+      expect(at('openai.py')).toEqual(['OpenAI:3']);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('two requests are two call sites', () => {
+    const dir = withTempDir({
+      'two.ts': `import Anthropic from '@anthropic-ai/sdk';
+const client = new Anthropic();
+export const a = () => client.messages.create({ model: 'claude-haiku', max_tokens: 10, messages: [] });
+export const b = () => client.messages.stream({ model: 'claude-haiku', max_tokens: 10, messages: [] });
+`,
+    });
+    try {
+      const { sites } = scan(dir);
+      expect(sites.map(s => `${s.sdk}:${s.line}`)).toEqual(['Anthropic:3', 'Anthropic:4']);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('a file that only builds a client (no request in it) counts once', () => {
+    const dir = withTempDir({
+      'client.ts': `import OpenAI from 'openai';
+export const client = new OpenAI();
+`,
+    });
+    try {
+      const { sites } = scan(dir);
+      expect(sites.map(s => `${s.sdk}:${s.line}`)).toEqual(['OpenAI:1']);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
   it('every estimatedModel resolves to a real MODELS entry with real pricing', () => {
     const dir = withTempDir({
       'mixed.ts': `

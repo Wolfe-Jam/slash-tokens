@@ -1,29 +1,35 @@
 export interface Pattern {
   name: string;
-  regex: RegExp;
+  /** A request to the model. Each match is one call site. */
+  call?: RegExp;
+  /** The SDK is in use (an import, a client being built). Not a request:
+   * it counts as one call site only in a file with no matched call, e.g. a
+   * client built here and passed to a wrapper. An import plus a client plus
+   * one request is one call site, not three. */
+  uses?: RegExp;
 }
 
 export const AI_PATTERNS: Pattern[] = [
   // OpenAI
-  { name: 'OpenAI', regex: /openai\.chat\.completions\.create|new OpenAI\(|from\s+['"]openai['"]/g },
+  { name: 'OpenAI', call: /\.(?:chat\.completions|responses)\.create\(/g, uses: /new OpenAI\(|from\s+['"]openai['"]/g },
   // Anthropic
-  { name: 'Anthropic', regex: /anthropic\.messages\.create|new Anthropic\(|from\s+['"]@anthropic-ai/g },
+  { name: 'Anthropic', call: /\.messages\.(?:create|stream)\(/g, uses: /new Anthropic\(|from\s+['"]@anthropic-ai/g },
   // Vercel AI SDK
-  { name: 'Vercel AI', regex: /from\s+['"]ai['"]|generateText|streamText|generateObject/g },
+  { name: 'Vercel AI', call: /\b(?:generateText|streamText|generateObject|streamObject)\(/g, uses: /from\s+['"]ai['"]/g },
   // LangChain
-  { name: 'LangChain', regex: /from\s+['"]langchain|ChatOpenAI|ChatAnthropic|\.invoke\(/g },
+  { name: 'LangChain', call: /\.invoke\(/g, uses: /from\s+['"]langchain|ChatOpenAI|ChatAnthropic/g },
   // Google Gemini
-  { name: 'Gemini', regex: /GoogleGenerativeAI|generateContent|from\s+['"]@google\/generative/g },
+  { name: 'Gemini', call: /\.generateContent(?:Stream)?\(/g, uses: /GoogleGenerativeAI|from\s+['"]@google\/generative/g },
   // AWS Bedrock
-  { name: 'Bedrock', regex: /BedrockRuntimeClient|InvokeModelCommand/g },
+  { name: 'Bedrock', call: /InvokeModelCommand\(/g, uses: /BedrockRuntimeClient/g },
   // xAI Grok
-  { name: 'Grok', regex: /x\.ai\/api|xai\.chat|from\s+['"]grok/g },
+  { name: 'Grok', call: /x\.ai\/api|xai\.chat/g, uses: /from\s+['"]grok/g },
   // Raw fetch to AI endpoints
-  { name: 'fetch (AI)', regex: /fetch\(.*api\.openai\.com|fetch\(.*api\.anthropic\.com|fetch\(.*generativelanguage\.googleapis/g },
+  { name: 'fetch (AI)', call: /fetch\(.*api\.openai\.com|fetch\(.*api\.anthropic\.com|fetch\(.*generativelanguage\.googleapis/g },
   // Cohere
-  { name: 'Cohere', regex: /from\s+['"]cohere|CohereClient|cohere\.chat/g },
+  { name: 'Cohere', call: /cohere\.chat/g, uses: /from\s+['"]cohere|CohereClient/g },
   // Mistral
-  { name: 'Mistral', regex: /from\s+['"]@mistralai|MistralClient/g },
+  { name: 'Mistral', uses: /from\s+['"]@mistralai|MistralClient/g },
 ];
 
 // Representative model per detected SDK — the scanner only ever sees an
