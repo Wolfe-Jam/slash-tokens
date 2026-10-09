@@ -833,6 +833,33 @@ describe('TIER 1: BRAKE — preflightRoute same-provider invariant', () => {
     expect(providerOf('not-a-real-model')).toBeNull();
   });
 
+  it('preflightRoute never picks a model the prompt does not fit', () => {
+    const big = 'word '.repeat(200_000);
+    const tokens = slash(big, 'gpt-5.4');
+    expect(tokens).toBeGreaterThan(MODELS['gpt-5.4-nano'].context);
+    expect(tokens).toBeLessThan(MODELS['gpt-5.4'].context);
+
+    init({ models: ['gpt-5.4', 'gpt-5.4-mini', 'gpt-5.4-nano'] });
+    try {
+      expect(preflightRoute('hello', 'gpt-5.4')?.model).toBe('gpt-5.4-nano');
+      expect(preflightRoute(big, 'gpt-5.4')).toBeNull();
+    } finally {
+      init({ models: Object.keys(MODELS) });
+    }
+
+    for (const model of Object.keys(MODELS)) {
+      const route = preflightRoute(big, model);
+      if (route) expect(MODELS[route.model].context).toBeGreaterThanOrEqual(slash(big, model));
+    }
+  });
+
+  it('intercept.ts uses the shared PROVIDER_MODELS, not its own copy', async () => {
+    const { readFileSync } = await import('fs');
+    const source = readFileSync(new URL('../src/intercept.ts', import.meta.url), 'utf8');
+    expect(source).toMatch(/import\s*\{[^}]*\bPROVIDER_MODELS\b[^}]*\}\s*from\s*'\.\/providers\.js'/);
+    expect(source).not.toMatch(/const\s+PROVIDER_MODELS\b/);
+  });
+
   it('preflight() semantics unchanged — still cross-provider analysis', () => {
     // Regression guard: preflight() must continue to return cross-provider
     // options. Only preflightRoute is same-provider. This is by design.

@@ -99,9 +99,9 @@ export function preflight(content: string, model: string): PreflightResult {
  *     canonical model in PROVIDER_MODELS.
  *   - Returns null when: model unknown, provider unknown, or no cheaper same-
  *     provider alternative exists. Null is a valid result ("PASS, no route").
- *   - Cheapest SAME-PROVIDER alternative by input price. If two alternatives
- *     tie on price (unlikely but possible), returns the first encountered in
- *     PROVIDER_MODELS order.
+ *   - Cheapest SAME-PROVIDER alternative that fits the prompt, by cost for
+ *     this prompt. When two costs round to the same value (tiny prompts),
+ *     the lower input list price wins.
  *   - Respects the same init() config gates as intercept.ts findCheapestRoute: shouldRoute()
  *     (init({route: false}) must make this always return null, matching
  *     patchFetch() never routing) and isModelAllowed() (init({models: [...]})

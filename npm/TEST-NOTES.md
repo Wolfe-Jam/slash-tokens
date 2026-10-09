@@ -1,163 +1,52 @@
-# TEST-NOTES — slash-tokens v1.4.0 (pending)
+# TEST-NOTES — slash-tokens
 
-> Running collection of what should be tested. Inline `// TEST-NOTE:` comments in source point back here. Feeds into #5 WJTTC catch-all suite.
-
----
-
-## Context
-
-v1.3.0 shipped with a silent semantic bug: `preflight().options[0]` returned the globally cheapest model, but consumers (e.g., slash-nextjs) used it as if it were a routing decision. The actual routing (in `intercept.ts` `findCheapestRoute` and in mcpaas-cf proxy) is **same-provider only**. The two algorithms disagreed.
-
-v1.4.0 fix: extract `PROVIDER_MODELS` + `providerOf` to `providers.ts` (shared), add `preflightRoute()` to `preflight.ts` which uses the same-provider logic. `preflight()` unchanged (still cross-provider, still analysis-mode).
+> Which test holds each invariant, and what isn't tested yet. Inline `// TEST-NOTE:` comments in `src/` point back here. `bun test` runs the suite; every test file also passes on its own (`bun test tests/<file>`).
 
 ---
 
-## What to test
+## Routing invariants
 
-### 1. Critical: preflightRoute is same-provider only
+| Invariant | Held by |
+|---|---|
+| `preflightRoute()` is same-provider only, for every model | `preflight.test.ts` › *preflightRoute never returns a cross-provider model* |
+| `preflight().options` is cross-provider analysis; `options[0]` is not a routing decision | `preflight.test.ts` › *preflight() semantics unchanged — still cross-provider analysis* |
+| `preflightRoute()` returns `null` for an unknown model, or when nothing cheaper exists | `preflight.test.ts` › *returns null for unknown model* / *no cheaper same-provider option* |
+| `preflightRoute()` never picks a model the prompt doesn't fit | `preflight.test.ts` › *preflightRoute never picks a model the prompt does not fit* |
+| `preflightRoute()` is always cheaper, and its cost matches an independent calculation | `preflight.test.ts` › *always cheaper than input model* / *cost matches an independently-computed ground truth* |
+| `preflightRoute()` honours `init({ route: false })` and `init({ models })` | `preflight.test.ts` › *respects init({route: false})* / *respects init({models: [...]})* |
+| Every priced model has a provider (`providerOf`) | `preflight.test.ts` › *providerOf returns correct provider for every model in MODELS* |
+| `intercept.ts` uses the shared `PROVIDER_MODELS`, not its own copy | `preflight.test.ts` › *intercept.ts uses the shared PROVIDER_MODELS* |
+| grok-build-0.1 is priced but never a routing target | `preflight.test.ts`, `auto-safety.test.ts` |
 
-For every canonical model in `PROVIDER_MODELS`, `preflightRoute('any prompt', model)` must return either:
-- `null` (no cheaper same-provider option), OR
-- an `Alternative` whose `model` appears in the same `PROVIDER_MODELS[provider]` as the input
+**Changed since v1.4.0:** `preflightRoute()` and `/auto` no longer agree on purpose. `/auto` (`intercept.ts` `findCheapestRoute`) and the hosted proxy rewrite live calls only to their frozen 1.6.5 targets (`AUTO_ROUTE_TARGETS`); `preflightRoute()` and `decide()` consider every priced model. `auto-safety.test.ts` pins `/auto` to the 1.6.5 targets.
 
-**Never cross-provider.**
+## Accuracy invariants
 
-```ts
-for (const [provider, models] of Object.entries(PROVIDER_MODELS)) {
-  for (const model of models) {
-    const route = preflightRoute('test prompt', model);
-    if (route) {
-      expect(PROVIDER_MODELS[provider]).toContain(route.model);
-    }
-  }
-}
-```
+| Invariant | Held by |
+|---|---|
+| Calibrated counts are never under the real count (29-sample corpus; Claude, Gemini, Grok, Nemotron from recorded bench results, GPT-5.x via o200k_base) | `accuracy-gate.test.ts` |
+| A quote is never under a recorded real Nebius bill (`underReported` stays false) | `request-framing.test.ts` |
+| A > 1 MB input doesn't skew later counts | `wasm-memory.test.ts` |
+| Grok's long-context rate applies above 200K tokens; models without a tier stay flat | `long-context-pricing.test.ts` |
+| Every catalog price was checked within 30 days | `freshness.test.ts` (fixed dates) · `npm run check:freshness` (weekly, `freshness.yml`) |
 
-### 2. Critical: preflight and preflightRoute answer DIFFERENT questions
+## Product paths
 
-`preflight().options` is cross-provider analysis (may include Grok when input is Opus).
-`preflightRoute()` is same-provider routing (never Grok when input is Opus).
-
-Assert the difference exists:
-
-```ts
-// For at least one model (e.g. claude-opus), preflight.options[0] may be
-// cross-provider (cheapest globally), while preflightRoute is strictly
-// same-provider. They CAN disagree — that's by design.
-const pre = preflight('hello', 'claude-opus');
-const route = preflightRoute('hello', 'claude-opus');
-// Not an assertion that they DISAGREE, but an assertion of their SEMANTICS:
-if (route) {
-  expect(route.model).toMatch(/^claude/);  // always same-provider
-}
-// pre.options[0] could be anything cheaper — grok, gemini, etc.
-```
-
-### 3. Critical: preflightRoute agrees with intercept.ts findCheapestRoute
-
-For any (provider, tokens, model) triplet, both functions must return the same model. This is the cross-function semantic test that would have caught the v1.3.0 bug.
-
-Currently `findCheapestRoute` in `intercept.ts` is not exported. One of:
-- Export it (new public API)
-- OR test via behavioral composition (patch fetch, send request, inspect what gets sent upstream vs what preflightRoute predicts)
-
-```ts
-// If findCheapestRoute is exported:
-for (const model of PROVIDER_MODELS.Anthropic) {
-  const tokens = 100;
-  const direct = findCheapestRoute('Anthropic', tokens, model);
-  const predicted = preflightRoute('x'.repeat(tokens * 4), model)?.model ?? null;
-  expect(predicted).toBe(direct);
-}
-```
-
-### 4. preflightRoute returns null for unknown model
-
-```ts
-expect(preflightRoute('hello', 'not-a-real-model')).toBeNull();
-```
-
-### 5. preflightRoute returns null when model has no cheaper same-provider option
-
-```ts
-// claude-haiku is the cheapest Anthropic model — no cheaper same-provider
-expect(preflightRoute('hello', 'claude-haiku')).toBeNull();
-
-// gpt-5.4-nano is cheapest OpenAI — null
-expect(preflightRoute('hello', 'gpt-5.4-nano')).toBeNull();
-```
-
-### 6. preflightRoute respects context fit
-
-If tokens exceed an alternative's context window, it must not be selected:
-
-```ts
-const hugeTokens = 500_000; // exceeds gpt-5.4-mini's 128K context
-const content = 'x'.repeat(hugeTokens * 4);
-const route = preflightRoute(content, 'gpt-5.4');
-if (route) {
-  // Must not pick -mini or -nano — they don't fit 500K tokens
-  expect(route.model).not.toBe('gpt-5.4-mini');
-  expect(route.model).not.toBe('gpt-5.4-nano');
-}
-```
-
-### 7. providerOf returns correct provider for every canonical model
-
-```ts
-expect(providerOf('claude-opus')).toBe('Anthropic');
-expect(providerOf('gpt-5.4-nano')).toBe('OpenAI');
-expect(providerOf('grok-4-1-fast')).toBe('xAI');
-expect(providerOf('gemini-2.5-flash')).toBe('Google');
-expect(providerOf('not-real')).toBeNull();
-
-// Every model in MODELS should have a provider
-for (const model of Object.keys(MODELS)) {
-  expect(providerOf(model)).not.toBeNull(); // would catch a model added to MODELS but missing from PROVIDER_MODELS
-}
-```
-
-### 8. PROVIDER_MODELS is the single source of truth
-
-```ts
-// intercept.ts should not have its own PROVIDER_MODELS anymore.
-// If someone re-duplicates it, this test should fail.
-const interceptSource = readFileSync('src/intercept.ts', 'utf-8');
-expect(interceptSource).not.toMatch(/const PROVIDER_MODELS/);
-```
-
-### 9. Existing preflight behavior unchanged
-
-The 100 existing tests must still pass. `preflight()` semantics (cross-provider analysis) are unchanged. Only addition is `preflightRoute()`.
-
-```ts
-// Regression: preflight() still returns cross-provider options when applicable
-const pre = preflight('simple short prompt', 'claude-opus');
-// Grok/Gemini/etc. may appear in options — that's expected
-```
+| Path | Held by |
+|---|---|
+| `quote()` / `decide()` and catalog coherence | `quote-decide.test.ts` |
+| `reconcile()` receipts, `hire().run()` budgets, `slash-tokens quote` CLI | `receipt-agent.test.ts` |
+| `/auto` interception, routing targets, `report()` payload (numbers only) | `auto-safety.test.ts`, `preflight.test.ts` (TIER 4–5), `intercept-normalize.test.ts` |
+| The scan: per-provider calibration and pricing | `scanner.test.ts` |
+| `--version` / `--help` | `cli-flags.test.ts` |
+| Live mcpaas.live integration (only with `SLASH_LIVE=1`; weekly `integration.yml`) | `z-integration.test.ts` |
 
 ---
 
-## For #5 — Comprehensive WJTTC catch-all
+## Not tested yet
 
-This file's tests should be promoted into a proper WJTTC tier suite:
-
-- **TIER 1 (BRAKE)**: Tests 1, 3, 7, 8. If any of these fail, routing is fundamentally broken.
-- **TIER 2 (ENGINE)**: Tests 2, 4, 5, 6. Core behaviors and edge cases.
-- **TIER 3 (AERO)**: Test 9 (regression). Polish/non-breaking verifications.
-- **TIER 4 (PIT STOP — Integration)**: Add integration tests against live mcpaas-cf proxy that the preflightRoute prediction matches the proxy's actual routing decision — cross-repo semantic agreement.
-
-The bug this doc responds to would have been caught at TIER 1 test #1 or #3. The missing test was the root cause of the bug reaching production.
-
----
-
-## Other tests worth adding (not blocking v1.4.0)
-
-- **Model count floor**: assert `Object.keys(MODELS).length >= N` where N is the current known-good count. Catches accidental removals.
-- **Pricing monotonicity**: within each provider, prices should be sanely ordered (opus > sonnet > haiku). Not a hard rule but catches typos in pricing table.
-- **`preflight().options` ordering**: sorted ascending by cost. Catches sort regression.
-- **`preflight()` salvaged signs**: every option has `salvaged > 0`. Catches negative salvage (which would mean "cheaper route is more expensive" — a bug).
-
----
-
-*Generated 2026-04-19 during the preflightRoute fix. Update as new test needs surface.*
+- **GPT-6 calibration.** GPT-6 takes the conservative default factor (2.05) until a bench run adds it; the accuracy gate covers GPT-5.x only.
+- **Request framing outside Nebius.** xAI comes from the Grok bench, OpenAI from its tiktoken cookbook, and Anthropic and Google are allowances. None is checked against a real bill.
+- **Gemini 3.1 Pro's long-context rate** ($4 / $18 above 200K). It's in the catalog, but only Grok's tier has a test.
+- **Model-count floor.** `preflight.test.ts` asserts `>= 10` models; the catalog has 48. A tighter floor would catch an accidental removal.
+- **Price order within a provider** (e.g. a flagship never priced below its small model). Not a hard rule, but it would catch a typo in the catalog.

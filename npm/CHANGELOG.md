@@ -4,6 +4,7 @@
 
 ### Docs
 - **Accuracy claims now say what was measured.** Request framing is measured on Nebius only; xAI comes from the Grok bench, OpenAI from its tiktoken cookbook, Anthropic and Google are allowances. The npm README's accuracy line, the root README's accuracy gate (GPT-5.x, not all GPT; GPT-6 takes the conservative default) and the `quote()` / `FRAMING` doc comments now say so. The 1.7.0 entry below called all framing "measured" and its live check didn't name Nebius; both are corrected in place.
+- **`TEST-NOTES.md` is current.** It was the v1.4.0 plan: retired models, and a "preflightRoute agrees with /auto" invariant that has been false by design since 1.6.6 (`/auto` is frozen at its 1.6.5 targets). It now maps each invariant to the test that holds it and lists what isn't tested yet. Two of its invariants had no test and now do: `preflightRoute()` never picks a model the prompt doesn't fit, and `intercept.ts` uses the shared `PROVIDER_MODELS`. The `preflightRoute()` tie-break comment now matches the code (lower list price, not list order).
 
 ## [1.7.0] — The Hired Agent Edition
 
