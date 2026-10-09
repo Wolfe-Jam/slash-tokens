@@ -74,10 +74,13 @@ export const DEFAULT_MAX_OUTPUT_TOKENS = 4096;
  *   xAI        a fixed system preamble of 185–193 tokens per request
  *              (baselines in bench/results-grok.json); 193 used.
  *   OpenAI     3 per message + 3 to prime the reply (OpenAI's tiktoken
- *              cookbook); 4 per message, the first one inside `request`.
+ *              cookbook, not measured here); 4 per message, the first one
+ *              inside `request`.
  *   Anthropic  the calibration ground truth (count_tokens) already includes
- *              one message's framing; 4 per extra message.
- *   Google     countTokens on content; 4 per message, not yet measured.
+ *              one message's framing; 4 per extra message, an allowance,
+ *              not yet measured.
+ *   Google     countTokens on content; 4 per message, an allowance, not yet
+ *              measured.
  */
 export const FRAMING: Record<string, { request: number; perMessage: number }> = {
   Nebius:    { request: 16,  perMessage: 7 },
@@ -103,7 +106,8 @@ function inputTokens(input: string | Message[], model: string, provider: string)
  * Price a job before it runs: input tokens, an output band, and a low–high
  * cost. Input is the content counted with the model's calibration factor
  * plus the provider's request framing (see FRAMING), so it doesn't come in
- * under the bill; the long-context rate applies when the prompt crosses it.
+ * under the bill (checked against real bills for Nebius; an allowance for
+ * the others); the long-context rate applies when the prompt crosses it.
  */
 export function quote(task: Task): Quote {
   const model = canonicalModel(task.model);
