@@ -1,5 +1,10 @@
 # Changelog
 
+## [Unreleased]
+
+### Docs
+- **Accuracy claims now say what was measured.** Request framing is measured on Nebius only; xAI comes from the Grok bench, OpenAI from its tiktoken cookbook, Anthropic and Google are allowances. The npm README's accuracy line, the root README's accuracy gate (GPT-5.x, not all GPT; GPT-6 takes the conservative default) and the `quote()` / `FRAMING` doc comments now say so. The 1.7.0 entry below called all framing "measured" and its live check didn't name Nebius; both are corrected in place.
+
 ## [1.7.0] — The Hired Agent Edition
 
 *2026-10-08*
@@ -14,7 +19,7 @@ New: `quote()`, `decide()`, `reconcile()`, `hire().run()`, `slash-tokens quote`,
 - **`reconcile(quote, usage, { baseline, feeRate, waived })`** writes the receipt after a call: estimated vs actual tokens and cost (from the provider's own `usage`, OpenAI-style or Anthropic-style), `underReported` (the estimate counted fewer input tokens than were billed — Slash should never do this), whether the cost stayed within the quote, what was saved against a baseline model, and the agent's fee (10% of measured savings by default, shown and waived by default, never charged on a loss). Cached input is priced at the full input rate, so a cached call's cost is an upper bound.
 - **`hire({ budget, baseline, floor, feeRate, waived }).run(job)`**: the agent you hire. Each job is quoted, booked on the cheapest model the policy allows (or blocked), run through your own `call(model, input)`, and reconciled into a receipt. The budget covers all jobs: each one may spend only what earlier jobs left. Blocked jobs never call the model. `agent.spent`, `agent.remaining`, `agent.receipts`.
 - **`slash-tokens quote --model M [--file F | --text T | stdin] [--max-output N] [--min-output N] [--budget USD] [--floor 1-4] [--json]`** prints the quote and the decision (`--json` for pipelines). Exit 0 for go, downgrade and block (read `action`); 1 for bad input.
-- **Quotes include each provider's request framing.** A provider bills the chat template and system preamble on top of your content. Content-only counting quoted 12 input tokens for a real Nebius call billed 23. `quote()` now adds measured framing: Nebius 16 per request + 7 per extra message (real Token Factory calls, recorded in `bench/results-nemotron-requests.json`), xAI's 193-token system preamble (the Grok bench baseline), OpenAI's 3-per-message rule, and a conservative allowance for Anthropic and Google. Live check after the fix: 4% and 8% over the bill, never under. `tests/request-framing.test.ts` holds every recorded bill. `preflight()` stays a content-only go/no-go.
+- **Quotes include each provider's request framing.** A provider bills the chat template and system preamble on top of your content. Content-only counting quoted 12 input tokens for a real Nebius call billed 23. `quote()` now adds framing: Nebius 16 per request + 7 per extra message, measured (real Token Factory calls, recorded in `bench/results-nemotron-requests.json`), xAI's 193-token system preamble (the Grok bench baseline), OpenAI's 3-per-message rule (its tiktoken cookbook), and a conservative allowance for Anthropic and Google. Two live Nebius calls after the fix: 4% and 8% over the bill, never under. `tests/request-framing.test.ts` holds every recorded bill. `preflight()` stays a content-only go/no-go.
 - **`reconcile()` reads Nebius cache hits** (`prompt_cache_hit_tokens`).
 - **npm metadata:** description now says what 1.7.0 does; keywords add nemotron, nvidia, nebius, agent, cost.
 - **The catalog** (`CATALOG`): one source for every model's prices, context, provider, capability tier (1 small · 2 mid · 3 flagship · 4 frontier — the vendor's own line position, compared within one provider only) and `asOf` date. `MODELS` is now derived from it, with the same keys, order and fields.

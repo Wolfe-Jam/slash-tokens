@@ -186,7 +186,7 @@ Node.js, Bun, Deno, Cloudflare Workers, Vercel Edge, Browser.
 
 ## Testing
 
-TypeScript SDK tests via `cd npm && bun test`; every test file also passes on its own. An accuracy gate fails CI if any calibrated estimate falls below the real count on the 29-sample corpus (Claude, Gemini, Grok, GPT, Nemotron). Zig coverage includes adversarial cases (CJK, emoji, binary, base64, thresholds).
+TypeScript SDK tests via `cd npm && bun test`; every test file also passes on its own. An accuracy gate fails CI if any calibrated estimate falls below the real count on the 29-sample corpus (Claude, Gemini, Grok, GPT-5.x, Nemotron), and if a quote comes in under any recorded Nebius bill. Zig coverage includes adversarial cases (CJK, emoji, binary, base64, thresholds).
 
 ## Links
 
