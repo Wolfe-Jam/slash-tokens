@@ -1,0 +1,141 @@
+{
+  "slashTokens": "1.7.0",
+  "repos": [
+    {
+      "repo": "anthropics/claude-quickstarts",
+      "provider": "Anthropic",
+      "commit": "9ec32b91df50b0d4906cae64b13c6298055ff40d",
+      "requests": 8,
+      "skipped": 0,
+      "requestedUsd": 0.518284,
+      "defaultFloorUsd": 0.39565,
+      "floor1Usd": 0.183698,
+      "defaultFloorSavedPct": 24,
+      "floor1SavedPct": 65,
+      "byModel": {
+        "claude-sonnet-5.5": {
+          "n": 3,
+          "req": 0.09233799999999999,
+          "d0": 0.09233799999999999,
+          "d1": 0.045816,
+          "m0": "—",
+          "m1": "claude-haiku"
+        },
+        "claude-sonnet-4.6": {
+          "n": 1,
+          "req": 0.241107,
+          "d0": 0.160738,
+          "d1": 0.080261,
+          "m0": "claude-sonnet-5.5",
+          "m1": "claude-haiku"
+        },
+        "claude-haiku-4.5": {
+          "n": 2,
+          "req": 0.015738000000000002,
+          "d0": 0.015738000000000002,
+          "d1": 0.015738000000000002,
+          "m0": "—",
+          "m1": "—"
+        },
+        "claude-opus-4.8": {
+          "n": 1,
+          "req": 0.105765,
+          "d0": 0.084612,
+          "d1": 0.020956,
+          "m0": "claude-opus-5.5",
+          "m1": "claude-haiku"
+        },
+        "claude-sonnet-4.5": {
+          "n": 1,
+          "req": 0.063336,
+          "d0": 0.042224,
+          "d1": 0.020927,
+          "m0": "claude-sonnet-5.5",
+          "m1": "claude-haiku"
+        }
+      }
+    },
+    {
+      "repo": "xai-org/xai-cookbook",
+      "provider": "xAI",
+      "commit": "316ba56c8e389b7c6b8b8e6c5eb625ab7b5359c5",
+      "requests": 33,
+      "skipped": 1,
+      "requestedUsd": 0.836148,
+      "defaultFloorUsd": 0.836148,
+      "floor1Usd": 0.362876,
+      "defaultFloorSavedPct": 0,
+      "floor1SavedPct": 57,
+      "byModel": {
+        "grok-4.7": {
+          "n": 32,
+          "req": 0.825152,
+          "d0": 0.825152,
+          "d1": 0.35187999999999986,
+          "m0": "—",
+          "m1": "grok-4.3"
+        },
+        "grok-4.3": {
+          "n": 1,
+          "req": 0.010996,
+          "d0": 0.010996,
+          "d1": 0.010996,
+          "m0": "—",
+          "m1": "—"
+        }
+      }
+    },
+    {
+      "repo": "openai/openai-agents-python",
+      "provider": "OpenAI",
+      "commit": "125efa029b4bfd84238bd2c4fd69c3406f802663",
+      "requests": 139,
+      "skipped": 11,
+      "requestedUsd": 1.77694,
+      "defaultFloorUsd": 0.845429,
+      "floor1Usd": 0.289174,
+      "defaultFloorSavedPct": 52,
+      "floor1SavedPct": 84,
+      "byModel": {
+        "gpt-5.6-luna": {
+          "n": 125,
+          "req": 0.616312,
+          "d0": 0.259897,
+          "d1": 0.259897,
+          "m0": "gpt-6-luna",
+          "m1": "gpt-6-luna"
+        },
+        "gpt-5.6-sol": {
+          "n": 14,
+          "req": 1.160628,
+          "d0": 0.5855320000000002,
+          "d1": 0.029276999999999997,
+          "m0": "gpt-6.1-sol",
+          "m1": "gpt-6-luna"
+        }
+      }
+    },
+    {
+      "repo": "google-gemini/cookbook",
+      "provider": "Google",
+      "commit": "dd5b15da88a49309f3e66d30d3ee8de70ab99f9d",
+      "requests": 32,
+      "skipped": 6,
+      "requestedUsd": 0.495661,
+      "defaultFloorUsd": 0.329339,
+      "floor1Usd": 0.197995,
+      "defaultFloorSavedPct": 34,
+      "floor1SavedPct": 60,
+      "byModel": {
+        "gemini-3.8-flash": {
+          "n": 32,
+          "req": 0.495661,
+          "d0": 0.3293390000000001,
+          "d1": 0.197995,
+          "m0": "gemini-2.5-flash",
+          "m1": "gemini-3.1-flash-lite"
+        }
+      }
+    }
+  ]
+}
