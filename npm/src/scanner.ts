@@ -37,36 +37,39 @@ function walkDir(dir: string, files: string[]): void {
   }
 }
 
+function matchLines(regex: RegExp | undefined, content: string): number[] {
+  if (!regex) return [];
+  const found: number[] = [];
+  regex.lastIndex = 0;
+  let match;
+  while ((match = regex.exec(content)) !== null) {
+    const line = content.substring(0, match.index).split('\n').length;
+    if (!found.includes(line)) found.push(line);
+  }
+  return found;
+}
+
 function findCallSites(filePath: string, content: string): CallSite[] {
   const sites: CallSite[] = [];
   const lines = content.split('\n');
 
   for (const pattern of AI_PATTERNS) {
-    // Reset regex
-    pattern.regex.lastIndex = 0;
-    let match;
-    while ((match = pattern.regex.exec(content)) !== null) {
-      // Find line number
-      const beforeMatch = content.substring(0, match.index);
-      const lineNum = beforeMatch.split('\n').length;
+    const callLines = matchLines(pattern.call, content);
+    const siteLines = callLines.length > 0 ? callLines : matchLines(pattern.uses, content).slice(0, 1);
+    const estimatedModel = SDK_REPRESENTATIVE_MODEL[pattern.name] ?? UNKNOWN_SDK_REPRESENTATIVE_MODEL;
 
+    for (const lineNum of siteLines) {
       // Estimate tokens from surrounding context (grab the function/block)
       const startLine = Math.max(0, lineNum - 5);
       const endLine = Math.min(lines.length, lineNum + 20);
       const context = lines.slice(startLine, endLine).join('\n');
-      const estimatedModel = SDK_REPRESENTATIVE_MODEL[pattern.name] ?? UNKNOWN_SDK_REPRESENTATIVE_MODEL;
-      const tokensPerCall = slash(context, estimatedModel);
-
-      // Avoid duplicates at same location
-      if (!sites.some(s => s.line === lineNum && s.sdk === pattern.name)) {
-        sites.push({
-          file: filePath,
-          line: lineNum,
-          sdk: pattern.name,
-          tokensPerCall,
-          estimatedModel,
-        });
-      }
+      sites.push({
+        file: filePath,
+        line: lineNum,
+        sdk: pattern.name,
+        tokensPerCall: slash(context, estimatedModel),
+        estimatedModel,
+      });
     }
   }
 

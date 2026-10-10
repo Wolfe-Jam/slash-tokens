@@ -86,7 +86,7 @@ export function printReport(sites: CallSite[], filesScanned: number, timeMs: num
   console.log(`${WHITE}  Output:          ${B}$${monthlyCostOutput.toFixed(2)}/mo${R}`);
   console.log(`${WHITE}  Total:           ${ORANGE}${B}$${monthlyCost.toFixed(2)}/mo${R}`);
   if (unknownProviderSites > 0) {
-    console.log(`${GRAY}  (${unknownProviderSites} call site${unknownProviderSites === 1 ? '' : 's'} use an assumed price — the detected SDK doesn't reveal the exact provider)${R}`);
+    console.log(`${GRAY}  (${unknownProviderSites} ${unknownProviderSites === 1 ? 'call site uses' : 'call sites use'} an assumed price — the detected SDK doesn't reveal the exact provider)${R}`);
   }
   console.log('');
 

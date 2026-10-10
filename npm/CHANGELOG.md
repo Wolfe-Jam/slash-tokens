@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+- **The scan (`npx slash-tokens`) counts each LLM request once.** It counted every import, client constructor and request line as its own call site, so one `client.messages.create(...)` behind `import Anthropic` and `new Anthropic()` was reported as two sites (and the request itself wasn't matched unless the client variable was named `anthropic`). The monthly estimate is per site, so it came out inflated: a two-request sample project read 4 sites and $35.77/mo in 1.7.0, and reads 2 sites and $17.89/mo now. A request is now one site; a file that only imports or builds a client counts once. Requests on any client variable are matched (`.messages.create(`, `.chat.completions.create(`, `.responses.create(`, `generateText(` …), in Python too.
+- The scan's footnote reads "1 call site uses an assumed price" (was "use").
+
 ### Docs
 - **Accuracy claims now say what was measured.** Request framing is measured on Nebius only; xAI comes from the Grok bench, OpenAI from its tiktoken cookbook, Anthropic and Google are allowances. The npm README's accuracy line, the root README's accuracy gate (GPT-5.x, not all GPT; GPT-6 takes the conservative default) and the `quote()` / `FRAMING` doc comments now say so. The 1.7.0 entry below called all framing "measured" and its live check didn't name Nebius; both are corrected in place.
 
