@@ -31,7 +31,8 @@
     "test": "bun test",
     "check:engines": "node scripts/check-engines.mjs",
     "check:freshness": "bun scripts/check-freshness.ts",
-    "bench:nemotron": "bun bench/calibrate-nemotron.ts"
+    "bench:nemotron": "bun bench/calibrate-nemotron.ts",
+    "bench:oss": "bun bench/oss/study.ts"
   },
   "author": "wolfejam",
   "license": "MIT",
