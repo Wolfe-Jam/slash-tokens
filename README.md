@@ -44,8 +44,8 @@ import 'slash-tokens/auto'
 Intercepts `fetch()` to Anthropic, OpenAI, xAI, and Google endpoints. Estimates tokens before the call leaves your machine. Sub-millisecond. Non-blocking.
 
 ```
-[slash] Anthropic claude-sonnet-5 | 47,000 tokens | $0.0940 | OK
-[slash] xAI grok-4.6 | 12,300 tokens | $0.0246 | OK
+[slash] Anthropic claude-sonnet-5 → claude-haiku | 52,802 tok | $0.0528 saved $0.0528
+[slash] xAI grok-4.6 → grok-4.3 | 7,900 tok | $0.0099 saved $0.0059
 ```
 
 ## Pre-call check
