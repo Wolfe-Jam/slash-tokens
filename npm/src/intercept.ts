@@ -5,8 +5,9 @@ import { PROVIDER_MODELS, AUTO_ROUTE_TARGETS, NOT_ROUTE_TARGETS } from './provid
 
 // TEST-NOTE: intercept.ts and preflight.ts MUST share PROVIDER_MODELS.
 // Duplicating it locally here (as pre-v1.4.0 did) caused cross-function
-// semantic drift. Any test that asserts "preflightRoute agrees with
-// findCheapestRoute" relies on this shared import.
+// semantic drift. preflight.test.ts asserts the shared import. The two still
+// route differently by design: /auto only rewrites to AUTO_ROUTE_TARGETS
+// (frozen at 1.6.5, pinned by auto-safety.test.ts).
 
 export interface InterceptEvent {
   endpoint: string;
