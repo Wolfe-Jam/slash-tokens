@@ -50,6 +50,7 @@ npm install slash-tokens
 ```bash
 npx slash-tokens   # find the LLM calls in this project and what they cost a month
 echo "Fix the bug" | npx slash-tokens quote --model nemotron-3-ultra --floor 1
+npx slash-tokens diff main      # what this branch does to that monthly cost
 ```
 
 ## Check every call, automatically

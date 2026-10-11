@@ -7,6 +7,7 @@ import { scan } from './scanner.js';
 import { printReport } from './report.js';
 import { init } from './config.js';
 import { quote, decide } from './quote.js';
+import { scanDiff } from './diff.js';
 import type { Tier } from './catalog.js';
 
 const args = process.argv.slice(2);
@@ -23,6 +24,8 @@ if (args.includes('--help') || args.includes('-h')) {
 
 if (args[0] === 'quote') {
   runQuote(args.slice(1)).then(code => process.exit(code));
+} else if (args[0] === 'diff') {
+  process.exit(runDiff(args.slice(1)));
 } else {
   scanHere();
 }
@@ -51,6 +54,38 @@ function scanHere(): void {
       console.log(`${GRAY}  → Next: ${ORANGE}https://mcpaas.live/slash/setup${R}`);
     }
     console.log('');
+  }
+}
+
+/**
+ * slash-tokens diff <base> [head] [--json]
+ * The scan's monthly LLM cost at two git refs of the repo in this folder
+ * (head defaults to the working tree), and what changed. Exit 0, or 1 on
+ * bad input / git errors.
+ */
+function runDiff(argv: string[]): number {
+  try {
+    const refs = argv.filter(a => !a.startsWith('--'));
+    if (refs.length < 1 || refs.length > 2) throw new Error('usage: slash-tokens diff <base> [head] [--json]');
+    const d = scanDiff(process.cwd(), refs[0], refs[1]);
+    if (argv.includes('--json')) {
+      console.log(JSON.stringify(d, null, 2));
+      return 0;
+    }
+    const usd = (n: number) => `${n < 0 ? '-' : ''}$${Math.abs(n).toFixed(2)}`;
+    const sign = (n: number) => (n > 0 ? `+${usd(n)}` : usd(n));
+    console.log(`LLM cost of this change (scan estimate, ${d.callsPerSitePerDay} calls a site a day)`);
+    const sites = (n: number) => `${n} call site${n === 1 ? '' : 's'}`;
+    console.log(`  ${d.base.ref}: ${sites(d.base.sites)}, ${usd(d.base.monthlyCost)}/mo`);
+    console.log(`  ${d.head.ref}: ${sites(d.head.sites)}, ${usd(d.head.monthlyCost)}/mo`);
+    console.log(`  change: ${sign(d.monthlyDelta)}/mo`);
+    for (const f of d.files) {
+      console.log(`  ${f.file} (${f.sdk}): ${f.sitesBefore} → ${f.sitesAfter} sites, ${sign(f.monthlyDelta)}/mo`);
+    }
+    return 0;
+  } catch (err) {
+    console.error(`slash-tokens diff: ${(err as Error).message}`);
+    return 1;
   }
 }
 
@@ -133,6 +168,9 @@ function printHelp(): void {
   slash-tokens quote --model M [--file F | --text T | stdin]
       [--max-output N] [--min-output N] [--budget USD] [--floor 1-4] [--json]
                              price a job and decide: go, downgrade or block
+
+  slash-tokens diff <base> [head] [--json]
+                             what a git change does to the scan's monthly LLM cost
 
   --version, -V    print version and exit
   --help, -h       print this help and exit
