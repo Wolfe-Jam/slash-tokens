@@ -10,9 +10,11 @@
 **Know what an LLM call will cost before you make it, and prove what you saved after.**
 4.8 KB WASM · sub-millisecond · zero dependencies · Claude, GPT, Grok, Gemini, Nemotron.
 
-## v1.8.0 — The Merge Gate Edition
+## v1.8.1 — The Merge Gate Edition
 
 Know what a change will cost before it merges.
+
+New in 1.8.1: the scan counts production code only. Test files and anything in a `.slashignore` are skipped (`--include-tests` to count tests).
 
 ```bash
 npx slash-tokens diff main

@@ -1,6 +1,12 @@
 # Changelog
 
-## [Unreleased]
+## [1.8.1] — The Merge Gate Edition
+
+*2026-10-11*
+
+The scan counts production code only: tests and .slashignore paths are skipped.
+
+No change to `quote()`, `decide()`, `reconcile()`, `hire()`, `/auto` or prices.
 
 ### Fixed
 - **The scan and `diff` skip test code by default.** Test files mock LLM calls; counting them as production traffic inflated the monthly estimate. slash-tokens' own repo read 29 call sites and $1,263.72/mo, all of them test fixtures or the scanner's own patterns; it now reads 0. Skipped: `test/`, `tests/`, `__tests__/`, `__mocks__/`, `spec/`, `fixtures/`, `*.test.*`, `*.spec.*`, `test_*.py`, `*_test.py`. `--include-tests` scans them again. The scan says how many paths it skipped.
