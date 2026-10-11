@@ -81,6 +81,8 @@ npx slash-tokens diff main HEAD --json  # for CI: base, head, change, and each f
 
 Same assumptions as the scan (100 calls a site a day, output twice the input, each call site priced at its SDK's representative model), stated in the output. Needs `git`; it's a CLI command, not part of the library entry.
 
+Test code is skipped (`tests/`, `*.test.*`, `*.spec.*`, …; `--include-tests` to count it), and so is anything listed in a `.slashignore` at the repo root (one path or pattern per line).
+
 ## Quote → Decide → Prove
 
 Price a job before it runs, choose the model under a budget and a quality floor, and check the bill afterwards.

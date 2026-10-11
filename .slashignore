@@ -1,0 +1,2 @@
+# Not production LLM calls: the scanner's own detection patterns.
+npm/src/patterns.ts

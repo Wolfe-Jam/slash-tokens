@@ -18,7 +18,7 @@
  * Run: bun test tests/scanner.test.ts
  */
 import { describe, it, expect } from 'bun:test';
-import { mkdtempSync, writeFileSync, rmSync } from 'fs';
+import { mkdtempSync, writeFileSync, rmSync, mkdirSync } from 'fs';
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { scan } from '../src/scanner';
@@ -194,6 +194,47 @@ Client(sid, token).messages.create(to=to, from_=frm, body="hi")
       expect(at('claude.py')).toEqual(['Anthropic:3']);
       expect(at('gem.py')).toEqual(['Gemini:3']);
       expect(at('sms.py')).toEqual([]);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('test code is skipped by default: test dirs, *.test.*, *.spec.*, test_*.py', () => {
+    const call = `import Anthropic from '@anthropic-ai/sdk';
+const client = new Anthropic();
+export const ask = (q: string) => client.messages.create({ model: 'claude-haiku', max_tokens: 9, messages: [] });
+`;
+    const dir = withTempDir({ 'app.ts': call, 'app.test.ts': call, 'app.spec.ts': call });
+    mkdirSync(join(dir, 'tests'));
+    writeFileSync(join(dir, 'tests', 'mock.ts'), call);
+    writeFileSync(join(dir, 'test_client.py'), 'import anthropic\nanthropic.Anthropic().messages.create(model="x", max_tokens=1, messages=[])\n');
+    try {
+      const def = scan(dir);
+      expect(def.sites.map(s => s.file.split('/').pop())).toEqual(['app.ts']);
+      expect(def.skipped.tests).toBe(4);
+      const all = scan(dir, { includeTests: true });
+      expect(all.sites.length).toBe(5);
+      expect(all.skipped.tests).toBe(0);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('.slashignore paths are skipped (file, folder, glob)', () => {
+    const call = `import OpenAI from 'openai';
+const c = new OpenAI();
+export const f = () => c.chat.completions.create({ model: 'gpt-5.4', messages: [] });
+`;
+    const dir = withTempDir({ 'keep.ts': call, 'gen.gen.ts': call, '.slashignore': '# not production\nsrc/patterns.ts\nexamples/\n*.gen.ts\n' });
+    mkdirSync(join(dir, 'src'));
+    writeFileSync(join(dir, 'src', 'patterns.ts'), call);
+    writeFileSync(join(dir, 'src', 'real.ts'), call);
+    mkdirSync(join(dir, 'examples'));
+    writeFileSync(join(dir, 'examples', 'demo.ts'), call);
+    try {
+      const r = scan(dir);
+      expect(r.sites.map(s => s.file.slice(dir.length + 1)).sort()).toEqual(['keep.ts', 'src/real.ts']);
+      expect(r.skipped.ignored).toBe(3);
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
