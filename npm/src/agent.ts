@@ -7,7 +7,7 @@ export interface HireOptions {
   budget?: number;
   /** Model the savings are measured against. Default: the model each job asks for. */
   baseline?: string;
-  /** Lowest tier a substitute may have. Default: each job's requested tier. */
+  /** Lowest tier a substitute may have. A job's own `floor` overrides it. Default: each job's requested tier. */
   floor?: Tier;
   /** The agent's cut of measured savings. Default 0.10. */
   feeRate?: number;
@@ -15,15 +15,23 @@ export interface HireOptions {
   waived?: boolean;
 }
 
+/** What hire().run() tells your client about the job, beyond the model and input. */
+export interface CallOptions {
+  /** The job's output ceiling, the quote's high end. Send it as the provider's max-tokens so the bill can't pass the quote. */
+  maxOutputTokens: number;
+}
+
 /**
  * What the agent calls to do the work: your provider client. `model` is the
  * booked catalog key (e.g. `nemotron-3.5-lightning`); map it to your
  * provider's API ID. Return the output and the provider's `usage` object.
  */
-export type CallModel = (model: string, input: string | Message[]) => Promise<{ output: string; usage: Usage }>;
+export type CallModel = (model: string, input: string | Message[], opts: CallOptions) => Promise<{ output: string; usage: Usage }>;
 
 export interface Job extends Task {
   call: CallModel;
+  /** Lowest tier a substitute may have for this job. Default: the agent's floor, else the job's requested tier. */
+  floor?: Tier;
 }
 
 export interface RunResult {
@@ -61,14 +69,14 @@ export function hire(opts: HireOptions = {}): Agent {
     get receipts() { return receipts; },
 
     async run(job: Job): Promise<RunResult> {
-      const { call, ...task } = job;
-      const policy: Policy = { floor: opts.floor };
+      const { call, floor, ...task } = job;
+      const policy: Policy = { floor: floor ?? opts.floor };
       if (budget !== Infinity) policy.budget = Math.max(budget - spent, 0);
 
       const decision = decide(task, policy);
       if (decision.action === 'block' || !decision.chosen) return { decision };
 
-      const { output, usage } = await call(decision.chosen.model, task.input);
+      const { output, usage } = await call(decision.chosen.model, task.input, { maxOutputTokens: decision.chosen.outputTokens.max });
       const receipt = reconcile(decision.chosen, usage, {
         baseline: opts.baseline ?? decision.requested.model,
         feeRate: opts.feeRate,

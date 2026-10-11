@@ -15,7 +15,7 @@ export type { Usage, Receipt, ReconcileOptions } from './receipt.js';
 
 // The agent you hire: quote → decide → book → run → reconcile → receipt
 export { hire } from './agent.js';
-export type { HireOptions, Job, CallModel, RunResult, Agent } from './agent.js';
+export type { HireOptions, Job, CallModel, CallOptions, RunResult, Agent } from './agent.js';
 
 // The catalog: prices, provider, capability tier, date checked
 export { CATALOG, TIER_NAMES } from './catalog.js';
