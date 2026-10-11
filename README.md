@@ -10,7 +10,7 @@
 **Know what an LLM call will cost before you make it, and prove what you saved after.**
 4.8 KB WASM · sub-millisecond · zero dependencies · Claude, GPT, Grok, Gemini, Nemotron.
 
-**v1.8.0 — The Merge Gate Edition:** know what a change will cost before it merges. [npm](https://www.npmjs.com/package/slash-tokens) · [release notes](https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.8.0)
+**v1.8.1 — The Merge Gate Edition:** know what a change will cost before it merges. [npm](https://www.npmjs.com/package/slash-tokens) · [release notes](https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.8.1)
 
 ## Try it
 
