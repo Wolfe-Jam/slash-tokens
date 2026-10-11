@@ -198,9 +198,8 @@ describe('TIER 3: AERO — decide()', () => {
     }
   });
 
-  it('never swaps in an older generation by default (Gemini 3.8 Flash stays; 2.5 Flash only if allowed)', () => {
+  it('never swaps in an older generation of the same line by default (Gemini 3.8 Flash stays; 2.5 Flash only if allowed)', () => {
     expect(decide({ ...task, model: 'gemini-3.8-flash' }).action).toBe('go');
-    expect(decide({ ...task, model: 'gemini-3.8-flash' }, { floor: 1 }).action).toBe('go');
     const older = decide({ ...task, model: 'gemini-3.8-flash' }, { allowOlder: true });
     expect(older.chosen?.model).toBe('gemini-2.5-flash');
   });
@@ -211,13 +210,19 @@ describe('TIER 3: AERO — decide()', () => {
     expect(decide({ ...task, model: 'nemotron-3-ultra' }, { floor: 1 }).chosen?.model).toBe('nemotron-3.5-lightning');
   });
 
-  it('every substitute is the same generation or newer, for every model', () => {
+  it('a substitute in the same line (tier) is never an older generation, for every model', () => {
     for (const model of Object.keys(CATALOG)) {
       const d = decide({ ...task, model }, { floor: 1 });
-      if (d.chosen && d.chosen.model !== d.requested.model) {
+      if (d.chosen && d.chosen.model !== d.requested.model && d.chosen.tier === d.requested.tier) {
         expect([model, CATALOG[d.chosen.model].gen >= CATALOG[d.requested.model].gen]).toEqual([model, true]);
       }
     }
+  });
+
+  it('floor 1 can still move to a smaller current line (Opus 5.5 → Haiku, Grok 4.7 → 4.3, Gemini 3.8 Flash → 3.1 Flash-Lite)', () => {
+    expect(CATALOG[decide({ ...task, model: 'claude-opus-5.5' }, { floor: 1 }).chosen!.model].tier).toBe(1);
+    expect(decide({ ...task, model: 'grok-4.7' }, { floor: 1 }).chosen?.model).toBe('grok-4.3');
+    expect(decide({ ...task, model: 'gemini-3.8-flash' }, { floor: 1 }).chosen?.model).toBe('gemini-3.1-flash-lite');
   });
 
   it('every catalog model has a generation; aliases take the one they resolve to', () => {

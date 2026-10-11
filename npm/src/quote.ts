@@ -45,9 +45,10 @@ export interface Policy {
    */
   floor?: Tier;
   /**
-   * Let a substitute be an older generation than the requested model (Gemini
-   * 3.8 Flash → 2.5 Flash). Default false: a tier is a product line, not a
-   * generation, so "same tier" alone doesn't mean "as good".
+   * Let a substitute be an older generation of the requested model's own
+   * line (same tier: Gemini 3.8 Flash → 2.5 Flash). Default false: a tier is a
+   * product line, not a generation, so "same tier" alone doesn't mean "as
+   * good". A smaller current line (floor 1: Opus 5.5 → Haiku) is unaffected.
    */
   allowOlder?: boolean;
 }
@@ -148,7 +149,7 @@ export function quote(task: Task): Quote {
  * Choose what to run under a budget and a quality floor.
  *
  * Candidates are the requested model plus its same-provider siblings at or
- * above the floor and the same generation or newer (unless allowOlder; never
+ * above the floor, never an older generation of the requested line (unless allowOlder; never
  * a NOT_ROUTE_TARGETS model, never one excluded by
  * init({ models }), none at all after init({ route: false })). Each is quoted
  * on its own token count. A substitute must cost less than the requested
@@ -167,7 +168,8 @@ export function decide(task: Task, policy: Policy = {}): Decision {
     for (const m of PROVIDER_MODELS[requested.provider] ?? []) {
       if (m === requested.model || NOT_ROUTE_TARGETS.has(m) || !isModelAllowed(m)) continue;
       if (CATALOG[m].tier < floor) continue;
-      if (!policy.allowOlder && CATALOG[m].gen < CATALOG[requested.model].gen) continue;
+      // Older generation of the same line (tier) only: a smaller current line is fine.
+      if (!policy.allowOlder && CATALOG[m].tier === CATALOG[requested.model].tier && CATALOG[m].gen < CATALOG[requested.model].gen) continue;
       const q = quote({ ...task, model: m });
       if (!ok(q) || q.cost.high >= requested.cost.high) continue;  // never raise the cost
       if (!chosen || q.cost.high < chosen.cost.high ||
