@@ -198,6 +198,35 @@ describe('TIER 3: AERO — decide()', () => {
     }
   });
 
+  it('never swaps in an older generation by default (Gemini 3.8 Flash stays; 2.5 Flash only if allowed)', () => {
+    expect(decide({ ...task, model: 'gemini-3.8-flash' }).action).toBe('go');
+    expect(decide({ ...task, model: 'gemini-3.8-flash' }, { floor: 1 }).action).toBe('go');
+    const older = decide({ ...task, model: 'gemini-3.8-flash' }, { allowOlder: true });
+    expect(older.chosen?.model).toBe('gemini-2.5-flash');
+  });
+
+  it('a newer generation is always fair game (Opus 4.8 → 5.5, GPT-5.6 Sol → GPT-6 Luna, Ultra → Lightning)', () => {
+    expect(decide({ ...task, model: 'claude-opus-4.8' }).chosen?.model).toBe('claude-opus-5.5');
+    expect(decide({ ...task, model: 'gpt-5.6-sol' }, { floor: 1 }).chosen?.model).toBe('gpt-6-luna');
+    expect(decide({ ...task, model: 'nemotron-3-ultra' }, { floor: 1 }).chosen?.model).toBe('nemotron-3.5-lightning');
+  });
+
+  it('every substitute is the same generation or newer, for every model', () => {
+    for (const model of Object.keys(CATALOG)) {
+      const d = decide({ ...task, model }, { floor: 1 });
+      if (d.chosen && d.chosen.model !== d.requested.model) {
+        expect([model, CATALOG[d.chosen.model].gen >= CATALOG[d.requested.model].gen]).toEqual([model, true]);
+      }
+    }
+  });
+
+  it('every catalog model has a generation; aliases take the one they resolve to', () => {
+    for (const [k, e] of Object.entries(CATALOG)) expect([k, typeof e.gen === 'number' && e.gen > 0]).toEqual([k, true]);
+    expect(CATALOG['claude-opus'].gen).toBe(CATALOG['claude-opus-5'].gen);
+    expect(CATALOG['grok-4.20'].gen).toBe(CATALOG['grok-4.3'].gen);
+    expect(CATALOG['grok-4-1-fast'].gen).toBe(CATALOG['grok-4.3'].gen);
+  });
+
   it('init({ route: false }) means go or block only', () => {
     init({ route: false });
     try {

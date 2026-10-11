@@ -26,6 +26,13 @@ export const TIER_NAMES: Record<Tier, string> = {
 export interface CatalogEntry {
   provider: string;
   tier: Tier;
+  /**
+   * Model generation within its provider (Claude 4.5 < 5 < 5.5, Gemini 2.5 <
+   * 3.8, GPT-5.4 < 6, Grok 4.3 < 4.7, Nemotron 3 < 3.5). Aliases take the
+   * generation they resolve to (grok-4.20 and grok-4-1-fast → 4.3). decide() won't swap in an older generation
+   * unless the policy allows it.
+   */
+  gen: number;
   /** Date the price was checked against the provider's own pricing page. */
   asOf: string;
   /** Last day this price holds, when the provider has announced a change. */
@@ -95,66 +102,66 @@ const ASOF = '2026-10-07';
 // Nemotron: read from the Token Factory API (see above).
 const ASOF_NEBIUS = '2026-10-08';
 
-function e(provider: string, tier: Tier, price: Price): CatalogEntry {
-  return { provider, tier, asOf: provider === 'Nebius' ? ASOF_NEBIUS : ASOF, ...price };
+function e(provider: string, tier: Tier, price: Price, gen: number): CatalogEntry {
+  return { provider, tier, gen, asOf: provider === 'Nebius' ? ASOF_NEBIUS : ASOF, ...price };
 }
 
 // Order is kept from the 1.6.6 MODELS table (new entries appended), so
 // preflight()'s option ordering for equal costs doesn't move.
 export const CATALOG: Record<string, CatalogEntry> = {
   // Anthropic — live names + generic aliases (same rates)
-  'claude-fable-5.1':  e('Anthropic', 4, FABLE),
-  'claude-fable-5':    e('Anthropic', 4, FABLE),
-  'claude-mythos-5.1': e('Anthropic', 4, FABLE),
-  'claude-mythos-5':   e('Anthropic', 4, FABLE),
-  'claude-opus-5.5':   e('Anthropic', 3, OPUS_55),
-  'claude-opus-5':     e('Anthropic', 3, OPUS),
-  'claude-opus-4.8':   e('Anthropic', 3, OPUS),
-  'claude-opus':       e('Anthropic', 3, OPUS),
-  'claude-opus-4.7':   e('Anthropic', 3, OPUS),
-  'claude-opus-4.6':   e('Anthropic', 3, OPUS),
-  'claude-opus-4.5':   e('Anthropic', 3, OPUS),
-  'claude-sonnet-5.5': e('Anthropic', 2, SONNET),
-  'claude-sonnet-5':   e('Anthropic', 2, SONNET),
-  'claude-sonnet':     e('Anthropic', 2, SONNET),
-  'claude-sonnet-4.6': e('Anthropic', 2, SONNET_4X),
-  'claude-sonnet-4.5': e('Anthropic', 2, SONNET_4X),
-  'claude-haiku-4.5':  e('Anthropic', 1, HAIKU),
-  'claude-haiku':      e('Anthropic', 1, HAIKU),
+  'claude-fable-5.1':  e('Anthropic', 4, FABLE, 5.1),
+  'claude-fable-5':    e('Anthropic', 4, FABLE, 5),
+  'claude-mythos-5.1': e('Anthropic', 4, FABLE, 5.1),
+  'claude-mythos-5':   e('Anthropic', 4, FABLE, 5),
+  'claude-opus-5.5':   e('Anthropic', 3, OPUS_55, 5.5),
+  'claude-opus-5':     e('Anthropic', 3, OPUS, 5),
+  'claude-opus-4.8':   e('Anthropic', 3, OPUS, 4.8),
+  'claude-opus':       e('Anthropic', 3, OPUS, 5),
+  'claude-opus-4.7':   e('Anthropic', 3, OPUS, 4.7),
+  'claude-opus-4.6':   e('Anthropic', 3, OPUS, 4.6),
+  'claude-opus-4.5':   e('Anthropic', 3, OPUS, 4.5),
+  'claude-sonnet-5.5': e('Anthropic', 2, SONNET, 5.5),
+  'claude-sonnet-5':   e('Anthropic', 2, SONNET, 5),
+  'claude-sonnet':     e('Anthropic', 2, SONNET, 5),
+  'claude-sonnet-4.6': e('Anthropic', 2, SONNET_4X, 4.6),
+  'claude-sonnet-4.5': e('Anthropic', 2, SONNET_4X, 4.5),
+  'claude-haiku-4.5':  e('Anthropic', 1, HAIKU, 4.5),
+  'claude-haiku':      e('Anthropic', 1, HAIKU, 4.5),
   // xAI — flagship 4.6, cheap same-provider 4.3. 4.20 / fast are aliases.
-  'grok-4.7':          e('xAI', 3, GROK_46),
-  'grok-4.6':          e('xAI', 3, GROK_46),
-  'grok-4.5':          e('xAI', 3, GROK_46),
-  'grok-build-0.1':    e('xAI', 2, GROK_BUILD),
-  'grok-4.3':          e('xAI', 2, GROK_43),
-  'grok-4.20':         e('xAI', 2, GROK_43),
-  'grok-4-1-fast':     e('xAI', 2, GROK_43),
+  'grok-4.7':          e('xAI', 3, GROK_46, 4.7),
+  'grok-4.6':          e('xAI', 3, GROK_46, 4.6),
+  'grok-4.5':          e('xAI', 3, GROK_46, 4.5),
+  'grok-build-0.1':    e('xAI', 2, GROK_BUILD, 4.7),
+  'grok-4.3':          e('xAI', 2, GROK_43, 4.3),
+  'grok-4.20':         e('xAI', 2, GROK_43, 4.3),
+  'grok-4-1-fast':     e('xAI', 2, GROK_43, 4.3),
   // Google
-  'gemini-3.1-pro':         e('Google', 3, GEMINI_PRO),
-  'gemini-3.1-pro-preview': e('Google', 3, GEMINI_PRO),
-  'gemini-3.8-flash':       e('Google', 2, GEMINI_FLASH_3X),
-  'gemini-3.7-flash':       e('Google', 2, GEMINI_FLASH_3X),
-  'gemini-3.6-flash':       e('Google', 2, GEMINI_FLASH_3X),
-  'gemini-3.5-flash':       e('Google', 2, GEMINI_35_FLASH),
-  'gemini-3.1-flash-lite':  e('Google', 1, GEMINI_31_FLASH_LITE),
-  'gemini-3.5-flash-lite':  e('Google', 1, GEMINI_FLASH),
-  'gemini-2.5-flash':       e('Google', 2, GEMINI_FLASH),
+  'gemini-3.1-pro':         e('Google', 3, GEMINI_PRO, 3.1),
+  'gemini-3.1-pro-preview': e('Google', 3, GEMINI_PRO, 3.1),
+  'gemini-3.8-flash':       e('Google', 2, GEMINI_FLASH_3X, 3.8),
+  'gemini-3.7-flash':       e('Google', 2, GEMINI_FLASH_3X, 3.7),
+  'gemini-3.6-flash':       e('Google', 2, GEMINI_FLASH_3X, 3.6),
+  'gemini-3.5-flash':       e('Google', 2, GEMINI_35_FLASH, 3.5),
+  'gemini-3.1-flash-lite':  e('Google', 1, GEMINI_31_FLASH_LITE, 3.1),
+  'gemini-3.5-flash-lite':  e('Google', 1, GEMINI_FLASH, 3.5),
+  'gemini-2.5-flash':       e('Google', 2, GEMINI_FLASH, 2.5),
   // OpenAI — live 5.6 ladder + GPT-6. 5.4 family kept as aliases (old prices).
-  'gpt-6-astra':       e('OpenAI', 4, GPT_6_ASTRA),
-  'gpt-6.1-sol':       e('OpenAI', 3, GPT_6_SOL),
-  'gpt-6-sol':         e('OpenAI', 3, GPT_6_SOL),
-  'gpt-6-luna':        e('OpenAI', 1, GPT_6_LUNA),
-  'gpt-5.6-sol':       e('OpenAI', 3, GPT_SOL),
-  'gpt-5.6-terra':     e('OpenAI', 2, GPT_TERRA),
-  'gpt-5.6-luna':      e('OpenAI', 1, GPT_LUNA),
-  'gpt-5.4':           e('OpenAI', 3, GPT_54),
-  'gpt-5.4-mini':      e('OpenAI', 2, GPT_54_MINI),
-  'gpt-5.4-nano':      e('OpenAI', 1, GPT_54_NANO),
+  'gpt-6-astra':       e('OpenAI', 4, GPT_6_ASTRA, 6),
+  'gpt-6.1-sol':       e('OpenAI', 3, GPT_6_SOL, 6.1),
+  'gpt-6-sol':         e('OpenAI', 3, GPT_6_SOL, 6),
+  'gpt-6-luna':        e('OpenAI', 1, GPT_6_LUNA, 6),
+  'gpt-5.6-sol':       e('OpenAI', 3, GPT_SOL, 5.6),
+  'gpt-5.6-terra':     e('OpenAI', 2, GPT_TERRA, 5.6),
+  'gpt-5.6-luna':      e('OpenAI', 1, GPT_LUNA, 5.6),
+  'gpt-5.4':           e('OpenAI', 3, GPT_54, 5.4),
+  'gpt-5.4-mini':      e('OpenAI', 2, GPT_54_MINI, 5.4),
+  'gpt-5.4-nano':      e('OpenAI', 1, GPT_54_NANO, 5.4),
   // NVIDIA Nemotron, served and billed by Nebius Token Factory
-  'nemotron-3-ultra':       e('Nebius', 3, NEMOTRON_ULTRA),
-  'nemotron-3-super':       e('Nebius', 2, NEMOTRON_SUPER),
-  'nemotron-3-nano':        e('Nebius', 1, NEMOTRON_NANO),
-  'nemotron-3.5-lightning': e('Nebius', 1, NEMOTRON_LIGHTNING),
+  'nemotron-3-ultra':       e('Nebius', 3, NEMOTRON_ULTRA, 3),
+  'nemotron-3-super':       e('Nebius', 2, NEMOTRON_SUPER, 3),
+  'nemotron-3-nano':        e('Nebius', 1, NEMOTRON_NANO, 3),
+  'nemotron-3.5-lightning': e('Nebius', 1, NEMOTRON_LIGHTNING, 3.5),
 };
 
 /**
