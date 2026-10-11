@@ -14,7 +14,7 @@
 
 Know what a change will cost before it merges.
 
-New in 1.8.1: the scan counts production code only. Test files and anything in a `.slashignore` are skipped (`--include-tests` to count tests).
+Count what ships: the scan and diff measure the code you deploy, not your tests. Test files and anything in a `.slashignore` are skipped (`--include-tests` to count tests).
 
 ```bash
 npx slash-tokens diff main
