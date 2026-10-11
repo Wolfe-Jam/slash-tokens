@@ -19,6 +19,50 @@ function formatNum(n: number): string {
   return n.toLocaleString('en-US');
 }
 
+/** Assumed traffic for the scan's estimate: 100 calls per site per day, output twice the input. */
+export const CALLS_PER_SITE_PER_DAY = 100;
+
+export interface MonthlyEstimate {
+  callsPerDay: number;
+  dailyInput: number;
+  dailyOutput: number;
+  dailyTotal: number;
+  monthlyCostInput: number;
+  monthlyCostOutput: number;
+  monthlyCost: number;
+  unknownProviderSites: number;
+}
+
+/** The scan's daily token volume and monthly cost for a set of call sites. */
+export function estimateMonthly(sites: CallSite[]): MonthlyEstimate {
+  const callsPerDay = CALLS_PER_SITE_PER_DAY;
+  const dailyInput = sites.reduce((sum, s) => sum + s.tokensPerCall * callsPerDay, 0);
+  const dailyOutput = dailyInput * 2; // Estimate output at 2x input
+  const dailyTotal = dailyInput + dailyOutput;
+
+  // Cost per site using its own representative model's REAL current price
+  // (see patterns.ts SDK_REPRESENTATIVE_MODEL) — fixed 2026-08-23: this
+  // used to be one flat hardcoded $3/$15 "GPT-4o class" rate applied to
+  // every site regardless of detected provider, understating cost by up
+  // to ~67% for premium providers and overstating it for cheap ones.
+  let monthlyCostInput = 0;
+  let monthlyCostOutput = 0;
+  let unknownProviderSites = 0;
+  for (const site of sites) {
+    const info = getModel(site.estimatedModel);
+    if (!info) continue; // shouldn't happen — estimatedModel always maps to a real MODELS entry
+    if (site.estimatedModel === UNKNOWN_SDK_REPRESENTATIVE_MODEL && !['Anthropic'].includes(site.sdk)) {
+      unknownProviderSites++;
+    }
+    const siteDailyInput = site.tokensPerCall * callsPerDay;
+    const siteDailyOutput = siteDailyInput * 2;
+    monthlyCostInput += (siteDailyInput * 30 / 1_000_000) * info.input;
+    monthlyCostOutput += (siteDailyOutput * 30 / 1_000_000) * info.output;
+  }
+  const monthlyCost = monthlyCostInput + monthlyCostOutput;
+  return { callsPerDay, dailyInput, dailyOutput, dailyTotal, monthlyCostInput, monthlyCostOutput, monthlyCost, unknownProviderSites };
+}
+
 export function printReport(sites: CallSite[], filesScanned: number, timeMs: number, cwd: string): void {
   console.log('');
   console.log(`${ORANGE}${B}  ⚡ /slash${R}`);
@@ -46,32 +90,8 @@ export function printReport(sites: CallSite[], filesScanned: number, timeMs: num
 
   console.log('');
 
-  // Daily estimates (100 calls/site/day)
-  const callsPerDay = 100;
-  const dailyInput = sites.reduce((sum, s) => sum + s.tokensPerCall * callsPerDay, 0);
-  const dailyOutput = dailyInput * 2; // Estimate output at 2x input
-  const dailyTotal = dailyInput + dailyOutput;
+  const { callsPerDay, dailyInput, dailyOutput, dailyTotal, monthlyCostInput, monthlyCostOutput, monthlyCost, unknownProviderSites } = estimateMonthly(sites);
 
-  // Cost per site using its own representative model's REAL current price
-  // (see patterns.ts SDK_REPRESENTATIVE_MODEL) — fixed 2026-08-23: this
-  // used to be one flat hardcoded $3/$15 "GPT-4o class" rate applied to
-  // every site regardless of detected provider, understating cost by up
-  // to ~67% for premium providers and overstating it for cheap ones.
-  let monthlyCostInput = 0;
-  let monthlyCostOutput = 0;
-  let unknownProviderSites = 0;
-  for (const site of sites) {
-    const info = getModel(site.estimatedModel);
-    if (!info) continue; // shouldn't happen — estimatedModel always maps to a real MODELS entry
-    if (site.estimatedModel === UNKNOWN_SDK_REPRESENTATIVE_MODEL && !['Anthropic'].includes(site.sdk)) {
-      unknownProviderSites++;
-    }
-    const siteDailyInput = site.tokensPerCall * callsPerDay;
-    const siteDailyOutput = siteDailyInput * 2;
-    monthlyCostInput += (siteDailyInput * 30 / 1_000_000) * info.input;
-    monthlyCostOutput += (siteDailyOutput * 30 / 1_000_000) * info.output;
-  }
-  const monthlyCost = monthlyCostInput + monthlyCostOutput;
 
   console.log(`${ORANGE}  DAILY TOKEN VOLUME ${GRAY}(${callsPerDay} calls/site/day)${R}`);
   console.log(`${DIM}  ${'─'.repeat(60)}${R}`);
