@@ -15,6 +15,7 @@
  */
 
 import { describe, it, expect, beforeAll, beforeEach, afterAll } from 'bun:test';
+import { withStubFetch } from './helpers/stub-fetch';
 import { slash, slashBytes, init, report } from '../src/index';
 import { resolveKey, getEndpoint } from '../src/config';
 
@@ -216,24 +217,33 @@ describe('TIER 2: ENGINE — Config & Key Resolution', () => {
     });
 
     it('throws on invalid key (401)', async () => {
-      await expect(
-        report({
-          key: 'mcp_slash_fakefakefakefake',
-          tokens_estimated: 100, tokens_saved: 100,
-          action: 'skipped', cost_saved_usd: 0.01,
-        })
-      ).rejects.toThrow('Invalid Slash API key');
-    }, 15000);
+      await withStubFetch({ status: 401 }, async () => {
+        await expect(
+          report({
+            key: 'mcp_slash_fakefakefakefake',
+            tokens_estimated: 100, tokens_saved: 100,
+            action: 'skipped', cost_saved_usd: 0.01,
+          })
+        ).rejects.toThrow('Invalid Slash API key');
+      });
+    });
 
     it('model defaults to unknown when omitted', async () => {
-      await expect(
-        report({
+      await withStubFetch({ status: 200, body: { transaction_id: 't', fee_usd: 0, balance_remaining_usd: 20, timestamp: 'now' } }, async (sent) => {
+        await report({
           key: 'mcp_slash_fakefakefakefake',
           tokens_estimated: 100, tokens_saved: 100,
           action: 'skipped', cost_saved_usd: 0.01,
-        })
-      ).rejects.toThrow(); // Will throw 401, not a model error
-    }, 15000);
+        });
+        expect(sent[0].model).toBe('unknown');
+      });
+    });
+
+    it('402 and 429 come back as clear errors', async () => {
+      const args = { key: 'mcp_slash_x', tokens_estimated: 1, tokens_saved: 1, action: 'routed' as const, cost_saved_usd: 0 };
+      await withStubFetch({ status: 402 }, () => expect(report(args)).rejects.toThrow('Insufficient balance'));
+      await withStubFetch({ status: 429 }, () => expect(report(args)).rejects.toThrow('Rate limited'));
+    });
   });
 });
 

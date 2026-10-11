@@ -18,6 +18,7 @@ import { slash, preflight, preflightRoute, listModels, MODELS, PROVIDER_MODELS, 
 import type { PreflightResult, ModelInfo } from '../src/index';
 import { getModel } from '../src/models';
 import { patchFetch, onIntercept } from '../src/intercept';
+import { withStubFetch } from './helpers/stub-fetch';
 import type { InterceptEvent } from '../src/intercept';
 
 // Warm up WASM
@@ -558,9 +559,10 @@ describe('TIER 5: BILLING — Auto Report & Metering', () => {
 
   describe('Auto report behavior', () => {
     it('report() with zero savings charges zero fee', async () => {
-      // This is the auto-mode pattern: observation, not charge
+      // This is the auto-mode pattern: observation, not charge. Offline: a
+      // stub returns the server's 401 for a fake key.
       const { report } = await import('../src/transact');
-      try {
+      await withStubFetch({ status: 401 }, async () => { try {
         const result = await report({
           key: 'mcp_slash_fakefakefakefake',
           tokens_estimated: 1000,
@@ -575,13 +577,14 @@ describe('TIER 5: BILLING — Auto Report & Metering', () => {
         // The point: the payload shape is valid, report() doesn't reject it
         expect(e.message).toContain('Invalid Slash API key');
       }
+      });
     }, 15000);
 
     it('report() never throws on network failure in auto mode pattern', async () => {
       // Auto mode catches errors silently — test that pattern
       const { report } = await import('../src/transact');
       let crashed = false;
-      try {
+      await withStubFetch({ status: 503 }, async () => { try {
         await report({
           key: 'mcp_slash_fakefakefakefake',
           tokens_estimated: 100,
@@ -596,6 +599,7 @@ describe('TIER 5: BILLING — Auto Report & Metering', () => {
       } catch {
         crashed = true;
       }
+      });
       expect(crashed).toBe(false);
     }, 15000);
   });
@@ -628,7 +632,7 @@ describe('TIER 5: BILLING — Auto Report & Metering', () => {
       // The API rejects negative cost_saved_usd (tested in mcpaas-cf WJTTC)
       // Here we verify the client-side expectation
       const { report } = await import('../src/transact');
-      try {
+      await withStubFetch({ status: 401 }, async () => { try {
         await report({
           key: 'mcp_slash_fakefakefakefake',
           tokens_estimated: 100,
@@ -641,6 +645,7 @@ describe('TIER 5: BILLING — Auto Report & Metering', () => {
         // Either 401 (fake key) or 400 (negative savings) — both acceptable
         expect(['Invalid Slash API key', 'cost_saved_usd'].some(s => e.message.includes(s))).toBe(true);
       }
+      });
     }, 15000);
   });
 
