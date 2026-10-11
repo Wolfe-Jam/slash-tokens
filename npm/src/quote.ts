@@ -44,6 +44,12 @@ export interface Policy {
    * own tier, so nothing is swapped for a smaller line unless you allow it.
    */
   floor?: Tier;
+  /**
+   * Let a substitute be an older generation than the requested model (Gemini
+   * 3.8 Flash → 2.5 Flash). Default false: a tier is a product line, not a
+   * generation, so "same tier" alone doesn't mean "as good".
+   */
+  allowOlder?: boolean;
 }
 
 export type Action = 'go' | 'downgrade' | 'block';
@@ -142,7 +148,8 @@ export function quote(task: Task): Quote {
  * Choose what to run under a budget and a quality floor.
  *
  * Candidates are the requested model plus its same-provider siblings at or
- * above the floor (never a NOT_ROUTE_TARGETS model, never one excluded by
+ * above the floor and the same generation or newer (unless allowOlder; never
+ * a NOT_ROUTE_TARGETS model, never one excluded by
  * init({ models }), none at all after init({ route: false })). Each is quoted
  * on its own token count. A substitute must cost less than the requested
  * model — decide() never raises the bill. The cheapest candidate that fits
@@ -160,6 +167,7 @@ export function decide(task: Task, policy: Policy = {}): Decision {
     for (const m of PROVIDER_MODELS[requested.provider] ?? []) {
       if (m === requested.model || NOT_ROUTE_TARGETS.has(m) || !isModelAllowed(m)) continue;
       if (CATALOG[m].tier < floor) continue;
+      if (!policy.allowOlder && CATALOG[m].gen < CATALOG[requested.model].gen) continue;
       const q = quote({ ...task, model: m });
       if (!ok(q) || q.cost.high >= requested.cost.high) continue;  // never raise the cost
       if (!chosen || q.cost.high < chosen.cost.high ||

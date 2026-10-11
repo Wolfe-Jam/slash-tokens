@@ -8,6 +8,9 @@
 - **A quality floor per job.** `run({ …, floor })` overrides the agent's floor for that job, so one agent can plan on the flagship (floor 3) and edit on a mid-tier model (floor 2).
 - `estimateMonthly(sites)` in `report.ts`: the scan's monthly cost as one function, shared by the scan report and `diff`. The scan's numbers are unchanged.
 
+### Changed
+- **`decide()` won't swap in an older generation by default.** A tier is the vendor's product line, not its generation, so "same tier" alone didn't mean "as good": at the default floor Gemini 3.8 Flash was swapped for 2.5 Flash. Each catalog model now has a `gen` (Claude 4.5 < 5 < 5.5, Gemini 2.5 < 3.8, GPT-5.4 < 6, Grok 4.3 < 4.7, Nemotron 3 < 3.5; aliases take the generation they resolve to), and a substitute must be the same generation or newer. `decide(task, { allowOlder: true })` brings back the old behaviour. Newer-generation swaps are unchanged: Opus 4.8 → 5.5, GPT-5.6 Sol → GPT-6 Luna, Nemotron Ultra → 3.5 Lightning. `preflightRoute()` and `/auto` are unchanged.
+
 ## [1.7.1] — The Hired Agent Edition
 
 *2026-10-10*
