@@ -17,6 +17,7 @@ New: `slash-tokens diff`, a quality floor per job, the output cap passed to your
 
 ### Changed
 - **`decide()` won't swap in an older generation of the same line by default.** A tier is the vendor's product line, not its generation, so "same tier" alone didn't mean "as good": at the default floor Gemini 3.8 Flash was swapped for 2.5 Flash. Each catalog model now has a `gen` (Claude 4.5 < 5 < 5.5, Gemini 2.5 < 3.8, GPT-5.4 < 6, Grok 4.3 < 4.7, Nemotron 3 < 3.5; aliases take the generation they resolve to), and a substitute in the same tier must be the same generation or newer. A smaller current line is still fair game at a lower floor (Opus 5.5 → Haiku, Gemini 3.8 Flash → 3.1 Flash-Lite). `decide(task, { allowOlder: true })` brings back the old behaviour. Newer-generation swaps are unchanged: Opus 4.8 → 5.5, GPT-5.6 Sol → GPT-6 Luna, Nemotron Ultra → 3.5 Lightning. `preflightRoute()` and `/auto` are unchanged.
+- **OSS savings study re-run** (`bench/oss/RESULTS.md`): floor 1 is unchanged (pooled 71%); the default floor reads 29% pooled (was 34%) because Google's 34% was the 3.8 Flash → 2.5 Flash swap this release stops. The study now fails loudly without `rg` instead of writing zeros.
 
 ## [1.7.1] — The Hired Agent Edition
 

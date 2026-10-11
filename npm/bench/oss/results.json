@@ -1,5 +1,5 @@
 {
-  "slashTokens": "1.7.0",
+  "slashTokens": "1.8.0",
   "repos": [
     {
       "repo": "anthropics/claude-quickstarts",
@@ -122,17 +122,17 @@
       "requests": 32,
       "skipped": 6,
       "requestedUsd": 0.495661,
-      "defaultFloorUsd": 0.329339,
+      "defaultFloorUsd": 0.495661,
       "floor1Usd": 0.197995,
-      "defaultFloorSavedPct": 34,
+      "defaultFloorSavedPct": 0,
       "floor1SavedPct": 60,
       "byModel": {
         "gemini-3.8-flash": {
           "n": 32,
           "req": 0.495661,
-          "d0": 0.3293390000000001,
+          "d0": 0.495661,
           "d1": 0.197995,
-          "m0": "gemini-2.5-flash",
+          "m0": "—",
           "m1": "gemini-3.1-flash-lite"
         }
       }
