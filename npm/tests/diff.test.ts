@@ -112,6 +112,7 @@ describe('slash-tokens diff (CLI)', () => {
         expect(JSON.parse(json.stdout).files[0].file).toBe('src/b.ts');
         const text = run('HEAD~1', 'HEAD');
         expect(text.stdout).toContain('change: +$');
+        expect(text.stdout).toContain(': 1 call site, $');
         expect(text.stdout).toContain('src/b.ts (OpenAI): 0 → 1 sites');
         const bad = run();
         expect(bad.status).toBe(1);

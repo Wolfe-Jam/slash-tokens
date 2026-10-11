@@ -75,8 +75,9 @@ function runDiff(argv: string[]): number {
     const usd = (n: number) => `${n < 0 ? '-' : ''}$${Math.abs(n).toFixed(2)}`;
     const sign = (n: number) => (n > 0 ? `+${usd(n)}` : usd(n));
     console.log(`LLM cost of this change (scan estimate, ${d.callsPerSitePerDay} calls a site a day)`);
-    console.log(`  ${d.base.ref}: ${d.base.sites} call sites, ${usd(d.base.monthlyCost)}/mo`);
-    console.log(`  ${d.head.ref}: ${d.head.sites} call sites, ${usd(d.head.monthlyCost)}/mo`);
+    const sites = (n: number) => `${n} call site${n === 1 ? '' : 's'}`;
+    console.log(`  ${d.base.ref}: ${sites(d.base.sites)}, ${usd(d.base.monthlyCost)}/mo`);
+    console.log(`  ${d.head.ref}: ${sites(d.head.sites)}, ${usd(d.head.monthlyCost)}/mo`);
     console.log(`  change: ${sign(d.monthlyDelta)}/mo`);
     for (const f of d.files) {
       console.log(`  ${f.file} (${f.sdk}): ${f.sitesBefore} → ${f.sitesAfter} sites, ${sign(f.monthlyDelta)}/mo`);
