@@ -80,8 +80,9 @@ function runDiff(argv: string[]): number {
     const sign = (n: number) => (n > 0 ? `+${usd(n)}` : usd(n));
     console.log(`LLM cost of this change (scan estimate, ${d.callsPerSitePerDay} calls a site a day)`);
     const sites = (n: number) => `${n} call site${n === 1 ? '' : 's'}`;
-    console.log(`  ${d.base.ref}: ${sites(d.base.sites)}, ${usd(d.base.monthlyCost)}/mo`);
-    console.log(`  ${d.head.ref}: ${sites(d.head.sites)}, ${usd(d.head.monthlyCost)}/mo`);
+    const ref = (r: string) => (/^[0-9a-f]{40}$/.test(r) ? r.slice(0, 7) : r);  // CI passes full SHAs
+    console.log(`  ${ref(d.base.ref)}: ${sites(d.base.sites)}, ${usd(d.base.monthlyCost)}/mo`);
+    console.log(`  ${ref(d.head.ref)}: ${sites(d.head.sites)}, ${usd(d.head.monthlyCost)}/mo`);
     console.log(`  change: ${sign(d.monthlyDelta)}/mo`);
     for (const f of d.files) {
       console.log(`  ${f.file} (${f.sdk}): ${f.sitesBefore} → ${f.sitesAfter} site${f.sitesAfter === 1 ? '' : 's'}, ${sign(f.monthlyDelta)}/mo`);
