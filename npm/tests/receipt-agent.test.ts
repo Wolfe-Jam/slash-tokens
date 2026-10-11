@@ -141,6 +141,30 @@ describe('TIER 3: AERO — hire().run()', () => {
     expect(second.decision.action).toBe('block');
   });
 
+  it("a job's own floor overrides the agent's (plan on the flagship, edit on mid-tier)", async () => {
+    const seen: string[] = [];
+    const agent = hire({ floor: 1 });
+    await agent.run({ input: prompt, model: 'nemotron-3-ultra', maxOutputTokens: 500, floor: 3, call: fakeCall(seen) });
+    await agent.run({ input: prompt, model: 'nemotron-3-ultra', maxOutputTokens: 500, floor: 2, call: fakeCall(seen) });
+    await agent.run({ input: prompt, model: 'nemotron-3-ultra', maxOutputTokens: 500, call: fakeCall(seen) });
+    expect(seen).toEqual(['nemotron-3-ultra', 'nemotron-3-super', 'nemotron-3.5-lightning']);
+  });
+
+  it("the client is told the output cap, so the bill can't pass the quote", async () => {
+    const caps: number[] = [];
+    const call: CallModel = async (_m, _i, o) => { caps.push(o.maxOutputTokens); return { output: 'ok', usage: { prompt_tokens: 40, completion_tokens: 10 } }; };
+    const agent = hire();
+    await agent.run({ input: prompt, model: 'gpt-5.4', maxOutputTokens: 1234, call });
+    await agent.run({ input: prompt, model: 'gpt-5.4', call });
+    expect(caps).toEqual([1234, 4096]);
+  });
+
+  it('a two-argument client still works', async () => {
+    const legacy = async (model: string) => ({ output: model, usage: { prompt_tokens: 40, completion_tokens: 10 } });
+    const res = await hire().run({ input: prompt, model: 'gpt-5.4', call: legacy });
+    expect(res.output).toBeTruthy();
+  });
+
   it('a failing call throws and records nothing', async () => {
     const agent = hire();
     const boom: CallModel = async () => { throw new Error('429'); };
