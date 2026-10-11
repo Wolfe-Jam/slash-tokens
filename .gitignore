@@ -9,3 +9,8 @@ __pycache__/
 *.tar.gz
 *.crate
 npm/bench/oss/.cache/
+
+# Private release tooling (/pubpro etc.) lives in the private faf-skills-ops repo,
+# never in this public repo. Removed 2026-10-10 after #18 added it.
+.cursor/skills/
+.claude/skills/
