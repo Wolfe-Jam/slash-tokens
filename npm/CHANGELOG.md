@@ -4,7 +4,7 @@
 
 *2026-10-11*
 
-The scan counts production code only: tests and .slashignore paths are skipped.
+Count what ships: the scan and diff measure the code you deploy, not your tests.
 
 No change to `quote()`, `decide()`, `reconcile()`, `hire()`, `/auto` or prices.
 
