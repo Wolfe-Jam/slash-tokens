@@ -54,8 +54,10 @@ function findCallSites(filePath: string, content: string): CallSite[] {
   const lines = content.split('\n');
 
   for (const pattern of AI_PATTERNS) {
-    const callLines = matchLines(pattern.call, content);
-    const siteLines = callLines.length > 0 ? callLines : matchLines(pattern.uses, content).slice(0, 1);
+    const usesLines = matchLines(pattern.uses, content);
+    // A call counts where it names the provider itself, or where the SDK is in use.
+    const callLines = pattern.standalone || !pattern.uses || usesLines.length > 0 ? matchLines(pattern.call, content) : [];
+    const siteLines = callLines.length > 0 ? callLines : usesLines.slice(0, 1);
     const estimatedModel = SDK_REPRESENTATIVE_MODEL[pattern.name] ?? UNKNOWN_SDK_REPRESENTATIVE_MODEL;
 
     for (const lineNum of siteLines) {

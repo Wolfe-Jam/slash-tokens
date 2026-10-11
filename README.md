@@ -10,7 +10,7 @@
 **Know what an LLM call will cost before you make it, and prove what you saved after.**
 4.8 KB WASM · sub-millisecond · zero dependencies · Claude, GPT, Grok, Gemini, Nemotron.
 
-**v1.7.0 — The Hired Agent Edition:** quote the job, book the right model, prove it with a receipt. [npm](https://www.npmjs.com/package/slash-tokens) · [release notes](https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.7.0)
+**v1.7.1 — The Hired Agent Edition:** quote the job, book the right model, prove it with a receipt. [npm](https://www.npmjs.com/package/slash-tokens) · [release notes](https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.7.1)
 
 ## Try it
 
