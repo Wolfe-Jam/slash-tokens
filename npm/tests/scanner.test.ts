@@ -138,6 +138,67 @@ export const client = new OpenAI();
     }
   });
 
+  it('a look-alike call is not an LLM call unless the SDK is in the file (Twilio SMS, Tauri IPC)', () => {
+    const dir = withTempDir({
+      'sms.ts': `import twilio from 'twilio';
+const client = twilio(process.env.SID, process.env.TOKEN);
+export const send = (to: string) => client.messages.create({ to, from: '+15550100', body: 'Your code is 1234' });
+`,
+      'ipc.ts': `import { invoke } from '@tauri-apps/api/core';
+export const save = () => invoke('save_file');
+export const load = (w: any) => w.invoke('load');
+`,
+      'gen.ts': `export function generateText(x: string) { return x.toUpperCase(); }
+export const y = generateText('hi');
+`,
+    });
+    try {
+      expect(scan(dir).sites).toEqual([]);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('a call that names the provider itself counts without an import (raw fetch, x.ai URL)', () => {
+    const dir = withTempDir({
+      'raw.ts': `export const ask = (body: string) => fetch('https://api.openai.com/v1/chat/completions', { method: 'POST', body });
+`,
+      'grok.ts': `export const url = 'https://api.x.ai/api/chat';
+`,
+    });
+    try {
+      const at = (file: string) => scan(dir).sites.filter(s => s.file.endsWith(file)).map(s => s.sdk);
+      expect(at('raw.ts')).toEqual(['fetch (AI)']);
+      expect(at('grok.ts')).toEqual(['Grok']);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('Python SDKs: imports and clients count, look-alikes do not', () => {
+    const dir = withTempDir({
+      'claude.py': `import anthropic
+client = anthropic.AsyncAnthropic()
+msg = await client.messages.create(model="claude-haiku-4-5", max_tokens=100, messages=[])
+`,
+      'gem.py': `from google import genai
+client = genai.Client()
+r = client.models.generate_content(model="gemini-3.8-flash", contents="hi")
+`,
+      'sms.py': `from twilio.rest import Client
+Client(sid, token).messages.create(to=to, from_=frm, body="hi")
+`,
+    });
+    try {
+      const at = (file: string) => scan(dir).sites.filter(s => s.file.endsWith(file)).map(s => `${s.sdk}:${s.line}`);
+      expect(at('claude.py')).toEqual(['Anthropic:3']);
+      expect(at('gem.py')).toEqual(['Gemini:3']);
+      expect(at('sms.py')).toEqual([]);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
   it('every estimatedModel resolves to a real MODELS entry with real pricing', () => {
     const dir = withTempDir({
       'mixed.ts': `

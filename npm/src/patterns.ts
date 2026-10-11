@@ -7,27 +7,32 @@ export interface Pattern {
    * client built here and passed to a wrapper. An import plus a client plus
    * one request is one call site, not three. */
   uses?: RegExp;
+  /** The call names the provider by itself (an API URL, a provider-named
+   * client), so it counts without `uses` in the file. Otherwise a call counts
+   * only where the SDK is in use: `.messages.create(` is also Twilio's SMS
+   * API, and `.invoke(` is also Tauri / Electron IPC. */
+  standalone?: boolean;
 }
 
 export const AI_PATTERNS: Pattern[] = [
   // OpenAI
-  { name: 'OpenAI', call: /\.(?:chat\.completions|responses)\.create\(/g, uses: /new OpenAI\(|from\s+['"]openai['"]/g },
+  { name: 'OpenAI', call: /\.(?:chat\.completions|responses)\.create\(/g, uses: /\b(?:Async|Azure)?OpenAI\(|from\s+['"]openai['"]|^\s*(?:from\s+openai\s+import|import\s+openai)\b/gm },
   // Anthropic
-  { name: 'Anthropic', call: /\.messages\.(?:create|stream)\(/g, uses: /new Anthropic\(|from\s+['"]@anthropic-ai/g },
+  { name: 'Anthropic', call: /\.messages\.(?:create|stream)\(/g, uses: /\b(?:Async)?Anthropic\(|from\s+['"]@anthropic-ai|^\s*(?:from\s+anthropic\s+import|import\s+anthropic)\b/gm },
   // Vercel AI SDK
   { name: 'Vercel AI', call: /\b(?:generateText|streamText|generateObject|streamObject)\(/g, uses: /from\s+['"]ai['"]/g },
   // LangChain
-  { name: 'LangChain', call: /\.invoke\(/g, uses: /from\s+['"]langchain|ChatOpenAI|ChatAnthropic/g },
+  { name: 'LangChain', call: /\.invoke\(/g, uses: /from\s+['"]@?langchain|^\s*(?:from|import)\s+langchain|ChatOpenAI|ChatAnthropic/gm },
   // Google Gemini
-  { name: 'Gemini', call: /\.generateContent(?:Stream)?\(/g, uses: /GoogleGenerativeAI|from\s+['"]@google\/generative/g },
+  { name: 'Gemini', call: /\.(?:generateContent(?:Stream)?|generate_content(?:_stream)?)\(/g, uses: /GoogleGenerativeAI|from\s+['"]@google\/gen|^\s*(?:import\s+google\.generativeai|from\s+google(?:\.genai|\s+import\s+genai))/gm },
   // AWS Bedrock
   { name: 'Bedrock', call: /InvokeModelCommand\(/g, uses: /BedrockRuntimeClient/g },
   // xAI Grok
-  { name: 'Grok', call: /x\.ai\/api|xai\.chat/g, uses: /from\s+['"]grok/g },
+  { name: 'Grok', call: /x\.ai\/api|xai\.chat/g, uses: /from\s+['"]grok/g, standalone: true },
   // Raw fetch to AI endpoints
-  { name: 'fetch (AI)', call: /fetch\(.*api\.openai\.com|fetch\(.*api\.anthropic\.com|fetch\(.*generativelanguage\.googleapis/g },
+  { name: 'fetch (AI)', call: /fetch\(.*api\.openai\.com|fetch\(.*api\.anthropic\.com|fetch\(.*generativelanguage\.googleapis/g, standalone: true },
   // Cohere
-  { name: 'Cohere', call: /cohere\.chat/g, uses: /from\s+['"]cohere|CohereClient/g },
+  { name: 'Cohere', call: /cohere\.chat/g, uses: /from\s+['"]cohere|CohereClient/g, standalone: true },
   // Mistral
   { name: 'Mistral', uses: /from\s+['"]@mistralai|MistralClient/g },
 ];

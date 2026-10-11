@@ -1,6 +1,6 @@
 {
   "name": "slash-tokens",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "Know what an LLM call will cost before you make it, and prove what you saved after. Quote, decide, receipt. 4.8 KB WASM, zero dependencies.",
   "main": "dist/index.js",
   "module": "dist/index.js",

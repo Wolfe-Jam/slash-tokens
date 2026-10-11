@@ -10,9 +10,11 @@
 **Know what an LLM call will cost before you make it, and prove what you saved after.**
 4.8 KB WASM · sub-millisecond · zero dependencies · Claude, GPT, Grok, Gemini, Nemotron.
 
-## v1.7.0 — The Hired Agent Edition
+## v1.7.1 — The Hired Agent Edition
 
 Quote the job, book the right model, prove it with a receipt.
+
+New in 1.7.1: the scan counts each real LLM request once.
 
 ```js
 import { hire } from 'slash-tokens'

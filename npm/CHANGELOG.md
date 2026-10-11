@@ -1,9 +1,16 @@
 # Changelog
 
-## [Unreleased]
+## [1.7.1] — The Hired Agent Edition
+
+*2026-10-10*
+
+The scan counts each real LLM request once.
+
+No change to `quote()`, `decide()`, `reconcile()`, `hire()`, `/auto` or prices.
 
 ### Fixed
 - **The scan (`npx slash-tokens`) counts each LLM request once.** It counted every import, client constructor and request line as its own call site, so one `client.messages.create(...)` behind `import Anthropic` and `new Anthropic()` was reported as two sites (and the request itself wasn't matched unless the client variable was named `anthropic`). The monthly estimate is per site, so it came out inflated: a two-request sample project read 4 sites and $35.77/mo in 1.7.0, and reads 2 sites and $17.89/mo now. A request is now one site; a file that only imports or builds a client counts once. Requests on any client variable are matched (`.messages.create(`, `.chat.completions.create(`, `.responses.create(`, `generateText(` …), in Python too.
+- **The scan no longer counts look-alike calls.** Matching any client variable made `.messages.create(` also catch Twilio's SMS API and `.invoke(` catch Tauri / Electron IPC. A request now counts only in a file that uses that SDK (an import or a client: `import anthropic`, `from openai import`, `new Anthropic()`, `AsyncOpenAI()` …), unless the call names the provider itself (`fetch` to an AI API URL, `x.ai/api`, `cohere.chat`). Python Gemini (`generate_content`) is matched too.
 - The scan's footnote reads "1 call site uses an assumed price" (was "use").
 
 ### Docs
