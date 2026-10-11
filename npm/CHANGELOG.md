@@ -1,15 +1,23 @@
 # Changelog
 
-## [Unreleased]
+## [1.8.0] — The Merge Gate Edition
+
+*2026-10-11*
+
+Know what a change will cost before it merges.
+
+New: `slash-tokens diff`, a quality floor per job, the output cap passed to your client, and no older-generation swaps by default. `/auto` routing is unchanged. No price change.
 
 ### Added
 - **`slash-tokens diff <base> [head] [--json]`**: what a git change does to the scan's monthly LLM cost. It scans both refs of the repo in the current folder (head defaults to the working tree, so uncommitted edits count), and reports call sites and monthly cost at each, the change, and each file whose LLM calls or cost moved, largest first. Same assumptions as the scan (100 calls a site a day, output twice the input). `--json` is for CI. CLI only: it uses git, so it isn't in the library entry (which runs in browsers and Workers).
 - **`hire().run()` tells your client the job's output cap.** `call(model, input, { maxOutputTokens })`: send it as the provider's max-tokens so the bill can't pass the quote. Two-argument clients keep working.
 - **A quality floor per job.** `run({ …, floor })` overrides the agent's floor for that job, so one agent can plan on the flagship (floor 3) and edit on a mid-tier model (floor 2).
+- The diff's per-file line reads "0 → 1 site" (was "sites").
 - `estimateMonthly(sites)` in `report.ts`: the scan's monthly cost as one function, shared by the scan report and `diff`. The scan's numbers are unchanged.
 
 ### Changed
 - **`decide()` won't swap in an older generation of the same line by default.** A tier is the vendor's product line, not its generation, so "same tier" alone didn't mean "as good": at the default floor Gemini 3.8 Flash was swapped for 2.5 Flash. Each catalog model now has a `gen` (Claude 4.5 < 5 < 5.5, Gemini 2.5 < 3.8, GPT-5.4 < 6, Grok 4.3 < 4.7, Nemotron 3 < 3.5; aliases take the generation they resolve to), and a substitute in the same tier must be the same generation or newer. A smaller current line is still fair game at a lower floor (Opus 5.5 → Haiku, Gemini 3.8 Flash → 3.1 Flash-Lite). `decide(task, { allowOlder: true })` brings back the old behaviour. Newer-generation swaps are unchanged: Opus 4.8 → 5.5, GPT-5.6 Sol → GPT-6 Luna, Nemotron Ultra → 3.5 Lightning. `preflightRoute()` and `/auto` are unchanged.
+- **OSS savings study re-run** (`bench/oss/RESULTS.md`): floor 1 is unchanged (pooled 71%); the default floor reads 29% pooled (was 34%) because Google's 34% was the 3.8 Flash → 2.5 Flash swap this release stops. The study now fails loudly without `rg` instead of writing zeros.
 
 ## [1.7.1] — The Hired Agent Edition
 

@@ -1,7 +1,8 @@
 # OSS savings study
 
 What would `decide()` save on the LLM requests in official open-source repos
-from four providers? Run with slash-tokens 1.7.0 prices, offline, against each
+from four providers? Run with slash-tokens 1.8.0 (1.7.0 prices; `decide()` no
+longer swaps to an older generation of the same line), offline, against each
 repo pinned to the commit below.
 
 ```bash
@@ -30,9 +31,12 @@ bun bench/oss/goose.ts         # goose job model
 | anthropics/claude-quickstarts | Anthropic | `9ec32b9` | 8 | 24% | 65% |
 | xai-org/xai-cookbook | xAI | `316ba56` | 33 | 0% | 57% |
 | openai/openai-agents-python | OpenAI | `125efa0` | 139 | 52% | 84% |
-| google-gemini/cookbook | Google | `dd5b15d` | 32 | 34% | 60% |
-| **Pooled by dollars** | | | 212 | 34% | 71% |
-| **Average of repos** | | | | 28% | 67% |
+| google-gemini/cookbook | Google | `dd5b15d` | 32 | 0% | 60% |
+| **Pooled by dollars** | | | 212 | 29% | 71% |
+| **Average of repos** | | | | 19% | 67% |
+
+Under 1.7 the Google default floor read 34%: that was Gemini 3.8 Flash → 2.5
+Flash, an older generation of the same line, which 1.8.0 no longer does.
 
 At floor 1 every repo lands at 57–84%. At the default floor it is 0–52%. The
 "40–80% of tokens" claim is about tasks that fit a smaller model, which is
@@ -52,9 +56,10 @@ the floor-1 case.
   (58%), `gpt-5.6-sol` → `gpt-6.1-sol` (50%). At floor 1, `gpt-5.6-sol` →
   `gpt-6-luna` saves 97%. GPT-6 counts use the conservative default
   calibration, which over-counts, so real GPT-6 savings would be higher.
-- **Google.** The cookbook defaults to `gemini-3.8-flash`. Same tier picks
-  `gemini-2.5-flash` (34%), an older generation; floor 1 picks
-  `gemini-3.1-flash-lite` (60%). 3.8 Flash is on launch pricing until
+- **Google.** The cookbook defaults to `gemini-3.8-flash`. No newer, cheaper
+  Flash exists, so the default floor saves nothing (1.7 picked the older
+  `gemini-2.5-flash`, 34%; 1.8.0 doesn't). Floor 1 picks
+  `gemini-3.1-flash-lite`, the current Flash-Lite line (60%). 3.8 Flash is on launch pricing until
   2026-12-31; at Google's list price these savings grow.
 
 ## Caveats

@@ -10,7 +10,7 @@
 **Know what an LLM call will cost before you make it, and prove what you saved after.**
 4.8 KB WASM · sub-millisecond · zero dependencies · Claude, GPT, Grok, Gemini, Nemotron.
 
-**v1.7.1 — The Hired Agent Edition:** quote the job, book the right model, prove it with a receipt. [npm](https://www.npmjs.com/package/slash-tokens) · [release notes](https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.7.1)
+**v1.8.0 — The Merge Gate Edition:** know what a change will cost before it merges. [npm](https://www.npmjs.com/package/slash-tokens) · [release notes](https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.8.0)
 
 ## Try it
 
@@ -70,6 +70,17 @@ const route = preflightRoute(prompt, 'claude-opus-5')
 
 Fully typed. Do not use `check.options[0]` as the route — that list is cross-provider on purpose.
 
+## What a change costs (merge gate)
+
+`slash-tokens diff <base> [head]` scans two versions of your repo and tells you what the change does to your monthly LLM cost. Head defaults to the working tree, so uncommitted edits count.
+
+```bash
+npx slash-tokens diff main            # this branch vs main
+npx slash-tokens diff main HEAD --json  # for CI: base, head, change, and each file that moved
+```
+
+Same assumptions as the scan (100 calls a site a day, output twice the input, each call site priced at its SDK's representative model), stated in the output. Needs `git`; it's a CLI command, not part of the library entry.
+
 ## Quote → Decide → Prove
 
 Price a job before it runs, choose the model under a budget and a quality floor, and check the bill afterwards.
@@ -92,11 +103,12 @@ const receipt = reconcile(d.chosen, response.usage, { baseline: 'claude-opus-5' 
 
 - **Tiers** are each vendor's own line: 1 small · 2 mid · 3 flagship · 4 frontier. A floor compares models within one provider only. The default floor is the requested model's own tier.
 - **`decide()` never raises the bill**: a substitute always costs less than the model you asked for, and it stays with the same provider.
+- **No older generation by default**: a tier is the vendor's product line, not its generation, so `decide()` only swaps to the same generation or newer (Opus 4.8 → 5.5 yes, Gemini 3.8 Flash → 2.5 Flash no). `{ allowOlder: true }` lifts it.
 - **`reconcile()`** reads OpenAI-style usage (OpenAI, xAI, Nebius, any OpenAI-compatible API) and Anthropic-style usage. `underReported` flags the one thing Slash must never do.
 
 ## Hire the agent
 
-`hire()` runs the whole loop for each job: quote → decide → your call → receipt. One budget covers every job; a blocked job never calls the model.
+`hire()` runs the whole loop for each job: quote → decide → your call → receipt. One budget covers every job; a blocked job never calls the model. A job can set its own `floor` (plan on the flagship, edit on mid-tier), and your client receives `{ maxOutputTokens }` so the bill can't pass the quote.
 
 ```js
 import { hire } from 'slash-tokens'
