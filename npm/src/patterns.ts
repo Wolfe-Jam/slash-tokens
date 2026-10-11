@@ -70,6 +70,10 @@ export const SKIP_DIRS = new Set([
   'target', 'zig-out', 'zig-cache',
 ]);
 
+/** Test code: mocked and example LLM calls, not production traffic. Skipped unless includeTests. */
+export const TEST_DIRS = new Set(['test', 'tests', '__tests__', '__mocks__', 'spec', 'fixtures']);
+export const TEST_FILE = /(\.(test|spec)\.[cm]?[jt]sx?$)|(^test_.*\.py$)|(_test\.py$)/;
+
 export const SCAN_EXTENSIONS = new Set([
   '.ts', '.tsx', '.js', '.jsx', '.mjs', '.mts', '.py', '.rs',
 ]);

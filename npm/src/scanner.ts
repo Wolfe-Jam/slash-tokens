@@ -1,10 +1,12 @@
 import { readdirSync, readFileSync, statSync } from 'fs';
-import { join, extname } from 'path';
+import { join, extname, relative, sep } from 'path';
 import { slash } from './slash.js';
 import {
   AI_PATTERNS,
   SKIP_DIRS,
   SCAN_EXTENSIONS,
+  TEST_DIRS,
+  TEST_FILE,
   Pattern,
   SDK_REPRESENTATIVE_MODEL,
   UNKNOWN_SDK_REPRESENTATIVE_MODEL,
@@ -21,7 +23,28 @@ export interface CallSite {
   estimatedModel: string;
 }
 
-function walkDir(dir: string, files: string[]): void {
+export interface ScanOptions {
+  /** Scan test code too (test dirs, *.test.*, *.spec.*, test_*.py). Default false. */
+  includeTests?: boolean;
+}
+
+/**
+ * `.slashignore` at the scan root: one path or pattern per line, relative to
+ * the root; `#` comments; a trailing `/` matches a folder; `*` matches within
+ * one path segment, `**` across segments.
+ */
+export function readSlashIgnore(root: string): RegExp[] {
+  let text = '';
+  try { text = readFileSync(join(root, '.slashignore'), 'utf-8'); } catch { return []; }
+  return text.split('\n').map(l => l.trim()).filter(l => l && !l.startsWith('#')).map(p => {
+    const dir = p.endsWith('/');
+    const body = p.replace(/^\/+|\/+$/g, '').split('**').map(part =>
+      part.split('*').map(s => s.replace(/[.+?^${}()|[\]\\]/g, '\\$&')).join('[^/]*')).join('.*');
+    return new RegExp(`^${body}${dir ? '/' : '(/|$)'}`);
+  });
+}
+
+function walkDir(root: string, dir: string, files: string[], skipped: { tests: number; ignored: number }, opts: ScanOptions, ignore: RegExp[]): void {
   let entries;
   try { entries = readdirSync(dir); } catch { return; }
   for (const entry of entries) {
@@ -29,9 +52,13 @@ function walkDir(dir: string, files: string[]): void {
     const full = join(dir, entry);
     let stat;
     try { stat = statSync(full); } catch { continue; }
+    const rel = relative(root, full).split(sep).join('/') + (stat.isDirectory() ? '/' : '');
+    if (ignore.some(re => re.test(rel))) { skipped.ignored++; continue; }
     if (stat.isDirectory()) {
-      walkDir(full, files);
+      if (!opts.includeTests && TEST_DIRS.has(entry)) { skipped.tests++; continue; }
+      walkDir(root, full, files, skipped, opts, ignore);
     } else if (SCAN_EXTENSIONS.has(extname(entry))) {
+      if (!opts.includeTests && TEST_FILE.test(entry)) { skipped.tests++; continue; }
       files.push(full);
     }
   }
@@ -78,10 +105,11 @@ function findCallSites(filePath: string, content: string): CallSite[] {
   return sites;
 }
 
-export function scan(dir: string): { sites: CallSite[]; filesScanned: number; timeMs: number } {
+export function scan(dir: string, opts: ScanOptions = {}): { sites: CallSite[]; filesScanned: number; timeMs: number; skipped: { tests: number; ignored: number } } {
   const start = performance.now();
   const files: string[] = [];
-  walkDir(dir, files);
+  const skipped = { tests: 0, ignored: 0 };
+  walkDir(dir, dir, files, skipped, opts, readSlashIgnore(dir));
 
   const sites: CallSite[] = [];
   for (const file of files) {
@@ -94,5 +122,6 @@ export function scan(dir: string): { sites: CallSite[]; filesScanned: number; ti
     sites,
     filesScanned: files.length,
     timeMs: Math.round(performance.now() - start),
+    skipped,
   };
 }

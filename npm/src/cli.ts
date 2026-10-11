@@ -37,8 +37,12 @@ function scanHere(): void {
   if (key) init({ key });
 
   const cwd = process.cwd();
-  const { sites, filesScanned, timeMs } = scan(cwd);
+  const { sites, filesScanned, timeMs, skipped } = scan(cwd, { includeTests: args.includes('--include-tests') });
   printReport(sites, filesScanned, timeMs, cwd);
+  if (skipped.tests || skipped.ignored) {
+    const parts = [skipped.tests ? `${skipped.tests} test ${skipped.tests === 1 ? 'path' : 'paths'}` : '', skipped.ignored ? `${skipped.ignored} in .slashignore` : ''].filter(Boolean);
+    console.log(`\x1b[90m  Skipped ${parts.join(' and ')}${skipped.tests ? ' (--include-tests to scan tests)' : ''}\x1b[0m\n`);
+  }
 
   const R = '\x1b[0m';
   const B = '\x1b[1m';
@@ -66,8 +70,8 @@ function scanHere(): void {
 function runDiff(argv: string[]): number {
   try {
     const refs = argv.filter(a => !a.startsWith('--'));
-    if (refs.length < 1 || refs.length > 2) throw new Error('usage: slash-tokens diff <base> [head] [--json]');
-    const d = scanDiff(process.cwd(), refs[0], refs[1]);
+    if (refs.length < 1 || refs.length > 2) throw new Error('usage: slash-tokens diff <base> [head] [--json] [--include-tests]');
+    const d = scanDiff(process.cwd(), refs[0], refs[1], { includeTests: argv.includes('--include-tests') });
     if (argv.includes('--json')) {
       console.log(JSON.stringify(d, null, 2));
       return 0;
@@ -169,12 +173,13 @@ function printHelp(): void {
       [--max-output N] [--min-output N] [--budget USD] [--floor 1-4] [--json]
                              price a job and decide: go, downgrade or block
 
-  slash-tokens diff <base> [head] [--json]
+  slash-tokens diff <base> [head] [--json] [--include-tests]
                              what a git change does to the scan's monthly LLM cost
 
   --version, -V    print version and exit
   --help, -h       print this help and exit
   --key=KEY        optional; CLI scans never charge
+  --include-tests  scan test code too (skipped by default, like .slashignore paths)
 
 Run in a project that already calls an LLM.
 Empty folder → no call sites. That's normal.`);

@@ -2,7 +2,7 @@ import { mkdtempSync, rmSync } from 'fs';
 import { tmpdir } from 'os';
 import { join, relative } from 'path';
 import { spawnSync } from 'child_process';
-import { scan, type CallSite } from './scanner.js';
+import { scan, type CallSite, type ScanOptions } from './scanner.js';
 import { estimateMonthly, CALLS_PER_SITE_PER_DAY } from './report.js';
 
 export interface ScanSide {
@@ -50,8 +50,8 @@ function exportRef(dir: string, ref: string): string {
   return out;
 }
 
-function scanSide(root: string): { sites: (CallSite & { rel: string })[]; monthly: number } {
-  const { sites } = scan(root);
+function scanSide(root: string, opts: ScanOptions): { sites: (CallSite & { rel: string })[]; monthly: number } {
+  const { sites } = scan(root, opts);
   return {
     sites: sites.map(s => ({ ...s, rel: relative(root, s.file) })),
     monthly: estimateMonthly(sites).monthlyCost,
@@ -62,14 +62,15 @@ function scanSide(root: string): { sites: (CallSite & { rel: string })[]; monthl
  * What a change does to the scan's monthly LLM cost: scan `base` and `head`
  * (default: the working tree) of the git repo at `dir`, and compare. Same
  * assumptions as the scan (100 calls a site a day, output twice the input,
- * each site priced at its SDK's representative model).
+ * each site priced at its SDK's representative model; test code and
+ * .slashignore paths skipped unless opts.includeTests).
  */
-export function scanDiff(dir: string, base: string, head?: string): ScanDiff {
+export function scanDiff(dir: string, base: string, head?: string, opts: ScanOptions = {}): ScanDiff {
   const baseDir = exportRef(dir, base);
   const headDir = head ? exportRef(dir, head) : dir;
   try {
-    const b = scanSide(baseDir);
-    const h = scanSide(headDir);
+    const b = scanSide(baseDir, opts);
+    const h = scanSide(headDir, opts);
 
     const groups = new Map<string, { file: string; sdk: string; before: CallSite[]; after: CallSite[] }>();
     const add = (s: CallSite & { rel: string }, side: 'before' | 'after') => {

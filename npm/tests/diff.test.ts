@@ -85,6 +85,19 @@ describe('scanDiff()', () => {
     } finally { rmSync(r.dir, { recursive: true, force: true }); }
   });
 
+  it("test code and .slashignore paths don't count; --include-tests brings tests back", () => {
+    const r = repo();
+    try {
+      r.commit({ 'src/a.ts': ANTHROPIC }, 'base');
+      r.commit({ 'tests/mock.ts': OPENAI, 'src/b.test.ts': OPENAI, 'src/fixture.ts': OPENAI, '.slashignore': 'src/fixture.ts\n' }, 'tests + ignored fixture');
+      const d = scanDiff(r.dir, 'HEAD~1', 'HEAD');
+      expect(d.monthlyDelta).toBe(0);
+      expect(d.files).toEqual([]);
+      const withTests = scanDiff(r.dir, 'HEAD~1', 'HEAD', { includeTests: true });
+      expect(withTests.files.map(f => f.file).sort()).toEqual(['src/b.test.ts', 'tests/mock.ts']);
+    } finally { rmSync(r.dir, { recursive: true, force: true }); }
+  });
+
   it('a bad ref is a clear error', () => {
     const r = repo();
     try {
