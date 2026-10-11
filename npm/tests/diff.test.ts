@@ -98,6 +98,22 @@ describe('scanDiff()', () => {
     } finally { rmSync(r.dir, { recursive: true, force: true }); }
   });
 
+  it('text output shortens full SHAs to 7 characters (JSON keeps them whole)', () => {
+    const r = repo();
+    try {
+      r.commit({ 'src/a.ts': ANTHROPIC }, 'base');
+      r.commit({ 'src/b.ts': OPENAI }, 'head');
+      const sha = (rev: string) => spawnSync('git', ['-C', r.dir, 'rev-parse', rev], { encoding: 'utf8' }).stdout.trim();
+      const [b, h] = [sha('HEAD~1'), sha('HEAD')];
+      const cli = join(dirname(fileURLToPath(import.meta.url)), '../src/cli.ts');
+      const text = spawnSync('bun', [cli, 'diff', b, h], { cwd: r.dir, encoding: 'utf8' }).stdout;
+      expect(text).toContain(`  ${b.slice(0, 7)}: 1 call site`);
+      expect(text).not.toContain(b);
+      const json = JSON.parse(spawnSync('bun', [cli, 'diff', b, h, '--json'], { cwd: r.dir, encoding: 'utf8' }).stdout);
+      expect(json.base.ref).toBe(b);
+    } finally { rmSync(r.dir, { recursive: true, force: true }); }
+  });
+
   it('a bad ref is a clear error', () => {
     const r = repo();
     try {
