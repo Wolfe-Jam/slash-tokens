@@ -10,11 +10,24 @@
 **Know what an LLM call will cost before you make it, and prove what you saved after.**
 4.8 KB WASM · sub-millisecond · zero dependencies · Claude, GPT, Grok, Gemini, Nemotron.
 
-## v1.7.1 — The Hired Agent Edition
+## v1.8.0 — The Merge Gate Edition
+
+Know what a change will cost before it merges.
+
+```bash
+npx slash-tokens diff main
+# LLM cost of this change (scan estimate, 100 calls a site a day)
+#   main: 1 call site, $8.71/mo
+#   working tree: 2 call sites, $17.29/mo
+#   change: +$8.58/mo
+#   src/summarise.ts (OpenAI): 0 → 1 site, +$8.58/mo
+```
+
+Run it in CI on every merge request (`--json` for pipelines). Also new in 1.8.0: `decide()` never swaps in an older model generation unless you allow it, and `hire()` takes a quality floor per job and tells your client each job's output cap.
+
+## Hire the agent
 
 Quote the job, book the right model, prove it with a receipt.
-
-New in 1.7.1: the scan counts each real LLM request once.
 
 ```js
 import { hire } from 'slash-tokens'
@@ -25,7 +38,7 @@ const { decision, receipt } = await agent.run({
   input: prompt,
   model: 'nemotron-3-ultra',
   maxOutputTokens: 2000,
-  call: (model, input) => yourClient(model, input),  // returns { output, usage }
+  call: (model, input, { maxOutputTokens }) => yourClient(model, input, maxOutputTokens),  // returns { output, usage }
 })
 
 decision.action  // 'downgrade': nemotron-3-super does the job for less

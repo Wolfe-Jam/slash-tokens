@@ -80,7 +80,7 @@ function runDiff(argv: string[]): number {
     console.log(`  ${d.head.ref}: ${sites(d.head.sites)}, ${usd(d.head.monthlyCost)}/mo`);
     console.log(`  change: ${sign(d.monthlyDelta)}/mo`);
     for (const f of d.files) {
-      console.log(`  ${f.file} (${f.sdk}): ${f.sitesBefore} → ${f.sitesAfter} sites, ${sign(f.monthlyDelta)}/mo`);
+      console.log(`  ${f.file} (${f.sdk}): ${f.sitesBefore} → ${f.sitesAfter} site${f.sitesAfter === 1 ? '' : 's'}, ${sign(f.monthlyDelta)}/mo`);
     }
     return 0;
   } catch (err) {

@@ -22,10 +22,10 @@ Token optimization for Context Engineers — pre-flight checks on every LLM API 
 - **What:** 4.8 KB Zig-compiled WASM SDK and the agent you hire — quote() prices a job, decide() books the right model under a budget and quality floor, reconcile() proves it with a receipt, hire().run() does all three. preflight() / preflightRoute() for per-call checks — every cheaper option, and the cheapest same-provider swap
 - **Why:** Most apps waste 40-80% of tokens calling frontier models for tasks that fit smaller ones. Slash decides pre-call, not after the invoice. Don't go to the corner shop in a Ferrari.
 - **Where:** npm (slash-tokens), slashtokens.com, GitHub (Wolfe-Jam/slash-tokens), mcpaas.live/slash
-- **When:** v1.7.1, The Hired Agent Edition (2026-10-10): quote the job, book the right model, prove it with a receipt; the scan counts each real LLM request once. Part of FAF Slash, the token meter for FAF.
+- **When:** v1.8.0, The Merge Gate Edition (2026-10-11): know what a change will cost before it merges; the agent you hire quotes the job, books the right model and proves it with a receipt. Part of FAF Slash, the token meter for FAF.
 - **How:** npm install slash-tokens or bunx slash-tokens. One import (slash-tokens/auto) intercepts every fetch to Anthropic/OpenAI/xAI/Google endpoints pre-call.
 
 ---
 
-*STATUS: SYNC ACTIVE — 2026-10-11T00:44:52.424Z*
+*STATUS: SYNC ACTIVE — 2026-10-11T05:37:18.218Z*
 <!-- faf:end -->

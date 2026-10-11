@@ -113,7 +113,7 @@ describe('slash-tokens diff (CLI)', () => {
         const text = run('HEAD~1', 'HEAD');
         expect(text.stdout).toContain('change: +$');
         expect(text.stdout).toContain(': 1 call site, $');
-        expect(text.stdout).toContain('src/b.ts (OpenAI): 0 → 1 sites');
+        expect(text.stdout).toContain('src/b.ts (OpenAI): 0 → 1 site,');
         const bad = run();
         expect(bad.status).toBe(1);
         expect(bad.stderr).toContain('usage: slash-tokens diff');
