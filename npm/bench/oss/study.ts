@@ -25,6 +25,15 @@ import { canonicalModel } from '../../src/models';
 import { REPOS, type Repo } from './repos';
 
 const CACHE = join(import.meta.dir, '.cache');
+
+// The extractor finds call sites with ripgrep. Without it every repo would
+// read as 0 requests and results.json would be overwritten with zeros.
+try {
+  execSync('rg --version', { stdio: 'ignore' });
+} catch {
+  console.error('bench:oss needs ripgrep (rg) on PATH: brew install ripgrep / apt install ripgrep');
+  process.exit(1);
+}
 const ROWS = !!process.env.ROWS;
 
 type Row = { site: string; model: string; max: number; req: number; d0: number; d1: number; m0: string; m1: string };
@@ -83,7 +92,10 @@ function scan(dir: string, cfg: { glob: string; call: string; defaultModel?: str
   try {
     files = execSync(`rg -l --glob '${cfg.glob}' -e '${cfg.call}' .`, { cwd: dir, encoding: 'utf8' })
       .trim().split('\n').filter(Boolean).map(f => f.replace(/^\.\//, '')).sort();
-  } catch {}
+  } catch (err) {
+    // rg exits 1 when nothing matches; anything else is a real failure.
+    if ((err as { status?: number }).status !== 1) throw err;
+  }
   const call = new RegExp(cfg.call, 'g');
   for (const f of files) {
     const us = units(dir, f);
