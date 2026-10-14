@@ -1,0 +1,49 @@
+version: "1.0"
+agent:
+  name: slash-tokens
+  displayName: slash-tokens
+  id: urn:air:slashtokens.com:agent:slash-tokens
+  version: 1.8.1
+  description: Prices an LLM call before you make it and reconciles it against what the provider billed after.
+  homepage: https://slashtokens.com
+capabilities:
+  - name: Scan
+    type: tool
+    description: find the LLM call sites in a project and estimate their monthly cost
+    tags:
+      - scan
+  - name: Quote
+    type: tool
+    description: price a job for a model before the call and decide go, downgrade or block
+    tags:
+      - quote
+  - name: Diff
+    type: tool
+    description: show what a git change does to the project's monthly LLM cost
+    tags:
+      - diff
+  - name: Reconcile
+    type: tool
+    description: compare a quote with what the provider billed and write the receipt
+    tags:
+      - reconcile
+  - name: Count tokens
+    type: tool
+    description: estimate a text's tokens for a model in under a millisecond with 4.8 KB of WASM
+    tags:
+      - count tokens
+endpoints:
+  - protocol: cli
+    transport: stdio
+    location: slash-tokens
+metadata:
+  cards:
+    domain: slashtokens.com
+    examples:
+      - What will this prompt cost on Claude before I send it?
+      - Which LLM calls in my project cost the most per month?
+      - What does this pull request do to our monthly LLM bill?
+      - How much did this call cost compared with the quote?
+    packages:
+      - registryType: npm
+        identifier: slash-tokens
