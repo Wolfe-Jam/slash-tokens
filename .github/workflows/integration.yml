@@ -24,7 +24,7 @@ jobs:
           echo "::notice::Integration skipped by request (maintenance window). Marked PASS."
           exit 0
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         if: ${{ github.event.inputs.force_skip != 'true' }}
 
       - name: Pre-flight — mcpaas.live health check (3 retries)
