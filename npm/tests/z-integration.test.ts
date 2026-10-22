@@ -361,7 +361,7 @@ describe.skipIf(!LIVE)('TIER 5: PROXY — Gateway Path', () => {
     const ours = afterEvents.find((e: any) => e.app === 'integration-test');
     expect(ours).toBeDefined();
     expect(ours.from).toContain('sonnet');
-  });
+  }, 15_000); // three live calls in a row (feed → proxy → Anthropic → feed); 5 s timed out once on 2026-10-19
 
   it('proxy accepts OpenAI-format calls', async () => {
     const res = await fetch(`${BASE_URL}/slash/v1/chat/completions`, {
