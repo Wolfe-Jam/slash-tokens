@@ -282,7 +282,8 @@ describe.skipIf(!LIVE)('TIER 3: AERO — Pass-Through Logging', () => {
 
 describe.skipIf(!LIVE)('TIER 4: PIT STOP — Dashboard Data Consistency', () => {
 
-  it('balance after transact matches usage endpoint', async () => {
+  // two live calls + a 500 ms wait; the default 5 s timed out on 2026-11-02
+  it('balance after transact matches usage endpoint', { timeout: 15000 }, async () => {
     init({ key: SLASH_KEY });
     const txnResult = await report({
       tokens_estimated: 1000,
