@@ -87,7 +87,7 @@ describe('TIER 2: ENGINE — quote()', () => {
     expect(q.outputTokens).toEqual({ min: 500, max: 2000 });
     expect(q.cost.low).toBeCloseTo((n * 1.00 + 500 * 3.00) / 1e6, 6);
     expect(q.cost.high).toBeCloseTo((n * 1.00 + 2000 * 3.00) / 1e6, 6);
-    expect(q).toMatchObject({ model: 'nemotron-3-ultra', provider: 'Nebius', tier: 3, outputAssumed: false, fits: true, asOf: '2026-10-08' });
+    expect(q).toMatchObject({ model: 'nemotron-3-ultra', provider: 'Nebius', tier: 3, outputAssumed: false, fits: true, asOf: '2026-11-20' });
   });
 
   it('says when it assumed the output ceiling', () => {
@@ -121,7 +121,7 @@ describe('TIER 2: ENGINE — quote()', () => {
   });
 
   it('flags a job that will not fit (input + max output)', () => {
-    const q = quote({ input: prompt, model: 'gpt-5.4-mini', maxOutputTokens: 200_000 });
+    const q = quote({ input: prompt, model: 'gpt-5.4-mini', maxOutputTokens: 400_000 });  // 400K context
     expect(q.fits).toBe(false);
   });
 
