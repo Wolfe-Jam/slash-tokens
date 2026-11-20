@@ -165,8 +165,8 @@ describe('TIER 2: ENGINE — Pricing & Intelligence', () => {
 
     it('context matches model specification', () => {
       expect(preflight('hi', 'claude-opus').context).toBe(1000000);
-      expect(preflight('hi', 'gpt-5.4').context).toBe(1000000);
-      expect(preflight('hi', 'gemini-2.5-flash').context).toBe(1000000);
+      expect(preflight('hi', 'gpt-5.4').context).toBe(1050000);
+      expect(preflight('hi', 'gemini-2.5-flash').context).toBe(1048576);
     });
 
     it('utilization is between 0 and 1 for fitting content', () => {
@@ -839,7 +839,7 @@ describe('TIER 1: BRAKE — preflightRoute same-provider invariant', () => {
   });
 
   it('preflightRoute never picks a model the prompt does not fit', () => {
-    const big = 'word '.repeat(200_000);
+    const big = 'word '.repeat(400_000);  // over GPT-5.4 nano's 400K, under GPT-5.4's 1.05M
     const tokens = slash(big, 'gpt-5.4');
     expect(tokens).toBeGreaterThan(MODELS['gpt-5.4-nano'].context);
     expect(tokens).toBeLessThan(MODELS['gpt-5.4'].context);

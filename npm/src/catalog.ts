@@ -37,6 +37,12 @@ export interface CatalogEntry {
   asOf: string;
   /** Last day this price holds, when the provider has announced a change. */
   priceUntil?: string;
+  /**
+   * Set when the provider no longer prices this ID on its own page (retired,
+   * auto-routed to another model, or not verifiable). The entry keeps the last
+   * price we could check, with that date in `asOf`; the freshness check skips it.
+   */
+  deprecated?: string;
   input: number;    // $/M input tokens (base/short-context rate)
   output: number;   // $/M output tokens (base/short-context rate)
   context: number;  // max context window
@@ -50,9 +56,11 @@ export interface CatalogEntry {
 type Price = Pick<CatalogEntry, 'input' | 'output' | 'context' | 'longContextThreshold' | 'longContextInput' | 'longContextOutput' | 'priceUntil'>;
 
 const OPUS = { input: 5.00, output: 25.00, context: 1_000_000 };
+const OPUS_45 = { input: 5.00, output: 25.00, context: 200_000 };
 const OPUS_55 = { input: 4.00, output: 20.00, context: 1_000_000 };
 const FABLE = { input: 10.00, output: 50.00, context: 1_000_000 };
 const SONNET_4X = { input: 3.00, output: 15.00, context: 1_000_000 };
+const SONNET_45 = { input: 3.00, output: 15.00, context: 200_000 };
 const SONNET = { input: 2.00, output: 10.00, context: 1_000_000 };
 const HAIKU = { input: 1.00, output: 5.00, context: 200_000 };
 const GROK_46 = {
@@ -64,28 +72,34 @@ const GROK_43 = {
   longContextThreshold: 200_000, longContextInput: 2.50, longContextOutput: 5.00,
 };
 const GEMINI_PRO = {
-  input: 2.00, output: 12.00, context: 1_000_000,
+  input: 2.00, output: 12.00, context: 1_048_576,
   longContextThreshold: 200_000, longContextInput: 4.00, longContextOutput: 18.00,
 };
-const GEMINI_FLASH = { input: 0.30, output: 2.50, context: 1_000_000 };
+const GEMINI_FLASH = { input: 0.30, output: 2.50, context: 1_048_576 };
 // Gemini 3.6–3.8 Flash: launch price through 2026-12-31; Google lists $1.50/$7.50
 // from 2027-01-01. priceUntil makes the freshness check fail before then.
-const GEMINI_FLASH_3X = { input: 0.75, output: 3.75, context: 1_000_000, priceUntil: '2026-12-31' };
-const GEMINI_35_FLASH = { input: 1.50, output: 9.00, context: 1_000_000 };
-const GEMINI_31_FLASH_LITE = { input: 0.25, output: 1.50, context: 1_000_000 };
+const GEMINI_FLASH_3X = { input: 0.75, output: 3.75, context: 1_048_576, priceUntil: '2026-12-31' };
+const GEMINI_35_FLASH = { input: 1.50, output: 9.00, context: 1_000_000 }; // deprecated, last checked 2026-10-07
+const GEMINI_31_FLASH_LITE = { input: 0.25, output: 1.50, context: 1_048_576 };
 const GROK_BUILD = {
   input: 1.00, output: 2.00, context: 256_000,
   longContextThreshold: 200_000, longContextInput: 2.00, longContextOutput: 4.00,
 };
-const GPT_6_ASTRA = { input: 10.00, output: 50.00, context: 1_050_000 };
-const GPT_6_SOL = { input: 2.00, output: 10.00, context: 1_050_000 };
-const GPT_6_LUNA = { input: 0.10, output: 0.50, context: 1_050_000 };
-const GPT_SOL = { input: 4.00, output: 20.00, context: 1_050_000 };
-const GPT_TERRA = { input: 2.00, output: 12.00, context: 1_050_000 };
-const GPT_LUNA = { input: 0.20, output: 1.20, context: 1_050_000 };
-const GPT_54 = { input: 2.50, output: 15.00, context: 1_000_000 };
-const GPT_54_MINI = { input: 0.75, output: 4.50, context: 128_000 };
-const GPT_54_NANO = { input: 0.20, output: 1.25, context: 128_000 };
+// OpenAI: prompts over 272K input tokens are billed at the long-context rate
+// (2x input, 1.5x output) for the whole request. GPT-5.4 mini and nano take at
+// most 272K input tokens, so they have no long-context rate.
+const OPENAI_LONG = 272_000;
+const GPT_6_ASTRA = { input: 10.00, output: 50.00, context: 1_050_000, longContextThreshold: OPENAI_LONG, longContextInput: 20.00, longContextOutput: 75.00 };
+const GPT_6_SOL = { input: 2.00, output: 10.00, context: 1_050_000, longContextThreshold: OPENAI_LONG, longContextInput: 4.00, longContextOutput: 15.00 };
+const GPT_6_LUNA = { input: 0.10, output: 0.50, context: 1_050_000, longContextThreshold: OPENAI_LONG, longContextInput: 0.20, longContextOutput: 0.75 };
+// GPT-5.6 Sol: "promotional pricing is available until November 30, 2026"; OpenAI
+// hasn't published the price after it. priceUntil makes the freshness check fail.
+const GPT_SOL = { input: 4.00, output: 20.00, context: 1_050_000, longContextThreshold: OPENAI_LONG, longContextInput: 8.00, longContextOutput: 30.00, priceUntil: '2026-11-30' };
+const GPT_TERRA = { input: 2.00, output: 12.00, context: 1_050_000, longContextThreshold: OPENAI_LONG, longContextInput: 4.00, longContextOutput: 18.00 };
+const GPT_LUNA = { input: 0.20, output: 1.20, context: 1_050_000, longContextThreshold: OPENAI_LONG, longContextInput: 0.40, longContextOutput: 1.80 };
+const GPT_54 = { input: 2.50, output: 15.00, context: 1_050_000, longContextThreshold: OPENAI_LONG, longContextInput: 5.00, longContextOutput: 22.50 };
+const GPT_54_MINI = { input: 0.75, output: 4.50, context: 400_000 };
+const GPT_54_NANO = { input: 0.20, output: 1.25, context: 400_000 };
 // NVIDIA Nemotron on Nebius Token Factory. Prices and context windows are
 // exactly what the API reports (GET /v1/models?verbose=true, 2026-10-08).
 const NEMOTRON_ULTRA = { input: 1.00, output: 3.00, context: 1_048_576 };
@@ -93,17 +107,24 @@ const NEMOTRON_SUPER = { input: 0.30, output: 0.90, context: 262_144 };
 const NEMOTRON_NANO = { input: 0.06, output: 0.24, context: 262_144 };
 const NEMOTRON_LIGHTNING = { input: 0.06, output: 0.24, context: 1_048_576 };
 
-// Prices as of 2026-10-07 — first-party pages:
-//   platform.claude.com/docs/en/about-claude/pricing
-//   developers.openai.com/api/docs/models
-//   docs.x.ai/developers/models
-//   ai.google.dev/gemini-api/docs/pricing
-const ASOF = '2026-10-07';
-// Nemotron: read from the Token Factory API (see above).
-const ASOF_NEBIUS = '2026-10-08';
+// Prices as of 2026-11-20 — first-party pages:
+//   platform.claude.com/docs/en/about-claude/pricing (+ models/overview for context)
+//   developers.openai.com/api/docs/pricing (+ api/docs/models/<id>)
+//   docs.x.ai/developers/pricing (+ developers/models)
+//   aistudio.google.com/docs/pricing (ai.google.dev/gemini-api/docs/pricing redirects there)
+//   nebius.com/services/token-factory/models/nvidia-nemotron-models-inference
+const ASOF = '2026-11-20';
+// The last check of an entry the provider no longer prices (see `deprecated`).
+const ASOF_PREV = '2026-10-07';
+const ASOF_PREV_NEBIUS = '2026-10-08';
 
 function e(provider: string, tier: Tier, price: Price, gen: number): CatalogEntry {
-  return { provider, tier, gen, asOf: provider === 'Nebius' ? ASOF_NEBIUS : ASOF, ...price };
+  return { provider, tier, gen, asOf: ASOF, ...price };
+}
+
+/** An entry the provider no longer prices: last checked price, kept with its date. */
+function retired(entry: CatalogEntry, reason: string): CatalogEntry {
+  return { ...entry, asOf: entry.provider === 'Nebius' ? ASOF_PREV_NEBIUS : ASOF_PREV, deprecated: reason };
 }
 
 // Order is kept from the 1.6.6 MODELS table (new entries appended), so
@@ -120,29 +141,29 @@ export const CATALOG: Record<string, CatalogEntry> = {
   'claude-opus':       e('Anthropic', 3, OPUS, 5),
   'claude-opus-4.7':   e('Anthropic', 3, OPUS, 4.7),
   'claude-opus-4.6':   e('Anthropic', 3, OPUS, 4.6),
-  'claude-opus-4.5':   e('Anthropic', 3, OPUS, 4.5),
+  'claude-opus-4.5':   e('Anthropic', 3, OPUS_45, 4.5),
   'claude-sonnet-5.5': e('Anthropic', 2, SONNET, 5.5),
   'claude-sonnet-5':   e('Anthropic', 2, SONNET, 5),
   'claude-sonnet':     e('Anthropic', 2, SONNET, 5),
   'claude-sonnet-4.6': e('Anthropic', 2, SONNET_4X, 4.6),
-  'claude-sonnet-4.5': e('Anthropic', 2, SONNET_4X, 4.5),
+  'claude-sonnet-4.5': e('Anthropic', 2, SONNET_45, 4.5),
   'claude-haiku-4.5':  e('Anthropic', 1, HAIKU, 4.5),
   'claude-haiku':      e('Anthropic', 1, HAIKU, 4.5),
   // xAI — flagship 4.6, cheap same-provider 4.3. 4.20 / fast are aliases.
   'grok-4.7':          e('xAI', 3, GROK_46, 4.7),
   'grok-4.6':          e('xAI', 3, GROK_46, 4.6),
   'grok-4.5':          e('xAI', 3, GROK_46, 4.5),
-  'grok-build-0.1':    e('xAI', 2, GROK_BUILD, 4.7),
+  'grok-build-0.1':    retired(e('xAI', 2, GROK_BUILD, 4.7), 'no longer on docs.x.ai pricing or models pages (2026-11-20)'),
   'grok-4.3':          e('xAI', 2, GROK_43, 4.3),
   'grok-4.20':         e('xAI', 2, GROK_43, 4.3),
   'grok-4-1-fast':     e('xAI', 2, GROK_43, 4.3),
   // Google
-  'gemini-3.1-pro':         e('Google', 3, GEMINI_PRO, 3.1),
+  'gemini-3.1-pro':         retired(e('Google', 3, GEMINI_PRO, 3.1), 'not a Google model ID; Google lists gemini-3.1-pro-preview only (2026-11-20)'),
   'gemini-3.1-pro-preview': e('Google', 3, GEMINI_PRO, 3.1),
   'gemini-3.8-flash':       e('Google', 2, GEMINI_FLASH_3X, 3.8),
-  'gemini-3.7-flash':       e('Google', 2, GEMINI_FLASH_3X, 3.7),
+  'gemini-3.7-flash':       retired(e('Google', 2, GEMINI_FLASH_3X, 3.7), 'deprecated 2026-10-08; Google routes it to gemini-3.8-flash'),
   'gemini-3.6-flash':       e('Google', 2, GEMINI_FLASH_3X, 3.6),
-  'gemini-3.5-flash':       e('Google', 2, GEMINI_35_FLASH, 3.5),
+  'gemini-3.5-flash':       retired(e('Google', 2, GEMINI_35_FLASH, 3.5), 'deprecated; Google routes it to gemini-3.6-flash'),
   'gemini-3.1-flash-lite':  e('Google', 1, GEMINI_31_FLASH_LITE, 3.1),
   'gemini-3.5-flash-lite':  e('Google', 1, GEMINI_FLASH, 3.5),
   'gemini-2.5-flash':       e('Google', 2, GEMINI_FLASH, 2.5),
@@ -159,7 +180,7 @@ export const CATALOG: Record<string, CatalogEntry> = {
   'gpt-5.4-nano':      e('OpenAI', 1, GPT_54_NANO, 5.4),
   // NVIDIA Nemotron, served and billed by Nebius Token Factory
   'nemotron-3-ultra':       e('Nebius', 3, NEMOTRON_ULTRA, 3),
-  'nemotron-3-super':       e('Nebius', 2, NEMOTRON_SUPER, 3),
+  'nemotron-3-super':       retired(e('Nebius', 2, NEMOTRON_SUPER, 3), 'not priced on a Nebius page we can read (2026-11-20)'),
   'nemotron-3-nano':        e('Nebius', 1, NEMOTRON_NANO, 3),
   'nemotron-3.5-lightning': e('Nebius', 1, NEMOTRON_LIGHTNING, 3.5),
 };

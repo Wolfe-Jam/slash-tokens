@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased
+
+### Fixed
+- **Catalog re-checked against the providers' own pages on 2026-11-20.** No base input or output price changed. Corrected:
+  - **OpenAI long-context rates**, missing until now: over 272K input tokens the whole request is billed at 2x input and 1.5x output (GPT-6 Astra $20/$75, GPT-6 / 6.1 Sol $4/$15, GPT-6 Luna $0.20/$0.75, GPT-5.6 Sol $8/$30, Terra $4/$18, Luna $0.40/$1.80, GPT-5.4 $5/$22.50). GPT-5.4 mini and nano take at most 272K input tokens and have none.
+  - **Context windows:** Claude Opus 4.5 and Sonnet 4.5 1M → 200K; GPT-5.4 1M → 1.05M; GPT-5.4 mini and nano 128K → 400K; Gemini 1M → 1,048,576 (Google's figure).
+  - **GPT-5.6 Sol:** its $4/$20 is promotional until 2026-11-30 (`priceUntil`); OpenAI hasn't published the price after it.
+
+### Added
+- **`deprecated`** on a catalog entry the provider no longer prices: it keeps its last checked price and date, and the freshness check skips it. Five entries: `gemini-3.5-flash` (routed to 3.6 Flash), `gemini-3.7-flash` (routed to 3.8 Flash), `gemini-3.1-pro` (not a Google ID; `gemini-3.1-pro-preview` is), `grok-build-0.1` (no longer on xAI's pages), `nemotron-3-super` (not priced on a Nebius page we can read). Nothing is removed.
+
 ## [1.8.1] — The Merge Gate Edition
 
 *2026-10-11*

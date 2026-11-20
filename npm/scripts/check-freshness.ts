@@ -18,6 +18,7 @@ export function freshnessProblems(catalog: Record<string, CatalogEntry>, today: 
   const now = day(today);
   const problems: string[] = [];
   for (const [model, e] of Object.entries(catalog)) {
+    if (e.deprecated) continue; // no longer priced by the provider; kept with its last checked date
     const age = Math.floor((now - day(e.asOf)) / DAY);
     if (age > MAX_AGE_DAYS) problems.push(`${model}: price checked ${e.asOf}, ${age} days ago (limit ${MAX_AGE_DAYS})`);
     if (e.priceUntil) {
@@ -37,5 +38,8 @@ if (import.meta.main) {
     console.error('Re-check the provider pricing pages, update src/catalog.ts and asOf.');
     process.exit(1);
   }
-  console.log(`✓ catalog fresh on ${today}: ${Object.keys(CATALOG).length} models, all checked within ${MAX_AGE_DAYS} days`);
+  const all = Object.values(CATALOG);
+  const retired = all.filter((e) => e.deprecated).length;
+  console.log(`✓ catalog fresh on ${today}: ${all.length - retired} priced models, all checked within ${MAX_AGE_DAYS} days` +
+    (retired ? `; ${retired} deprecated (no longer priced by the provider, not checked)` : ''));
 }
