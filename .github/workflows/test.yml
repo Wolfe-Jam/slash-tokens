@@ -16,6 +16,8 @@ jobs:
   test:
     name: Unit tests (WJTTC)
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     defaults:
       run:
         working-directory: npm
@@ -33,11 +35,34 @@ jobs:
       - name: Build
         run: bun run build
 
+      # `shell: bash` turns on pipefail: a failing test fails this step.
       - name: Run unit tests (preflight + sdk)
-        run: bun test tests/preflight.test.ts tests/sdk.test.ts
+        shell: bash
+        run: bun test tests/preflight.test.ts tests/sdk.test.ts 2>&1 | tee test-output.txt
+
+      - name: Upload test output for the TAF receipt
+        if: ${{ !cancelled() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: taf-test-output
+          path: npm/test-output.txt
+          overwrite: true
 
       - name: Engine floor gate
         run: node scripts/check-engines.mjs  # engines.node == the lowest Node in node-compat
+
+  # TAF receipt: one per push to main, red runs included (FAILED), saved to the
+  # taf-receipts branch by taf-git's receipt job, the only job that writes.
+  receipt:
+    needs: test
+    if: ${{ !cancelled() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+    permissions:
+      contents: write
+    uses: Wolfe-Jam/taf-git/.github/workflows/receipt.yml@v3.0.1
+    with:
+      artifact-name: taf-test-output
+      test-output-file: test-output.txt
+      test-result: ${{ needs.test.result }}
 
   node-compat:
     name: Node ${{ matrix.node }} install sanity
