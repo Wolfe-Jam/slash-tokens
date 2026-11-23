@@ -3,7 +3,7 @@ agent:
   name: slash-tokens
   displayName: slash-tokens
   id: urn:air:slashtokens.com:agent:slash-tokens
-  version: 1.8.1
+  version: 1.8.2
   description: Prices an LLM call before you make it and reconciles it against what the provider billed after.
   homepage: https://slashtokens.com
 capabilities:

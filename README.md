@@ -11,7 +11,7 @@
 **Know what an LLM call will cost before you make it, and prove what you saved after.**
 4.8 KB WASM · sub-millisecond · zero dependencies · Claude, GPT, Grok, Gemini, Nemotron.
 
-**v1.8.1 — The Merge Gate Edition:** know what a change will cost before it merges. [npm](https://www.npmjs.com/package/slash-tokens) · [release notes](https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.8.1)
+**v1.8.2 — The Merge Gate Edition:** know what a change will cost before it merges. [npm](https://www.npmjs.com/package/slash-tokens) · [release notes](https://github.com/Wolfe-Jam/slash-tokens/releases/tag/v1.8.2)
 
 ## Try it
 
@@ -143,7 +143,7 @@ Safe pre-check, not a perfect count. Pre-call, you only need go/no-go.
 
 ## Models
 
-Prices as of 2026-10-07, checked against each provider's pricing page. Real API IDs work as written (`claude-opus-4-7`, `claude-sonnet-4-5-20250929`). Generic aliases (`claude-opus`, `gpt-5.4`, `grok-4.20`, …) still resolve. `listModels()` has the full list. Don't see yours? [Open an issue.](https://github.com/Wolfe-Jam/slash-tokens/issues)
+Prices as of 2026-11-20, checked against each provider's pricing page. Real API IDs work as written (`claude-opus-4-7`, `claude-sonnet-4-5-20250929`). Generic aliases (`claude-opus`, `gpt-5.4`, `grok-4.20`, …) still resolve. `listModels()` has the full list. Don't see yours? [Open an issue.](https://github.com/Wolfe-Jam/slash-tokens/issues)
 
 | Model | $/M input | $/M output | Context |
 |---|---|---|---|
@@ -154,7 +154,7 @@ Prices as of 2026-10-07, checked against each provider's pricing page. Real API 
 | claude-haiku-4.5 | 1.00 | 5.00 | 200K |
 | grok-4.7 | 2.00 | 6.00 | 500K |
 | grok-4.3 | 1.25 | 2.50 | 1M |
-| gemini-3.1-pro | 2.00 | 12.00 | 1M |
+| gemini-3.1-pro-preview | 2.00 | 12.00 | 1M |
 | gemini-3.8-flash | 0.75 | 3.75 | 1M |
 | gemini-3.1-flash-lite | 0.25 | 1.50 | 1M |
 | gpt-6-astra | 10.00 | 50.00 | 1.05M |
@@ -162,11 +162,11 @@ Prices as of 2026-10-07, checked against each provider's pricing page. Real API 
 | gpt-6-luna | 0.10 | 0.50 | 1.05M |
 | gpt-5.6-sol | 4.00 | 20.00 | 1.05M |
 | nemotron-3-ultra | 1.00 | 3.00 | 1M |
-| nemotron-3-super | 0.30 | 0.90 | 262K |
+| nemotron-3-super † | 0.30 | 0.90 | 262K |
 | nemotron-3-nano | 0.06 | 0.24 | 262K |
 | nemotron-3.5-lightning | 0.06 | 0.24 | 1M |
 
-Gemini 3.6–3.8 Flash are at their launch price; Google lists $1.50 / $7.50 from 2027-01-01. Nemotron is NVIDIA's, served and billed by Nebius Token Factory; prices and context windows as its API reports them (2026-10-08), and Nebius IDs such as `nvidia/Nemotron-3_5-Lightning` work as written. `CATALOG` adds each model's provider, tier and `asOf` date; a weekly check fails when a price is over 30 days old.
+Gemini 3.6–3.8 Flash are at their launch price; Google lists $1.50 / $7.50 from 2027-01-01. Nemotron is NVIDIA's, served and billed by Nebius Token Factory; prices and context windows as its API reports them (2026-10-08), and Nebius IDs such as `nvidia/Nemotron-3_5-Lightning` work as written. OpenAI bills a prompt over 272K input tokens at 2x input and 1.5x output, for the whole request; GPT-5.6 Sol's $4 / $20 is promotional until 2026-11-30. † Deprecated: no longer priced on the provider's own page, so it keeps its last checked price (`deprecated` in `CATALOG`). `CATALOG` adds each model's provider, tier and `asOf` date; a weekly check fails when a price is over 30 days old, skipping deprecated entries.
 
 ```js
 import { listModels, MODELS } from 'slash-tokens'

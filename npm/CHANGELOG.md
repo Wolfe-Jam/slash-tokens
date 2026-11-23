@@ -1,6 +1,12 @@
 # Changelog
 
-## Unreleased
+## [1.8.2] — The Merge Gate Edition
+
+*2026-11-23*
+
+Every price re-checked against the providers' own pages on 2026-11-20: OpenAI's long-context rates, five context windows, and retired models marked deprecated.
+
+No change to `quote()`, `decide()`, `reconcile()` or `hire()` beyond the prices they read.
 
 ### Fixed
 - **Catalog re-checked against the providers' own pages on 2026-11-20.** No base input or output price changed. Corrected:
@@ -10,6 +16,9 @@
 
 ### Added
 - **`deprecated`** on a catalog entry the provider no longer prices: it keeps its last checked price and date, and the freshness check skips it. Five entries: `gemini-3.5-flash` (routed to 3.6 Flash), `gemini-3.7-flash` (routed to 3.8 Flash), `gemini-3.1-pro` (not a Google ID; `gemini-3.1-pro-preview` is), `grok-build-0.1` (no longer on xAI's pages), `nemotron-3-super` (not priced on a Nebius page we can read). Nothing is removed.
+
+### CI
+- **npm publishing moves to GitHub Actions** (`publish-npm.yml`, OIDC Trusted Publishing): a published GitHub release builds, tests and publishes, with no npm token in the repo and a provenance statement on the package.
 
 ## [1.8.1] — The Merge Gate Edition
 
