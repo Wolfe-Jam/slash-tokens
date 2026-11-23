@@ -10,7 +10,10 @@
 **Know what an LLM call will cost before you make it, and prove what you saved after.**
 4.8 KB WASM · sub-millisecond · zero dependencies · Claude, GPT, Grok, Gemini, Nemotron.
 
-## v1.8.1 — The Merge Gate Edition
+## v1.8.2 — The Merge Gate Edition
+
+**1.8.2:** Every price re-checked against the providers' own pages on 2026-11-20: OpenAI's long-context rates, five context windows, and retired models marked deprecated.
+
 
 Know what a change will cost before it merges.
 
