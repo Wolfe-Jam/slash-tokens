@@ -1,5 +1,5 @@
 import { slash } from './slash.js';
-import { getModel, MODELS, effectiveRate, type ModelInfo, canonicalModel } from './models.js';
+import { getModel, MODELS, effectiveRate, type ModelInfo, canonicalModel, isDeprecated } from './models.js';
 import { PROVIDER_MODELS, providerOf, NOT_ROUTE_TARGETS } from './providers.js';
 import { shouldRoute, isModelAllowed } from './config.js';
 
@@ -133,6 +133,7 @@ export function preflightRoute(content: string, model: string): Alternative | nu
     if (m === self) continue;
     if (NOT_ROUTE_TARGETS.has(m)) continue;        // specialised: never a target
     if (!isModelAllowed(m)) continue;             // user excluded this model
+    if (isDeprecated(m)) continue;                // the provider no longer prices it
     const altInfo = getModel(m);
     if (!altInfo) continue;
     if (tokens > altInfo.context) continue;       // doesn't fit

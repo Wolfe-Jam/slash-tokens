@@ -154,16 +154,23 @@ describe('TIER 3: AERO — decide()', () => {
     expect(d.chosen?.model).toBe('nemotron-3.5-lightning');
   });
 
-  it('floor 2 stops at Super', () => {
+  it('floor 2 stays on Ultra: Super is deprecated, never a route target (1.8.3)', () => {
     const d = decide({ ...task, model: 'nemotron-3-ultra' }, { floor: 2 });
-    expect(d.chosen?.model).toBe('nemotron-3-super');
+    expect(d.action).toBe('go');
+    expect(d.chosen?.model).toBe('nemotron-3-ultra');
+  });
+
+  it('floor 2 stops at the mid tier (Opus → Sonnet)', () => {
+    const d = decide({ ...task, model: 'claude-opus-5.5' }, { floor: 2 });
+    expect(d.action).toBe('downgrade');
+    expect(d.chosen?.model).toBe('claude-sonnet-5.5');
   });
 
   it('a budget the requested model breaks forces a cheaper model', () => {
-    const ultra = quote({ ...task, model: 'nemotron-3-ultra' });
-    const d = decide({ ...task, model: 'nemotron-3-ultra' }, { floor: 2, budget: ultra.cost.high / 2 });
+    const opus = quote({ ...task, model: 'claude-opus-5.5' });
+    const d = decide({ ...task, model: 'claude-opus-5.5' }, { floor: 2, budget: opus.cost.high / 2 });
     expect(d.action).toBe('downgrade');
-    expect(d.chosen!.cost.high).toBeLessThanOrEqual(ultra.cost.high / 2);
+    expect(d.chosen!.cost.high).toBeLessThanOrEqual(opus.cost.high / 2);
     expect(d.reason).toContain("doesn't fit the budget");
   });
 
@@ -242,9 +249,9 @@ describe('TIER 3: AERO — decide()', () => {
   });
 
   it('init({ models }) excludes substitutes', () => {
-    init({ models: ['nemotron-3-ultra', 'nemotron-3-super'] });
+    init({ models: ['nemotron-3-ultra', 'nemotron-3-nano'] });
     try {
-      expect(decide({ ...task, model: 'nemotron-3-ultra' }, { floor: 1 }).chosen?.model).toBe('nemotron-3-super');
+      expect(decide({ ...task, model: 'nemotron-3-ultra' }, { floor: 1 }).chosen?.model).toBe('nemotron-3-nano');
     } finally {
       init({ models: Object.keys(MODELS) });
     }
