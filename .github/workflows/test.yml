@@ -36,9 +36,9 @@ jobs:
         run: bun run build
 
       # `shell: bash` turns on pipefail: a failing test fails this step.
-      - name: Run unit tests (preflight + sdk)
+      - name: Run unit tests (the full suite; live integration runs only with SLASH_LIVE=1)
         shell: bash
-        run: bun test tests/preflight.test.ts tests/sdk.test.ts 2>&1 | tee test-output.txt
+        run: bun test 2>&1 | tee test-output.txt
 
       - name: Upload test output for the TAF receipt
         if: ${{ !cancelled() && github.event_name == 'push' && github.ref == 'refs/heads/main' }}
