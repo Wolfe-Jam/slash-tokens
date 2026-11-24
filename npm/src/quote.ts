@@ -1,6 +1,6 @@
 import { slash } from './slash.js';
 import { CATALOG, type Tier } from './catalog.js';
-import { canonicalModel, effectiveRate, MODELS } from './models.js';
+import { canonicalModel, effectiveRate, isDeprecated, MODELS } from './models.js';
 import { PROVIDER_MODELS, NOT_ROUTE_TARGETS } from './providers.js';
 import { shouldRoute, isModelAllowed } from './config.js';
 
@@ -150,7 +150,7 @@ export function quote(task: Task): Quote {
  *
  * Candidates are the requested model plus its same-provider siblings at or
  * above the floor, never an older generation of the requested line (unless allowOlder; never
- * a NOT_ROUTE_TARGETS model, never one excluded by
+ * a NOT_ROUTE_TARGETS or deprecated model, never one excluded by
  * init({ models }), none at all after init({ route: false })). Each is quoted
  * on its own token count. A substitute must cost less than the requested
  * model — decide() never raises the bill. The cheapest candidate that fits
@@ -166,7 +166,7 @@ export function decide(task: Task, policy: Policy = {}): Decision {
   let chosen: Quote | null = ok(requested) ? requested : null;
   if (shouldRoute()) {
     for (const m of PROVIDER_MODELS[requested.provider] ?? []) {
-      if (m === requested.model || NOT_ROUTE_TARGETS.has(m) || !isModelAllowed(m)) continue;
+      if (m === requested.model || NOT_ROUTE_TARGETS.has(m) || !isModelAllowed(m) || isDeprecated(m)) continue;
       if (CATALOG[m].tier < floor) continue;
       // Older generation of the same line (tier) only: a smaller current line is fine.
       if (!policy.allowOlder && CATALOG[m].tier === CATALOG[requested.model].tier && CATALOG[m].gen < CATALOG[requested.model].gen) continue;
@@ -179,23 +179,27 @@ export function decide(task: Task, policy: Policy = {}): Decision {
     }
   }
 
+  // Asking for a deprecated model by name still works; the reason says so.
+  const dep = CATALOG[requested.model]?.deprecated;
+  const note = (r: string) => (dep ? `${r}; ${requested.model} is deprecated (${dep})` : r);
+
   if (!chosen) {
     const why = !requested.fits
       ? `${requested.model} can't fit ${requested.inputTokens + requested.outputTokens.max} tokens`
       : `${requested.model} costs up to $${requested.cost.high}, over the $${budget} budget`;
-    return { action: 'block', requested, chosen: null, saved: 0, reason: `${why}, and no model at or above tier ${floor} does better` };
+    return { action: 'block', requested, chosen: null, saved: 0, reason: note(`${why}, and no model at or above tier ${floor} does better`) };
   }
   if (chosen === requested) {
     const within = budget === Infinity ? 'fits' : `fits the $${budget} budget`;
-    return { action: 'go', requested, chosen, saved: 0, reason: `${requested.model} is the cheapest model at or above tier ${floor} that ${within}` };
+    return { action: 'go', requested, chosen, saved: 0, reason: note(`${requested.model} is the cheapest model at or above tier ${floor} that ${within}`) };
   }
   return {
     action: 'downgrade',
     requested,
     chosen,
     saved: round6(requested.cost.high - chosen.cost.high),
-    reason: requested.fits && requested.cost.high <= budget
+    reason: note(requested.fits && requested.cost.high <= budget
       ? `${chosen.model} (tier ${chosen.tier}) does the job for less`
-      : `${requested.model} doesn't fit the ${requested.fits ? 'budget' : 'context window'}; ${chosen.model} (tier ${chosen.tier}) does`,
+      : `${requested.model} doesn't fit the ${requested.fits ? 'budget' : 'context window'}; ${chosen.model} (tier ${chosen.tier}) does`),
   };
 }

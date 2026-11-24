@@ -41,12 +41,12 @@ const agent = hire({ budget: 0.50, floor: 2 })  // $0.50 to spend; nothing below
 
 const { decision, receipt } = await agent.run({
   input: prompt,
-  model: 'nemotron-3-ultra',
+  model: 'claude-opus-5.5',
   maxOutputTokens: 2000,
   call: (model, input, { maxOutputTokens }) => yourClient(model, input, maxOutputTokens),  // returns { output, usage }
 })
 
-decision.action  // 'downgrade': nemotron-3-super does the job for less
+decision.action  // 'downgrade': claude-sonnet-5.5 does the job for less
 receipt.saved    // dollars saved against the model you asked for
 ```
 

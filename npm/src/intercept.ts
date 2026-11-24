@@ -1,5 +1,5 @@
 import { slash } from './slash.js';
-import { getModel, MODELS, canonicalModel } from './models.js';
+import { getModel, MODELS, canonicalModel, isDeprecated } from './models.js';
 import { shouldRoute, isModelAllowed } from './config.js';
 import { PROVIDER_MODELS, AUTO_ROUTE_TARGETS, NOT_ROUTE_TARGETS } from './providers.js';
 
@@ -164,6 +164,7 @@ export function findCheapestRoute(provider: string, tokens: number, currentModel
     if (!AUTO_ROUTE_TARGETS.has(model)) continue; // /auto rewrites only to its frozen 1.6.5 targets
     if (NOT_ROUTE_TARGETS.has(model)) continue;    // specialised models are never targets
     if (!isModelAllowed(model)) continue; // user excluded this model
+    if (isDeprecated(model)) continue;    // the provider no longer prices it
     const info = getModel(model);
     if (!info) continue;
     if (tokens > info.context) continue; // doesn't fit

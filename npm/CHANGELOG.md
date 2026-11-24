@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+
+### Fixed
+- **A deprecated model is never a route target.** `decide()`, `preflightRoute()` and `slash-tokens/auto` skip catalog entries marked `deprecated`, so a price change can't move a call onto a model the provider no longer prices (`/auto`'s frozen 1.6.5 targets include `gemini-3.1-pro`). Before, they skipped them only because those models cost more. Asking for one by name still works, and `decide()`'s reason now ends with "<model> is deprecated (<why>)".
+- This includes `nemotron-3-super` (its price can't be read on a Nebius page): Nemotron Ultra with `floor: 2` now stays on Ultra instead of downgrading to Super. The README's `hire()` example now uses Claude (Opus 5.5 → Sonnet 5.5 at `floor: 2`).
+
 ## [1.8.2] — The Merge Gate Edition
 
 *2026-11-23*

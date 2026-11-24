@@ -144,10 +144,10 @@ describe('TIER 3: AERO — hire().run()', () => {
   it("a job's own floor overrides the agent's (plan on the flagship, edit on mid-tier)", async () => {
     const seen: string[] = [];
     const agent = hire({ floor: 1 });
-    await agent.run({ input: prompt, model: 'nemotron-3-ultra', maxOutputTokens: 500, floor: 3, call: fakeCall(seen) });
-    await agent.run({ input: prompt, model: 'nemotron-3-ultra', maxOutputTokens: 500, floor: 2, call: fakeCall(seen) });
-    await agent.run({ input: prompt, model: 'nemotron-3-ultra', maxOutputTokens: 500, call: fakeCall(seen) });
-    expect(seen).toEqual(['nemotron-3-ultra', 'nemotron-3-super', 'nemotron-3.5-lightning']);
+    await agent.run({ input: prompt, model: 'claude-opus-5.5', maxOutputTokens: 500, floor: 3, call: fakeCall(seen) });
+    await agent.run({ input: prompt, model: 'claude-opus-5.5', maxOutputTokens: 500, floor: 2, call: fakeCall(seen) });
+    await agent.run({ input: prompt, model: 'claude-opus-5.5', maxOutputTokens: 500, call: fakeCall(seen) });
+    expect(seen).toEqual(['claude-opus-5.5', 'claude-sonnet-5.5', 'claude-haiku']);
   });
 
   it("the client is told the output cap, so the bill can't pass the quote", async () => {

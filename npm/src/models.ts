@@ -14,6 +14,16 @@ export interface ModelInfo {
 // The price table, derived from the catalog (catalog.ts): same keys, same
 // order, same fields as before 1.7.0. Old keys stay as aliases so existing
 // call sites don't throw.
+/**
+ * True when the provider no longer prices `model` (catalog `deprecated`).
+ * A deprecated model is never a route target: decide(), preflightRoute() and
+ * slash-tokens/auto never move a call onto one. Asking for one by name still
+ * works; decide() says it is deprecated.
+ */
+export function isDeprecated(model: string): boolean {
+  return Boolean(CATALOG[canonicalModel(model)]?.deprecated);
+}
+
 export const MODELS: Record<string, ModelInfo> = Object.fromEntries(
   Object.entries(CATALOG).map(([name, { provider: _p, tier: _t, gen: _g, asOf: _a, priceUntil: _u, deprecated: _d, ...price }]) => [name, price]),
 );
