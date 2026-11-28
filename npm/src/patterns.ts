@@ -12,6 +12,12 @@ export interface Pattern {
    * only where the SDK is in use: `.messages.create(` is also Twilio's SMS
    * API, and `.invoke(` is also Tauri / Electron IPC. */
   standalone?: boolean;
+  /** Only requests count; a file that merely imports the SDK is not a call site.
+   * For SDKs whose package also exports types, errors and helpers that files
+   * import without calling a model (Vercel AI's `ai`: `import type { ModelMessage }`,
+   * `import { tool }`, `import { JSONParseError }`). Found on goose's ask-ai bot,
+   * 2026-11-28: five import-only files counted as five sites, the one real call none. */
+  callsOnly?: boolean;
 }
 
 export const AI_PATTERNS: Pattern[] = [
@@ -20,7 +26,9 @@ export const AI_PATTERNS: Pattern[] = [
   // Anthropic
   { name: 'Anthropic', call: /\.messages\.(?:create|stream)\(/g, uses: /\b(?:Async)?Anthropic\(|from\s+['"]@anthropic-ai|^\s*(?:from\s+anthropic\s+import|import\s+anthropic)\b/gm },
   // Vercel AI SDK
-  { name: 'Vercel AI', call: /\b(?:generateText|streamText|generateObject|streamObject)\(/g, uses: /from\s+['"]ai['"]/g },
+  // Requests: the generate/stream functions, and an agent (AI SDK 5+: `new ToolLoopAgent(`, `new Agent(`),
+  // whose .generate()/.stream() are the requests. The agent is one site where it is built.
+  { name: 'Vercel AI', call: /\b(?:generateText|streamText|generateObject|streamObject)\(|\bnew\s+(?:ToolLoopAgent|Experimental_Agent|Agent)\(/g, uses: /from\s+['"]ai['"]/g, callsOnly: true },
   // LangChain
   { name: 'LangChain', call: /\.invoke\(/g, uses: /from\s+['"]@?langchain|^\s*(?:from|import)\s+langchain|ChatOpenAI|ChatAnthropic/gm },
   // Google Gemini
@@ -28,7 +36,7 @@ export const AI_PATTERNS: Pattern[] = [
   // AWS Bedrock
   { name: 'Bedrock', call: /InvokeModelCommand\(/g, uses: /BedrockRuntimeClient/g },
   // xAI Grok
-  { name: 'Grok', call: /x\.ai\/api|xai\.chat/g, uses: /from\s+['"]grok/g, standalone: true },
+  { name: 'Grok', call: /\bapi\.x\.ai\b|xai\.chat/g, uses: /from\s+['"]grok/g, standalone: true },
   // Raw fetch to AI endpoints
   { name: 'fetch (AI)', call: /fetch\(.*api\.openai\.com|fetch\(.*api\.anthropic\.com|fetch\(.*generativelanguage\.googleapis/g, standalone: true },
   // Cohere
@@ -70,8 +78,8 @@ export const SKIP_DIRS = new Set([
   'target', 'zig-out', 'zig-cache',
 ]);
 
-/** Test code: mocked and example LLM calls, not production traffic. Skipped unless includeTests. */
-export const TEST_DIRS = new Set(['test', 'tests', '__tests__', '__mocks__', 'spec', 'fixtures']);
+/** Test and example code: mocked and demo LLM calls, not production traffic. Skipped unless includeTests. */
+export const TEST_DIRS = new Set(['test', 'tests', '__tests__', '__mocks__', 'spec', 'fixtures', 'examples', 'example']);
 export const TEST_FILE = /(\.(test|spec)\.[cm]?[jt]sx?$)|(^test_.*\.py$)|(_test\.py$)/;
 
 export const SCAN_EXTENSIONS = new Set([

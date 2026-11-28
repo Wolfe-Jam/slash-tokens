@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 ### Fixed
+- **The scan no longer counts a file that only imports from `ai` (Vercel AI SDK) as a call site.** Files importing types, errors or helpers (`import type { ModelMessage }`, `import { tool }`) each counted as one call; an agent built with `new ToolLoopAgent(` / `new Agent(` did not count at all. On goose's ask-ai bot this read 5 sites where there is 1, so a scan of the goose repo now shows 3 sites ($101.51/mo at the default assumptions) instead of 7 ($208.82). Only requests count for Vercel AI now (`callsOnly` in `patterns.ts`).
+- **A link to x.ai in text is no longer a Grok call.** The Grok rule matched `x.ai/api` anywhere, so a pricing table citing `https://x.ai/api#pricing` counted 11 calls in firecrawl. It now matches the API host `api.x.ai`.
+- **Example code is skipped like test code** (`examples/`, `example/`; `--include-tests` counts it). Demo scripts are not production traffic; firecrawl has about 30 call sites in `examples/`.
 - **A deprecated model is never a route target.** `decide()`, `preflightRoute()` and `slash-tokens/auto` skip catalog entries marked `deprecated`, so a price change can't move a call onto a model the provider no longer prices (`/auto`'s frozen 1.6.5 targets include `gemini-3.1-pro`). Before, they skipped them only because those models cost more. Asking for one by name still works, and `decide()`'s reason now ends with "<model> is deprecated (<why>)".
 - This includes `nemotron-3-super` (its price can't be read on a Nebius page): Nemotron Ultra with `floor: 2` now stays on Ultra instead of downgrading to Super. The README's `hire()` example now uses Claude (Opus 5.5 → Sonnet 5.5 at `floor: 2`).
 

@@ -108,6 +108,33 @@ resp = client.chat.completions.create(model="gpt-5.6-sol", messages=[{"role": "u
     }
   });
 
+  it('Vercel AI: files that only import types or helpers from "ai" are not call sites; an agent is (goose ask-ai bot, 2026-11-28)', () => {
+    const dir = withTempDir({
+      'logger.ts': `import { JSONParseError, TypeValidationError } from "ai";
+export const log = (e: unknown) => e instanceof JSONParseError;
+`,
+      'content.ts': `import type { UserContent } from "ai";
+export const toContent = (t: string): UserContent => [{ type: 'text', text: t }];
+`,
+      'tools.ts': `import { tool } from "ai";
+export const search = tool({ description: 'search docs' });
+`,
+      'agent.ts': `import { ToolLoopAgent, type ModelMessage } from "ai";
+import { model } from "./client";
+export const answer = async (messages: ModelMessage[]) => {
+  const agent = new ToolLoopAgent({ model, instructions: 'Answer questions about goose.' });
+  return agent.generate({ messages });
+};
+`,
+    });
+    try {
+      const { sites } = scan(dir);
+      expect(sites.map(s => `${s.file.split('/').pop()}:${s.sdk}:${s.line}`)).toEqual(['agent.ts:Vercel AI:4']);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
   it('two requests are two call sites', () => {
     const dir = withTempDir({
       'two.ts': `import Anthropic from '@anthropic-ai/sdk';
@@ -170,6 +197,38 @@ export const y = generateText('hi');
       const at = (file: string) => scan(dir).sites.filter(s => s.file.endsWith(file)).map(s => s.sdk);
       expect(at('raw.ts')).toEqual(['fetch (AI)']);
       expect(at('grok.ts')).toEqual(['Grok']);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('x.ai named in text (a docs or pricing link) is not a Grok call; the API host is (firecrawl model-prices.ts, 2026-11-28)', () => {
+    const dir = withTempDir({
+      'prices.ts': `export const PRICES = { 'grok-4': { input: 3, source: "https://x.ai/api#pricing" } };
+`,
+      'grok.ts': `export const ask = (body: string) => fetch('https://api.x.ai/v1/chat/completions', { method: 'POST', body });
+`,
+    });
+    try {
+      const at = (file: string) => scan(dir).sites.filter(s => s.file.endsWith(file)).map(s => s.sdk);
+      expect(at('prices.ts')).toEqual([]);
+      expect(at('grok.ts')).toEqual(['Grok']);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('example code is skipped like test code (examples/, example/)', () => {
+    const call = `from openai import OpenAI
+client = OpenAI()
+client.chat.completions.create(model="gpt-5.6-sol", messages=[])
+`;
+    const dir = withTempDir({ 'app.py': call });
+    mkdirSync(join(dir, 'examples', 'crawler'), { recursive: true });
+    writeFileSync(join(dir, 'examples', 'crawler', 'crawler.py'), call);
+    try {
+      expect(scan(dir).sites.map(s => s.file.split('/').pop())).toEqual(['app.py']);
+      expect(scan(dir, { includeTests: true }).sites.length).toBe(2);
     } finally {
       rmSync(dir, { recursive: true, force: true });
     }
