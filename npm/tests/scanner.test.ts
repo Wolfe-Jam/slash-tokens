@@ -108,6 +108,33 @@ resp = client.chat.completions.create(model="gpt-5.6-sol", messages=[{"role": "u
     }
   });
 
+  it('Vercel AI: files that only import types or helpers from "ai" are not call sites; an agent is (goose ask-ai bot, 2026-11-28)', () => {
+    const dir = withTempDir({
+      'logger.ts': `import { JSONParseError, TypeValidationError } from "ai";
+export const log = (e: unknown) => e instanceof JSONParseError;
+`,
+      'content.ts': `import type { UserContent } from "ai";
+export const toContent = (t: string): UserContent => [{ type: 'text', text: t }];
+`,
+      'tools.ts': `import { tool } from "ai";
+export const search = tool({ description: 'search docs' });
+`,
+      'agent.ts': `import { ToolLoopAgent, type ModelMessage } from "ai";
+import { model } from "./client";
+export const answer = async (messages: ModelMessage[]) => {
+  const agent = new ToolLoopAgent({ model, instructions: 'Answer questions about goose.' });
+  return agent.generate({ messages });
+};
+`,
+    });
+    try {
+      const { sites } = scan(dir);
+      expect(sites.map(s => `${s.file.split('/').pop()}:${s.sdk}:${s.line}`)).toEqual(['agent.ts:Vercel AI:4']);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
   it('two requests are two call sites', () => {
     const dir = withTempDir({
       'two.ts': `import Anthropic from '@anthropic-ai/sdk';
