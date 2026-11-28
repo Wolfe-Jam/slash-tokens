@@ -36,7 +36,7 @@ export const AI_PATTERNS: Pattern[] = [
   // AWS Bedrock
   { name: 'Bedrock', call: /InvokeModelCommand\(/g, uses: /BedrockRuntimeClient/g },
   // xAI Grok
-  { name: 'Grok', call: /x\.ai\/api|xai\.chat/g, uses: /from\s+['"]grok/g, standalone: true },
+  { name: 'Grok', call: /\bapi\.x\.ai\b|xai\.chat/g, uses: /from\s+['"]grok/g, standalone: true },
   // Raw fetch to AI endpoints
   { name: 'fetch (AI)', call: /fetch\(.*api\.openai\.com|fetch\(.*api\.anthropic\.com|fetch\(.*generativelanguage\.googleapis/g, standalone: true },
   // Cohere
@@ -78,8 +78,8 @@ export const SKIP_DIRS = new Set([
   'target', 'zig-out', 'zig-cache',
 ]);
 
-/** Test code: mocked and example LLM calls, not production traffic. Skipped unless includeTests. */
-export const TEST_DIRS = new Set(['test', 'tests', '__tests__', '__mocks__', 'spec', 'fixtures']);
+/** Test and example code: mocked and demo LLM calls, not production traffic. Skipped unless includeTests. */
+export const TEST_DIRS = new Set(['test', 'tests', '__tests__', '__mocks__', 'spec', 'fixtures', 'examples', 'example']);
 export const TEST_FILE = /(\.(test|spec)\.[cm]?[jt]sx?$)|(^test_.*\.py$)|(_test\.py$)/;
 
 export const SCAN_EXTENSIONS = new Set([

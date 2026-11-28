@@ -202,6 +202,38 @@ export const y = generateText('hi');
     }
   });
 
+  it('x.ai named in text (a docs or pricing link) is not a Grok call; the API host is (firecrawl model-prices.ts, 2026-11-28)', () => {
+    const dir = withTempDir({
+      'prices.ts': `export const PRICES = { 'grok-4': { input: 3, source: "https://x.ai/api#pricing" } };
+`,
+      'grok.ts': `export const ask = (body: string) => fetch('https://api.x.ai/v1/chat/completions', { method: 'POST', body });
+`,
+    });
+    try {
+      const at = (file: string) => scan(dir).sites.filter(s => s.file.endsWith(file)).map(s => s.sdk);
+      expect(at('prices.ts')).toEqual([]);
+      expect(at('grok.ts')).toEqual(['Grok']);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
+  it('example code is skipped like test code (examples/, example/)', () => {
+    const call = `from openai import OpenAI
+client = OpenAI()
+client.chat.completions.create(model="gpt-5.6-sol", messages=[])
+`;
+    const dir = withTempDir({ 'app.py': call });
+    mkdirSync(join(dir, 'examples', 'crawler'), { recursive: true });
+    writeFileSync(join(dir, 'examples', 'crawler', 'crawler.py'), call);
+    try {
+      expect(scan(dir).sites.map(s => s.file.split('/').pop())).toEqual(['app.py']);
+      expect(scan(dir, { includeTests: true }).sites.length).toBe(2);
+    } finally {
+      rmSync(dir, { recursive: true, force: true });
+    }
+  });
+
   it('Python SDKs: imports and clients count, look-alikes do not', () => {
     const dir = withTempDir({
       'claude.py': `import anthropic
